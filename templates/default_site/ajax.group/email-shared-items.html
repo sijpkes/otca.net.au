@@ -1,0 +1,101 @@
+<?php
+$id = $this->EE->input->get('id');
+$emails = $this->EE->input->get('emails');
+$fileName = $this->EE->input->get('filename');
+$emailUser = $this->EE->input->get('iu') == 0 ? FALSE : TRUE;
+
+$fileName = str_replace(' ', '_', $fileName);
+$pracsot = preg_replace( '/\s+/', '', $this->EE->input->get('pracsot'));
+$pracsot = preg_replace('/[0-99]+\.[0-99]+\.[0-99]+/', "'$0'", $pracsot);
+
+$emails = preg_replace( '/\s+/', '', $emails);
+$email_array = explode(',', $emails);
+
+$userEmail = $this->EE->session->userdata('email');
+$userScreenName = $this->EE->session->userdata('screen_name');
+
+$this->EE->load->library('email');
+$this->EE->load->helper('string');
+$this->EE->load->helper('url');
+$this->EE->load->helper('text');
+$this->EE->load->library('file_field');
+
+// @todo add join on new assessment table
+$query = $this->EE->db->query("SELECT `entry_id`, `field_id_3`, `field_id_6`, `field_id_4` FROM `exp_channel_data` where `entry_id` = '$id'");
+if ($query->num_rows() > 0)
+{
+	foreach($query->result_array() as $row)
+    {
+		$file_metadata = $row['field_id_3'];
+		$criteria_mapping = $row['field_id_6'];
+		$description = $row['field_id_4'];
+	}
+}	
+
+$uploadFileArray = $this->EE->file_field->parse_field($file_metadata);
+
+$uploadFilePath = $uploadFileArray["rel_path"];
+
+$message = "Dear OT Practitioner,\n\nYou have been sent this email because $userScreenName a student Occupational Therapist, has requested that you verify the evidence they have provided to the OTCA website. Please review the description of the evidence provided and any attached documentation and then click the link below to verify that the evidence is valid and fulfils the PRACSOT criteria selected.\n\n $userScreenName describes this evidence as:\n\n$description\n\n.  It is claimed to fulfil:\n\n";
+
+if($pracsot) {
+	$query = $this->EE->db->query("SELECT id, question FROM otca_pracsot where id in ($pracsot)");
+	
+if ($query->num_rows() > 0)
+{
+    foreach($query->result_array() as $row)
+    {
+        	$message .= "\t$row[id] - $row[question]\n\n";
+    	}
+	}
+} else {
+	echo '{ "error" : "No PRACSOT criteria found." }';
+}
+
+
+$this->EE->email->initialize();
+if(file_exists($uploadFilePath)) {
+	$emailFileName = "/home4/otaltcne/public_html/user_evidence/_temp_email/".$fileName;
+	copy($uploadFilePath, $emailFileName);
+
+	$this->EE->email->attach($emailFileName);
+}
+
+if($emailUser === TRUE) {
+	$uniqueMessage = "\t==== This is a copy of the message sent to your supervisor(s). ====\n\n" . $message . "To verify this evidence click the link below. If you need to discuss this evidence with ".$userScreenName." email them directly via $userEmail regarding this evidence.\n\n\tClick this link to verify this evidence: A link is included in your supervisor's email. \n\nThank you for taking the time to fulfill this process.\n\n\tRegards,\n\n\tThe OTCA Team";
+    
+    	$this->EE->email->from("noreply@otca.net.au");
+    	$this->EE->email->to($userEmail);
+    	$this->EE->email->subject("OTCA - Validation required for evidence provided by: ".$userScreenName);
+    	$this->EE->email->message(entities_to_ascii($uniqueMessage));
+    	$this->EE->email->Send();
+	$this->EE->email->clear();
+}
+
+foreach($email_array as $sEmail)
+{
+if($userEmail !== $sEmail) {	// skip email if user has added themselves
+	$uuid = random_string('unique');
+	$valPath = "pages/validate-evidence/$uuid";
+	$validationURL = base_url().$valPath;
+	$uniqueMessage = $message . "To verify this evidence click the link below. If you need to discuss this evidence with ".$userScreenName." email them directly via $userEmail regarding this evidence.\n\n\tClick this link to verify this evidence:  {unwrap}$validationURL{/unwrap}.\n\nThank you for taking the time to fulfill this process.\n\n\tRegards,\n\n\tThe OTCA Team";
+
+    	$this->EE->email->from("no-reply@otaltc.net");
+    	$this->EE->email->to($sEmail);
+    	$this->EE->email->subject("OTCA - Validation required for evidence provided by: ".$userScreenName);
+    	$this->EE->email->message(entities_to_ascii($uniqueMessage));
+    	$this->EE->email->Send();
+ 
+    if($id) {
+	$query = $this->EE->db->query("INSERT INTO otca_evidence (`entry_id`, `validation_key`, `filename`, `authorised_by_email`, `upload_time`) VALUES ('$id','$uuid','$fileName','$sEmail', UNIX_TIMESTAMP())");
+    }
+
+    $this->EE->email->clear();
+}
+}
+if(isset($emailFileName) && file_exists($emailFileName)) {
+	unlink($emailFileName);
+}
+
+echo '{"message" : "<p>An email has been sent to these email addresses: '.$emails.'</p> <p>Your evidence will not count towards your competencies until the email recipients have verified these emails.</p>"}';
+?>

@@ -1,0 +1,45 @@
+<div id='breadcrumbs'>
+<a href="{site_url}">Home</a>
+{if '{segment_2}' != ""}
+    <?php 
+$n = 1;
+$segs = array();
+$segnames = array();
+while($this->EE->uri->segment($n) != "") {
+if(is_numeric($this->EE->uri->segment($n)) !== TRUE) {
+	$segs[] = $this->EE->uri->segment($n);
+        $name = $this->EE->uri->segment($n);
+        $parsed_name = str_replace("_",  " ",  $name); 
+        $parsed_name = str_replace("-", " ", $parsed_name);
+        $parsed_name = ucwords($parsed_name);
+        $segnames[] = $parsed_name;
+}
+$n = $n + 1;	
+}
+/*$last_seg = $segs[count($segs)-1];
+$channel_name = str_replace("-",  "_",  $last_seg); 
+$title_channel = str_replace("-", " ", $last_seg);
+$title_channel = ucwords($title_channel);*/
+
+$index = 1;
+$segsofar = array();
+$is_last = count($segs)-1;
+foreach($segs as $crumb) {
+    $segsofar[] = $crumb;
+    $bcpath = implode("/", $segsofar);
+    $bcpath = "/$bcpath";
+    
+    $name = $segnames[$index];
+    echo  " &raquo; <a href=\"$bcpath\">$name</a>";
+    if($is_last === $index) break;
+    $index = $index + 1;
+}
+?> 
+{/if}
+</div>
+<!-- div class="site-search"><label for="site-search">Search:</label><input width="30" type="text" name="site-search"></div -->
+{if logged_in}
+	{cycle-toolbar}
+	{cycle-name-box}
+{/if}
+

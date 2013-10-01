@@ -1,0 +1,30 @@
+{embed="structure/header" use_my_placement_css='yes' extra_css='{segment_2}'}
+<h2>Student ePortfolio - Shared Content/Items for Verification and Assessment</h2>	
+<div class='contrast' style='max-width:95%; min-width: 90%'>
+    
+{if !logged_in}
+	<p>Please <a href='{path='member/login'}'>login</a> to continue.  If you haven't yet got a login please <a href='{path='member/register'}'>register here</a>.</p>
+{/if}
+<p>These are items selected for your perusal by {segment_4}, for further items see their history below.</p>
+<?php $now = time(); ?>
+
+<div id='highlights-container'></div>
+
+<p>This is {segment_4}'s history. Select items to filter by below.</p>
+Show: <label for='evidence'><input id='evidence' type='checkbox' checked='checked'>Evidence</label>
+<label for='diary'>
+{if (group_id == 7 OR group_id == 9 OR group_id == 1)}    
+    <input id='diary' type='checkbox' checked='checked'>Diary Entries</label>
+{/if}
+    <input id='contracts' type='checkbox' checked='checked'>Learning Contracts</label>
+
+
+	<div id='timeline-container' style='width:750px; max-width:750px'>
+		<div class='timeline-center timeline'>
+			<div class='timeline-label'>Portfolio</div>
+		</div>
+	</div>
+</div>
+
+{exp:folio:educatorjavascript student_id='{segment_3}' screen_name='{segment_4}'}
+{embed="structure/footer"}

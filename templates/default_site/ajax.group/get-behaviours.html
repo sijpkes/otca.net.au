@@ -1,0 +1,17 @@
+<?php
+$step = $this->EE->uri->segment(3);
+$level = $this->EE->uri->segment(4);
+$row = $this->EE->uri->segment(5);
+$sql = "SELECT `observed_behaviours` FROM `otca_observed_behaviours` WHERE `level`='$level' AND `step`='$step' AND `row` = '$row' LIMIT 1;";
+//echo $sql;
+$query = $this->EE->db->query($sql);
+
+if($query->num_rows() > 0) {
+        foreach($query->result_array() as $row) 
+        {
+                    $beh = nl2br($row['observed_behaviours']);
+                    echo "<blockquote>$beh</blockquote>";
+        }
+} 
+
+?>

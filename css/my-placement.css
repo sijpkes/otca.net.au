@@ -1,0 +1,102 @@
+#content-pane .story-pane textarea {
+  max-height: 120px;
+  max-width: 245px;
+  min-height: 100px;
+  min-width: 245px;
+}
+
+#content-pane div.story-pane {
+  float: left;
+  max-width: 300px;
+  padding: 15px;
+}
+#content-pane div.story-pane-750px {
+    float: left;
+    max-width: 850px;
+    padding: 15px;
+}
+#content-pane .story-pane-750px textarea {
+margin-left: -22px;
+max-height: 10em;
+max-width: 715px;
+width: 850px;
+min-height: 5em;
+}
+#content-pane div.story-pane-845px {
+  float: left;
+  max-width: 845px;
+  padding: 15px;
+}
+textarea.planning {
+margin-left: 22px !important;
+min-height: 100px;
+}
+
+.story-pane-750px p#objectives {
+border: thin solid white;
+border-radius: 5px 5px 5px 5px;
+padding: 7px;
+}
+.story-pane textarea {
+    min-height: 9em;
+    min-width: 20em;
+    width: 10em;
+}
+a.button {
+	float:right; display: block; position: relative; padding: 4px; margin-top: 20px;  margin: 2px;
+	cursor: pointer;
+	border-radius: 10px;
+	border: solid 2px #888;
+	font-weight: bold;
+	font-size: 10px;
+	background-color: #F4E9E9;
+	text-decoration: none;
+	color: #551A8B !important;
+}
+a.button:hover {
+	background-color: #EAB74D;
+}
+p.knowledgeStatement, p.growthStatement, p.growthStatement {
+	font-style: oblique;
+}
+p#objectives img.exit {
+  background-color: transparent;
+  height: 20px;
+  left: 725px;
+  margin: 1px;
+  position: relative;
+  top: 2px;
+  width: 20px;
+  z-index: 10000;
+}
+p#objectives img.exit:hover {
+	width: 22px;
+	height: 22px;
+	cursor: pointer;
+	margin: 0 0;
+}
+p#objectives img.add {
+    position: relative;
+    top: 31px;
+    left: 5px;
+    width: 16px;
+    height: 16px;
+    margin: 1px;
+}
+p#objectives img.add:hover {
+	cursor: pointer;
+	width: 18px;
+	height: 18px;
+	margin: 0;
+}
+#objectives select#objective-crit {
+	max-width: 715px;	
+	width: 715px;
+}
+img#fast-wheelchair {
+  float: right;
+  width: 300px;
+  margin-top: -10px;
+  margin-right: 8px;
+  border: thin solid #639;
+}

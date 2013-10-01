@@ -1,0 +1,25 @@
+
+{embed='/structure/header'}
+{if logged_in}
+{if member_group == 6 && member_group == 7}
+<div class='story-pane-750px'>
+    <h1>Oops, how did you get here?</h1>
+    <h2>As an educator, you do not need access to this page.</h2>
+</div>
+{/if}
+<div class='story-pane-750px'>
+    <h2>Nominate your Practice Educator and Lecturer</h2>
+    <p>This is where you nominate who will be assessing your competency whilst you use this website.
+    You can nominate any Lecturers or Educators that are already in the system.
+    If your Lecturer or Practice Educator does not appear in the search, please enter their
+    Name: <input type='text' id='ed_name'/> and email address:
+    <input type='text' id='ed_email'/> and <a href='#' id='ed_invite'>invite them to
+    register with this website</a>.
+    </p>
+    <p>Search for OTCA registered educators <input id='search_educators' /> </p>
+    <h2>Currently assigned educators:</h2>
+    <ul><li>No educators are assigned yet.</li></ul>
+</div>
+<script>window.studentName = "{screen_name}";</script>
+{/if}
+{embed='/structure/footer' js_file='jquery.educator-settings.js'}

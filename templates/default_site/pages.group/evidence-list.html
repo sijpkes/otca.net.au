@@ -1,0 +1,11 @@
+<a href="#close" class="exit"><img src="/img/close-icon.png" alt="close"></a>
+<div class='file-viewer-inner scrollbar' style='width: 95%'>
+{exp:channel:entries channel="my_evidence" author_id="CURRENT_USER" limit='20' search:searchable_mapping="{segment_3}"}        
+<div class="file-info" data-crit="{criteria_mapping}">
+	<img src="/img/audio-icon128x128.png" alt="audio">
+	<h3>{title}<h3><p>{description}</p>
+	<p><strong>Signed off by: {sign_off_email}</strong>
+</p>
+</div>
+{/exp:channel:entries}
+</div>

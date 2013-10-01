@@ -1,0 +1,28 @@
+<?php 
+// avoid annoying repeat messages
+$message_shown = $this->EE->input->cookie('ie_message_shown');
+
+if($message_shown != 'TRUE') { 
+           $this->EE->functions->set_cookie('ie_message_shown', 'TRUE', 3600 * 24 * 14); // Set a cookie that expires in 14 days
+
+?>
+{if logged_out}
+<div id="system_message" style='display:none; background-color: yellow; color: darkgreen; border-color: darkgreen; width: 100%'>
+<p>
+The site has been upgraded to support Internet Explorer 8, if you have any issues with Internet Explorer or any other browser please contact <a href='webmaster@otca.net.au'>OTCA support</a> and
+provid the following information:</p>
+<ul>
+<li>Browser name (ie. Firefox, Internet Explorer)</li>
+<li>Browser version</li>
+<li>Details of what you were doing at the time of the problem occurring.</li>
+</ul>
+<p>
+All help with the testing process is greatly appreciated.
+</p>
+<p><strong>CLICK THIS BOX TO CLOSE</strong></p>
+</div>
+{/if}
+
+<?php
+}
+?>

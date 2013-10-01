@@ -1,0 +1,29 @@
+<?php
+$member_id = $this->EE->session->userdata('member_id');
+$group_id = $this->EE->session->userdata('group_id');
+
+if($member_id == 0 || $group_id == 6 || $group_id == 7) return;  /* does not need to be accessed by educators*/
+
+$user_check = "SELECT `otca_institution_id` FROM `exp_member_data` WHERE `member_id`='$member_id' LIMIT 1";
+$user_query = $this->EE->db->query($user_check);
+
+$preselect_id = 0;
+if($user_query->num_rows() > 0) {
+	foreach($user_query->result_array() as $row) // returns all evidence entries for this practice cycle
+	{
+            	$preselect_id = $row['otca_institution_id'];	
+	}
+} 
+
+$sql = "SELECT `id`, `name` FROM `otca_institutions` WHERE `type`='1' LIMIT 0,100";
+$query = $this->EE->db->query($sql);
+
+if($query->num_rows() > 0) {
+echo "<option value='0'>--- Select an institution ---</option>";
+	foreach($query->result_array() as $row) // returns all evidence entries for this practice cycle
+	{
+            $selected = ($row['id'] == $preselect_id) ? "selected" : ""; 
+            echo "<option value='$row[id]' $selected>$row[name]</option>";		
+	}
+} 
+?>

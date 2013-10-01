@@ -1,0 +1,378 @@
+<script>
+$(document).ready(function() {
+	$.checkHistoryID = function(callback, noCallbackIfUserLoggedIn) {
+	if(typeof noCallbackIfUserLoggedIn == 'undefined') noCallbackIfUserLoggedIn = false;
+		
+	if(typeof window.userProfile !== 'undefined') {
+		if(window.userProfile.history_id == 0) {
+			$('div#dialog-box > span#content').append("<h2>Start a new Practice Placement Cycle</h2>\
+								  <p>You start a new Practice Placement Cycle on this website whenever you start a new placement.</p>\
+								  <p>You are now starting a new practice placement cycle, you will need to name it before continuing.\
+								  This will save it to your profile for future use.</p><p>You can restore previous cycles from the toolbar\
+								  at any time by clicking\
+								  'Manage Practice Placement Cycles' and selecting the relevant cycle.</p><p>We recommend that you save\
+								  your current cycle with a meaningful name.\
+								  </p><label for='cycle_name'><strong>Cycle name:</strong></label>\
+								  <input name='cycle_name' type='text' />\
+								  <button name='save'>Save</button>");
+			$('div#dialog-box').show(100);
+		
+		var process = function(e) {
+			
+				// hack for IE 9 bug where this is added twice					
+				if($('#dialog-box').length > 1) {
+					$('#dialog-box').last().remove();
+					console.log("removed duplicate file-viewer DIV");
+				}
+				
+				var cycle_name = $("#dialog-box input[name='cycle_name']").val();
+				
+				if(typeof cycle_name !== 'undefined' && cycle_name.length > 0) {
+						window.userProfile.title = cycle_name;
+						$('#ajax-loader').show();
+						$.post('/ajax/user-status', 
+							{ "userProfile" : JSON.stringify(window.userProfile) }, 
+							function(data) {
+								$('#ajax-loader').hide();
+								window.userProfile.history_id = data.history_id;
+								callback(cycle_name);
+							} 
+							,'json');
+				} else {
+					$("#dialog-box #errorMsg").remove();
+					$("#dialog-box input[name='cycle_name']").css('border', 'thin solid red').after("<p style='color: red' id='errorMsg'>Please enter a name for this cycle</p>");
+					return false;
+				}
+		return false;
+		};
+		
+		
+		
+		$(document).on('keypress', "#dialog-box input[name='cycle_name']", function(e) {
+			if(e.which == 13) {
+				process(e);
+			}
+		});
+		
+		$(document).on('click', "#dialog-box button[name='save']", function(e) {
+				e.preventDefault();
+				process(e);
+		});
+		
+		} else {
+			if(!noCallbackIfUserLoggedIn) {
+				callback();
+			}
+		}
+	} 
+	return this;
+	};
+	
+	var searchGoogle = function() {
+		var search_val = $("#search input#keywords").val();
+		search_val = encodeURIComponent(search_val);
+		window.document.location = "//www.google.com/#hl=en&sclient=psy-ab&q="+search_val+"+site:otca.net.au";
+	};
+	
+//search box
+	$("#search input[type='submit']").click(function(e) {
+				e.preventDefault();
+				searchGoogle();
+	});
+	
+	$("#search input#keywords").keypress(function(event) {
+		if ( event.which == 13 ) {
+			event.preventDefault();
+			searchGoogle();
+		}
+	});
+});	
+<?php
+$member_id = $this->EE->session->userdata('member_id');
+$group_id = $this->EE->session->userdata('group_id');
+
+/*if(!function_exists("escapeJsonString")) {
+	function escapeJsonString($value) { 
+	    $escapers = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
+	    $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
+	    $result = str_replace($escapers, $replacements, $value);
+	return $result;
+	}
+}*/
+$admin_toolbars = "";
+if ($group_id == 1) {
+	$admin_toolbars = "$(\".cycle-toolbar\").css({ \"margin-left\" : \"464px\" });";
+}
+
+if(!empty($member_id)) {
+
+
+$toolbarChange = "window.toolbarHeightChange =  '=246px';";
+$toolbarMax = "window.toolbarMaxHeight = 246;";
+
+
+$query =  $this->EE->db->query("SELECT `entry_id`, `entry_text`,`creation_date`, `last_updated`, `tag` FROM `otca_diary` `d` LEFT JOIN (`otca_user_status` `s`)  ON (`d`.`current_practice_cycle` = `s`.`history_id` AND `d`.`member_id` = `s`.`member_id`) WHERE `s`.`member_id` = '$member_id' AND `d`.`member_id` = '$member_id'");
+
+$js_reflections_array = array();
+if ($query->num_rows() > 0)
+{
+	$i = 0;
+	foreach($query->result_array() as $row) // returns all diary entries for this practice cycle
+    	{	
+		//$entry_text_pregged = escapeJsonString($row['entry_text']);
+		//$entry_text_pregged = json_encode($row['entry_text']);
+		$entry_text_pregged = $row['entry_text'];
+		$js_reflections_array[$row['tag']] = array("internalId" => $row['entry_id'], "text" => $entry_text_pregged, "date" => $row['creation_date'], "tag" => $row['tag'] );
+	}
+} 
+
+$query = $this->EE->db->query("SELECT a.`steps`, a.`level`, a.`beginner`, a.`objectives`, a.`history_id`, a.`title`,b.`time` FROM `otca_user_status` a, `otca_user_status_history` b WHERE a.`member_id`=b.`member_id` AND a.`history_id`=b.`id` AND a.`member_id`= '$member_id'");
+
+$steps = "[]";
+$level = '1';
+$beginner = 'false';
+$objectives = "[]";
+$time = 0;
+if ($query->num_rows() > 0)
+{
+	foreach($query->result_array() as $row) // returns one row
+    {
+ 		$steps = isset($row['steps']) && $row['steps'] != ""?$row['steps']:"[]";
+		$level = isset($row['level']) && $row['level'] != ""?$row['level']:1;
+		$beginner = isset($row['beginner']) && $row['beginner'] != ""?$row['beginner']:0;
+		$objectives = isset($row['objectives']) && $row['objectives'] != ""?$row['objectives']:"[]";
+		$history_id = isset($row['history_id']) && $row['history_id'] != ""?$row['history_id']:0;
+		$title = isset($row['title']) && $row['title'] != ""?$row['title']:"";
+		$time = isset($row['time']) && $row['time'] != ""?$row['time']:0;
+	}
+}	else {
+	$steps = '[]';
+	$level = 1;
+	$beginner = 1;
+	$objectives = '[]';
+	$history_id = 0;
+	$title = "";
+	$time = time();
+}
+if($time == 0) 
+	$js_humanTime = "var cycleCreated = \"Not yet saved\"";
+else
+	$js_humanTime = "var cycleCreated = \"" . date("d/m/Y", $time) . "\";\n";
+
+$screen_name = $this->EE->session->userdata("screen_name");		
+$js_screen_name = "var screen_name = \"$screen_name\";\n";
+if (empty($js_reflections_array)) {
+	$json_ref_array = "{}";
+} else {
+	$json_ref_array = json_encode($js_reflections_array);
+}
+
+$js_userProfile = "window.userProfile = {
+				\"reflections\" : $json_ref_array,
+				\"startNewCycle\" : false,
+				\"steps\" : $steps,
+				\"level\" : $level,
+				\"beginner\" : $beginner,
+                \"objectives\" : $objectives,
+				\"history_id\" : $history_id,
+				\"title\" : \"$title\",
+				\"time\" : $time
+			};\n\n";
+			
+$js_currentTime = "var currentTime = \"".date('ds M, Y g:i a', $this->EE->localize->set_localized_time(time()))."\";\n";
+			
+/* user javascript variables */			
+echo $js_userProfile;
+echo $js_humanTime;
+echo $js_screen_name;
+echo $js_currentTime;
+echo $toolbarChange;
+echo $toolbarMax;
+echo $admin_toolbars;
+?>
+
+window.purple = '#852C8A';
+window.yellow = '#FFB510';
+	
+$(document).ready(function(){ 		
+	window.emptyUserProfile = {
+			"reflections" : {},
+			"startNewCycle" : false,
+			"steps" : [],
+			"level" : 0,
+			"beginner" : true,
+			"objectives" : [],
+			"history_id" : 0,
+			"title" : "",
+			"time" : 0
+	};
+        
+        window.stepDefinitions = [ "null", "Request for Service", "Information Gathering", "Occupational Assessment", "Identification of Occupational Issues", "Goal Setting", "Intervention",
+                                              "Evaluation", "Being a Professional"  ];          
+	
+    $('div.cycle-name-box').append((window.userProfile.title.length === 0 ?'Unnamed' : window.userProfile.title) + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Date created:</strong> " + cycleCreated);	
+					      
+    $("#traffic-light-set").criteriaLoader(); 
+
+    var arr = screen_name.split(" ");
+	var firstname = arr[0];
+	      
+	    if((firstname.substr(0, firstname.length-1)).toUpperCase() == 'S') 
+			firstname = firstname + "'";
+	    else 
+            firstname = firstname + "'s";	
+
+	      $("body #firstname").text(firstname);	
+	       
+		$(".cycle-toolbar").hover(
+			function() {
+			if($(this).height() <= 15) 
+				$(this).animate({ height: "+"+window.toolbarHeightChange }, 500);
+			}, 
+			function() {
+			if($(this).height() >= window.toolbarMaxHeight)	
+				$(this).animate({ height: "-"+window.toolbarHeightChange }, 500);
+			}
+		);
+		
+		if($(".ajax-loader").length == 0) {
+			$('body').append("<div class='ajax-loader' id='ajax-loader' style='display: none;'><p id='message' style='color: #FFB510;'><strong>Please wait...</strong></p></div>");
+		}
+		if($("#dialog-box").length == 0) {
+			console.log("added global viewer");
+			$('body').append("<div class='global_file-viewer' id='dialog-box' style='display: none'><a href='#close' class='exit'><img src='/img/close-icon.png' alt='close'></a><span id='content'></span></div>");
+		}
+		
+		$(document).on('click', 'div#dialog-box a.exit', function(e) {
+				e.preventDefault();
+				$('div#dialog-box > span#content').html('');
+				$('div#dialog-box').hide(100);
+		});
+		
+		
+		
+		// restore practice cycle
+		$(document).on('click', 'div#dialog-box > span#content ul.cycles .cl', function(e) {
+			e.preventDefault();
+			$('.ajax-loader').show(500);
+			$.get($('a', this).attr('href'), function(data) {
+				// userprofile restored from database and refreshed to js scope using refresh	
+				window.location.reload();
+			});
+		});
+		
+		// save and create new practice cycle
+		$('.cycle-toolbar a#save').click(function(e){
+			e.preventDefault();
+				
+			if(confirm("This will begin a new Practice Placement Cycle (PPC).  If you choose 'OK' and you want to revert to a previous cycle later,\n\n you can restore that PPC by selecting 'Restore' in the toolbar.\n\n Continue?")) {
+				window.userProfile = window.emptyUserProfile;
+				$.checkHistoryID(function() {
+					window.location.reload();
+				});
+			}
+		});
+		
+		$('.cycle-toolbar a#restore').click(function(e) {
+			e.preventDefault();
+			$('div#dialog-box > span#content').append("<h2>Restore a previous practice cycle</h2><ul class=cycles></ul>");
+			$("div#dialog-box > a.exit").css({left: "539px"});
+			$.get('/ajax/get-user-status-history', function(data) {
+				var str = "<li>You don't have any saved practice cycles yet.</li>";
+				if(typeof data != 'undefined' && data.length > 0) {
+				var json = JSON.parse(data);
+				$('div#dialog-box ul').html('');
+				$.each(json, function(i, v) {
+						if(i==0) str = '';
+						if (v.is_current == 0) {
+							str += "<li><div class='cl'><a href=/ajax/restore-user-status?id=" + v.id + ">"+ v.title + " &ndash; (" + v.time + ")</a></div><img alt=\"delete\" src=\"/img/close-icon.png\" id='deleteCycle' data-id='"+v.id+"'></li>";		
+						} else {
+							str += "<li><div class='cur-cl'><span style='color: #0066FF'>CURRENT CYCLE &ndash;</span>  "+v.title + " &ndash; (" + v.time + ")</div></li>";		
+						}
+						
+				});		
+				}	
+				$('div#dialog-box ul').append(str);
+				$('div#dialog-box').show(100);
+			});
+});
+		
+		$(document).on("click", "#deleteCycle", function(e) {
+			e.preventDefault();
+			
+			var confirmed = confirm("Are you sure, this will delete this cycle and all learning contracts associated with it?");
+			
+			if(confirmed == true) {
+			var id = $(e.target).data('id');
+				if(typeof confirmed != 'undefined' && confirmed == 1) {
+					if(typeof id !== 'undefined') {
+						$.get('/ajax/remove-practice-cycle?id='+id, function(data) {
+							console.log("cycle deleted");
+							$("#dialog-box > span#content").html("");
+							$('.cycle-toolbar a#restore').trigger('click');
+						});
+					}
+				}
+			}
+		});
+});
+<?php 	}  ?>
+</script>
+<script>
+$(document).ready(function() {
+	/* tabs for resources */
+	$("#resource-tabs li").click(function() {
+				$("#resource-tabs li").removeClass("selected");
+				$(this).addClass('selected');
+				var index = $(this).index();
+
+				$(".otca-tab").each(function(i, v) {
+					if(i == index) {
+						$(v).show();
+					} else {
+						$(v).hide();
+					}
+				});
+
+			});
+	
+		
+		$("ul.sf-menu").superfish({ 
+		            animation: {height:'show'},   // slide-down effect without fade-in 
+		            delay:     1200               // 1.2 second delay on mouseout 
+		});
+	
+		$("#system_message").slideDown();
+		
+		$("#system_message").click(function() { $(this).slideUp(1000); });
+		
+		<?php
+		if($member_id > 0 && $group_id == 6 || $group_id == 7 || $group_id == 5 || $group_id == 1 || $group_id == 9) { ?>
+		
+		$("#helptab").click(function() {
+			$("#youtube-intro").slideDown();
+		});
+		
+		$("#youtube-intro a#close").click(function(e) {
+			e.preventDefault();
+			$(this).closest('div').slideUp();
+		});
+		
+		$("#youtube-intro input#dontshow").click(function() {
+			var ytframe = $(this).closest('div');
+			
+			if($(this).is(':checked')) {
+				window.userProfile.beginner = 0;
+				 $.post('/ajax/user-status',
+				{ "userProfile" : JSON.stringify(window.userProfile) }
+			,'json');
+				 
+			$(ytframe).slideUp();	 
+			}
+		});
+	<?php } ?>		
+});
+</script>
+			
+
+		

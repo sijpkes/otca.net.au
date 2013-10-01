@@ -1,0 +1,7 @@
+<?php
+$member_id = $this->EE->session->userdata('member_id');
+$id = $this->EE->input->get('id');
+
+$sql = "UPDATE `exp_member_data` SET `otca_institution_id` = '$id' WHERE `member_id` = '$member_id';";
+$query = $this->EE->db->query($sql);
+?>

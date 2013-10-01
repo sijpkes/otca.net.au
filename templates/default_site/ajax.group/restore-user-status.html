@@ -1,0 +1,12 @@
+<?php
+$member_id = $this->EE->session->userdata('member_id');
+if(!isset($member_id) || $member_id == 0) return;
+
+$history_id = $this->EE->input->get('id');
+
+$this->EE->db->query("DELETE FROM `otca_user_status` WHERE `member_id` = '$member_id'");
+
+$sql = "INSERT INTO `otca_user_status` (`member_id`, `steps`, `level`, `beginner`, `objectives`, `title`, `history_id`) SELECT `member_id`, `steps`, `level`, `beginner`, `objectives`, `title`, `id` FROM `otca_user_status_history` WHERE `id`='$history_id'";
+
+$query = $this->EE->db->query($sql);
+?>

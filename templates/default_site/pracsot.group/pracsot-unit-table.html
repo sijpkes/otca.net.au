@@ -1,0 +1,211 @@
+<?php
+$member_id = $this->EE->session->userdata('member_id');
+if($member_id == 0) return;
+
+$group_id = $this->EE->session->userdata('group_id');
+if($group_id == 6 || $group_id == 7 || $group_id == 9 || $group_id == 1) {
+	$member_id = $this->EE->input->get('sid');
+}
+
+define('BEING_A_PROFESSIONAL', 1); // check for holistic item which spans all PRACSOT levels
+
+$element = $this->EE->input->get('element');
+
+$unit_code = substr($element, 0, 1);
+$unit_color = "unit$unit_code-color";
+$unit_heading = "unit$unit_code-heading";
+$unit_bgcolor = "unit$unit_code-bgcolor";
+$unit_sub_bgcolor = "unit$unit_code-sub-bgcolor";
+
+if(strlen($element) < 3) return;
+
+$sql = "SELECT `id`,`header` FROM `otca_pracsot_headers` WHERE id = '$element'";
+
+$query = $this->EE->db->query($sql);
+
+if ($query->num_rows() > 0)
+{
+	foreach($query->result_array() as $row)
+    {
+		$header = $row['header'];
+	}
+}
+
+$sql = "SELECT `id`, `question` FROM `otca_pracsot` WHERE `id` LIKE('$element.%')";
+
+$query = $this->EE->db->query($sql);
+
+$assess_sql = "SELECT * FROM (SELECT `data`.`entry_id`, `data`.`field_id_6` as `self_assessment`, `av`.`matrix_ids` as `supervisor_assessment`, `av`.`date_assessed` FROM  `exp_channel_data` `data` LEFT JOIN (`exp_channel_titles` `title` , `otca_evidence` `ev`, `otca_evidence_validated` `av`) ON (`data`.`entry_id` = `ev`.`entry_id` AND `title`.`entry_id` = `ev`.`entry_id` AND `ev`.`entry_id` = `av`.`evidence_id`) WHERE `title`.`author_id` = '$member_id' order by `data`.`entry_id`, `av`.`date_assessed` desc) `ua` GROUP BY `ua`.`entry_id`";
+ 
+$comparison_query = $this->EE->db->query($assess_sql);
+
+if ($comparison_query->num_rows() > 0)
+{
+	foreach($comparison_query->result_array() as $row)
+    {	
+		// add option to compare later ...? maybe
+		$temp_array = json_decode("[$row[supervisor_assessment]]");
+		foreach($temp_array as $item) {
+			$evidence_array[] = $item;
+		}
+		//$self_assessed[] = json_decode("[$row[self_assessment]]");			
+	}
+}
+?>	
+<br>
+<p style='text-align:right'><input type="button" value="Print this page" onClick="window.print()"></p>
+{embed='pracsot/header'}
+<p>&nbsp;</p>
+{embed='pracsot/<?php echo $unit_heading; ?> unit_color='<?php echo $unit_color; ?>'}	
+		<table cellspacing="0" cellpadding="0" border="0" class="pracsot-table">
+			<colgroup>
+				<col width="513">
+				<col width="61">
+				<col width="61">
+				<col width="61">
+			</colgroup>
+			<tbody>
+				<tr class="tr-header">
+					<td class="td-header <?php echo $unit_bgcolor; ?>" style="text-align:left;width:11.746cm; font-size: 10pt;">
+						<p style="margin: 0.199cm;">
+							<span class="td-element-header">Element <?php echo $element; ?></span>&nbsp; &nbsp; &nbsp; &nbsp; <?php echo $header; ?>
+						</p>
+					</td>
+					<td class='<?php echo $unit_bgcolor; ?>' style="text-align:left; font-size: 10pt;" colspan="3" class="td-header">
+						<p class="p-demonstrated-competence">
+							Demonstrated Competence
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<td class="perf-criteria <?php echo $unit_sub_bgcolor; ?>" style="text-align:left;width:11.746cm;">
+						<p class="perf-header">
+							Performance Criteria
+						</p>
+					</td>
+					<td class="perf-criteria <?php echo $unit_sub_bgcolor; ?>" style="text-align:left;width:2cm;">
+						<p class="perf-header">
+							Emerging
+						</p>
+					</td>
+					<td class="perf-criteria <?php echo $unit_sub_bgcolor; ?>" style="text-align:left;width:2cm;">
+						<p class="perf-header">
+							Consolidating
+						</p>
+					</td>
+					<td class="perf-criteria <?php echo $unit_sub_bgcolor; ?>" style="text-align: center;width: 3cm;">
+						<p class="perf-header">
+							Competent to Graduate
+						</p>
+					</td>
+				</tr>
+				
+<?php
+
+if ($query->num_rows() > 0)
+{
+	foreach($query->result_array() as $row)
+    {
+	
+?>
+				<tr>
+					<td style="text-align:left;width:11.746cm;">
+						<p>
+							<?php echo "<a name='$row[id]'></a><strong>$row[id]</strong> - $row[question]"; ?>
+						</p>
+					</td>
+					
+<?php
+$emer_v = 0;
+$cons_v = 0;
+$comp_v = 0;
+
+$emer_u = 0;
+$cons_u = 0;
+$comp_u = 0;
+
+if(isset($evidence_array)) {
+foreach($evidence_array as $ev_array)
+{	
+	$i = 0;
+	foreach($ev_array as $evidence) {
+		
+		if(strpos($evidence->pracsot, $row['id']) !== FALSE) {
+		
+			if($evidence->agreed == 1) {
+				
+				if($evidence->level == BEING_A_PROFESSIONAL) {
+					$emer_v = $emer_v + 1;
+					$cons_v = $cons_v + 1;
+					$comp_v = $comp_v + 1;
+				} else {
+					switch($evidence->level) {
+						case 1:
+							$emer_v = $emer_v + 1;
+						break;
+						case 2:
+							$cons_v = $cons_v + 1;
+						break;
+						case 3:
+							$comp_v = $comp_v + 1;
+						}
+				}
+			} else
+			{
+				if($evidence->level == BEING_A_PROFESSIONAL) {
+					$emer_u = $emer_u + 1;
+					$cons_u = $cons_u + 1;
+					$comp_u = $comp_u + 1;
+				} else {
+				switch($evidence->level) {
+					case 1:
+						$emer_u = $emer_u + 1;
+					break;
+					case 2:
+						$cons_u = $cons_u + 1;
+					break;
+					case 3:
+						$comp_u = $comp_u + 1;
+				}
+				}
+			}
+		}   
+	}
+}
+}
+?>
+					<td tyle="text-align:left;width:1.386cm;">
+						<div title="Evidence - validated: <?php echo $emer_v; ?> unvalidated: <?php echo $emer_u; ?>" class="pracsot-tickbox">
+								<?php if($emer_v > 0) { ?>
+									<div style='padding-top: 8px'>
+								<?php echo "&#10003;"; ?>
+									</div>
+							<?php	} ?>	
+						</div>
+					</td>
+					<td style="text-align:left;width:1.386cm;">
+						<div title="Evidence - validated: <?php echo $cons_v; ?> unvalidated: <?php echo $cons_u; ?>" class="pracsot-tickbox">
+								<?php if($cons_v > 0) { ?>
+									<div style='padding-top: 8px'>
+								<?php echo "&#10003;"; ?>
+									</div>
+							<?php	} ?>
+						</div>
+					</td>
+					<td style="text-align:left;width:1.386cm;">
+						<div title="Evidence - validated: <?php echo $comp_v; ?> unvalidated: <?php echo $comp_u; ?>" class="pracsot-tickbox">
+						<?php if($comp_v > 0) { ?>
+							<div style='padding-top: 8px'>
+						<?php echo "&#10003;"; ?>
+							</div>
+						<?php	} ?>
+						</div>
+					</td>
+				</tr>
+<?php
+	}
+}
+?>
+			</tbody>
+		</table>
+<p style='text-align:right'><input type="button" value="Print this page" onClick="window.print()"></p>

@@ -1,0 +1,32 @@
+<?php
+	$diaryHTML = $this->EE->input->post("diaryHTML");
+?>
+<!DOCTYPE html>
+<head>
+<title>{screen_name}'s Learning Contract</title>
+<style>
+body {
+	font-family: Garamond, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: normal;
+	width: 600px;
+	margin: 0 auto;
+}
+.printable-entry {
+    border: thin solid black;
+    border-radius: 5px;
+    padding: 1em;
+}
+</style>
+</head>
+<body>
+<h2>{screen_name}'s Diary</h2>
+<p>{current_time format="%d%S %F %Y"}</p>
+
+<?php echo $diaryHTML; ?>
+
+<p><form>
+<input type="button" value="Print this page" onClick="window.print()">
+</form></p>
+</body>
+</html>

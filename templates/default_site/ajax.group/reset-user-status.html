@@ -1,0 +1,8 @@
+<?php
+// not implemented
+
+$member_id = $this->EE->session->userdata('member_id');
+if(!isset($member_id) || $member_id == 0) return;
+
+$this->EE->db->query("DELETE FROM `otca_user_status` WHERE `member_id` = '$member_id'");
+?>

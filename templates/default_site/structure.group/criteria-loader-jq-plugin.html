@@ -1,0 +1,100 @@
+<?php
+$member_id = $this->EE->session->userdata('member_id');
+if($member_id == 0) return;
+
+$sql = "SELECT data.entry_id, data.field_id_6 FROM exp_channel_data data LEFT JOIN (exp_channel_titles title , otca_evidence ev, otca_evidence_validated av) ON (data.entry_id = ev.entry_id AND title.entry_id = ev.entry_id AND ev.entry_id = av.evidence_id) WHERE title.author_id = '$member_id' LIMIT 0, 1000"; 
+
+$query = $this->EE->db->query($sql);
+$json_array = "[";
+$sep = "";
+$i=0;
+foreach($query->result_array() as $row) // returns one row
+{
+	if($i++ > 0) { 
+		$sep=","; 
+	} else {
+		$sep="";
+	}
+	
+	$json_array .= "$sep $row[field_id_6]";
+}
+$json_array .= "]";
+$query = $this->EE->db->query("SELECT id from otca_pracsot ORDER BY id ASC");
+$pracArray = array();
+foreach($query->result_array() as $row) // returns one row
+{
+	$pracArray[] = $row['id'];
+}
+
+$db_vars = "var evidence = $json_array;\nvar pracsot = ".json_encode($pracArray).";\n";
+?>
+<script type='text/javascript'>
+(function( $ ) {
+$.fn.criteriaLoader = function() {
+	var weight = 1;
+	var threshold = 133;
+
+	var $me = this;
+
+<?php echo $db_vars; ?>
+
+var emer = 0;
+var cons = 0;
+var comp = 0;
+
+var checkedPrac = {
+	emer : [],
+	cons : [],
+	comp : []
+};
+$.each(evidence, function(i, v) {
+	var evPrac = v.pracsot.split(',');
+	$.each(evPrac, function(i, prac) {
+		if($.inArray(prac, pracsot) != -1) {
+			switch(v.level) {
+			case 1:
+				if($.inArray(prac, checkedPrac.emer) == -1) {
+					checkedPrac.emer.push(prac);
+					emer += weight;
+				}
+			break;
+			case 2:
+				if($.inArray(prac, checkedPrac.cons) == -1) {
+					checkedPrac.cons.push(prac);
+					cons += weight;
+				}
+			break;
+			case 3:	
+				if($.inArray(prac, checkedPrac.comp) == -1) {
+					checkedPrac.comp.push(prac);
+					comp += weight;
+				}
+			}	
+		}
+	});
+});
+		var emer_perc = emer > 0 ? emer / threshold : 0;
+		var cons_perc = cons > 0 ? cons / threshold : 0;
+		var comp_perc = comp > 0 ? comp / threshold : 0;
+			
+		$me.find("#emerging").attr('title', 'Emerging '+Math.round(emer_perc*100)+'%');
+		$me.find("#consolidating").attr('title', 'Consolidating '+Math.round(cons_perc*100)+'%');
+		$me.find("#competent").attr('title', 'Competent to Graduate '+Math.round(comp_perc*100)+'%');
+		
+		emer_perc = emer_perc + 0.3;
+		cons_perc = cons_perc + 0.3;
+		comp_perc = comp_perc + 0.3;
+		
+		if(emer_perc > 0.3) {	
+			$me.find("#emerging").css({ 'opacity' : emer_perc, "color": "#C84242"});
+		}
+		if(cons_perc > 0.3) {	
+			$me.find("#consolidating").css({ 'opacity' : cons_perc, "color" : "#FF8400"});
+		}
+		if(comp_perc > 0.3) {
+			$me.find("#competent").css({ 'opacity' : comp_perc, "color" : "#42C842"});
+		}
+return this;
+};
+})( jQuery );
+</script>

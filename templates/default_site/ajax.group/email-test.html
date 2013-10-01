@@ -1,0 +1,11 @@
+<?php
+$this->EE->load->library('email');
+
+	$this->EE->email->from("no-reply@otaltc.net");
+	$this->EE->email->to("paul.sijpkes@gmail.com");
+	$this->EE->email->subject("OTCA test email");
+	$this->EE->email->message("This is a test email sent from the OTCA server.");
+	$this->EE->email->Send();
+
+echo "Email sent without any problems that I can see on this end.";
+?>

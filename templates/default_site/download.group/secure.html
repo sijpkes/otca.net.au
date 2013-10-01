@@ -1,0 +1,73 @@
+<?php
+$member_id = $this->EE->session->userdata('member_id');
+if($member_id == 0) return;
+
+$group_id = $this->EE->session->userdata('group_id');
+
+$filename = $this->EE->uri->segment(3);
+$entry_id = $this->EE->uri->segment(4);
+
+$sql = "SELECT `field_id_3` as `file_name`, `author_id` as `student_id`  FROM `exp_channel_data` `data` LEFT JOIN `exp_channel_titles` `titles` ON `data`.`entry_id` = `titles`.`entry_id` WHERE `data`.`entry_id` = '$entry_id' LIMIT 1";
+$entry_query = $this->EE->db->query($sql);
+
+$student_id = $member_id;
+
+if($entry_query->num_rows() > 0) { 
+            foreach($entry_query->result_array() as $row) {
+			$file_link = $row['file_name'];
+            }
+}
+//check if this is a Lecturer or Practice Educator
+if($group_id == 1 || $group_id == 6 || $group_id == 7 || $group_id == 9) {
+        
+        if($entry_query->num_rows() > 0) { 
+            foreach($entry_query->result_array() as $row) {
+                        $student_id = $row['student_id'];
+            }
+        }
+        if($student_id != $member_id) {
+	$sql = "SELECT `student_id` FROM `otca_evidence_access` WHERE `educator_id` = '$member_id' AND `student_id` = '$student_id' LIMIT 1";
+	
+	$query = $this->EE->db->query($sql);
+	
+	if($query->num_rows() > 0) {
+		foreach($query->result_array() as $row) // returns all evidence entries for this practice cycle
+	    {
+			$temp_student_id = $row['student_id'];
+		}
+	} else {
+		$pract = $group_id=6?"Practice Educator":"Lecturer";
+		echo "<h1>Access denied.</h1><p>If you think you should have access to this file, please ask the owner to elect you as their $pract.</p>";
+		exit;
+	}
+	}
+	
+        if(isset($temp_student_id)) {
+		$student_id = $temp_student_id;
+	}
+} 
+
+if(isset($file_link)) {
+$file = preg_replace('~\{(.*?)\}~', '/home4/otaltcne/public_html/user_evidence/', $file_link);
+
+if (file_exists($file)) {
+    $mimet = mime_content_type($file);
+    header('Content-Description: File Transfer');
+    header("Content-Type: $mimet");
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($file));
+    ob_clean();
+    flush();
+    readfile($file);
+	exit;
+} else {
+	echo "<h1>This file does not exist.</h1><p>Please contact <a href='mailto:webmaster@otca.net.au'>webmaster@otca.net.au</a></p>";
+}
+
+} else {
+	echo "<h1>Oops. How did you get here?</h1><p>Click the back button to return to where you came from. Or return to the home page <a href='https://otca.net.au'>https://otca.net.au</a></p>";
+	exit;
+}
+?>

@@ -1,0 +1,41 @@
+<?php
+	$edname = $this->EE->input->post("edname");
+	$s1 = $this->EE->input->post("statement1");
+	$s2 = $this->EE->input->post("statement2");
+	$s3 = $this->EE->input->post("statement3");
+	$s4 = $this->EE->input->post("statement4");
+
+	$screen_name = $this->EE->session->userdata('screen_name');
+?>
+
+<style type='text/css'>
+#content {
+	font-family: Garamond, times, serif;
+	font-size: 12pt;
+	font-weight: normal;
+	display: block;
+	width: 600px;
+	margin: 0 auto;
+}
+</style>
+
+<div id='content'>
+<p>Dear <?php echo $edname; ?>,</p>
+
+<p id='statement1'><?php echo $s1; ?></p>
+
+<p id='statement2'><?php echo $s2; ?></p>
+
+<p id='statement3'><?php echo $s3; ?></p>
+
+<p id='statement4'><?php echo $s4; ?></p>
+
+<p>Yours sincerely,<br>
+<br>
+<br>
+<?php echo $screen_name; ?>
+</p>
+<p><form>
+<input type="button" value="Print this page" onClick="window.print()">
+</form></p>
+</div>

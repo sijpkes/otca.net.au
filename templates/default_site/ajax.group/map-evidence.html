@@ -1,0 +1,16 @@
+<?php
+$member_id = $this->EE->session->userdata('member_id');
+if($member_id == 0) return;
+
+$id = $this->EE->input->get('id');
+$fileName = $this->EE->input->get('filename');
+
+$query = $this->EE->db->query("INSERT INTO otca_evidence (`entry_id`, `filename`, `upload_time`) VALUES ('$id','$fileName',UNIX_TIMESTAMP())");
+
+$returnArray = array("message" => "<p>Evidence added.</p><p>This evidence will not count towards
+        your competencies until your practice educator has validated your self assessment.</p>",
+            "id" => $id);
+
+echo json_encode($returnArray);
+
+?>

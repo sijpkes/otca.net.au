@@ -1,0 +1,21 @@
+{embed="structure/header" use_my_placement_css='yes'}
+
+<h2>Your Learning Contract</h2>
+
+<div id='learning-contract-pane'>
+
+</div>
+<p><a id="continue" class="button" href="/practice-placement/summary-of-your-competencies">Summary of your Competencies &rarr;</a>&nbsp;&nbsp;<a class='button' id='printable'>Printable View of Learning Contract</a></p>
+</div>
+<div id='criteria-data' style='display:none'></div>
+
+{embed="structure/footer" login_required='true'}
+
+{exp:practice_placement:learning_contractjs 
+allowed_group_ids='5' 
+no_access_message='This functionality is only available to Student members.' 
+jquery_selector='#learning-contract-pane'
+planning = 'true'
+evidence = 'true'
+objectives = 'true'	
+}

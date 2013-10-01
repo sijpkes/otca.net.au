@@ -1,0 +1,28 @@
+<?php
+$member_id = $this->EE->session->userdata('member_id');
+$group_id = $this->EE->session->userdata('group_id');
+
+if($member_id == 0 || $group_id == 6 || $group_id == 7) return;  /* does not need to be accessed by educators*/
+
+$user_check = "SELECT `otca_institution_id` FROM `exp_member_data` WHERE `member_id` IN (SELECT `educator_id` FROM `otca_evidence_access` WHERE `student_id`='$member_id');";
+$user_query = $this->EE->db->query($user_check);
+
+$preselect_id = array();
+if($user_query->num_rows() > 0) {
+	foreach($user_query->result_array() as $row) 
+	{
+            	$preselect_id[] = $row['otca_institution_id'];	
+	}
+} 
+
+$sql = "SELECT `id`, `name` FROM `otca_institutions` WHERE `type` <> '1' LIMIT 0,100";
+$query = $this->EE->db->query($sql);
+
+if($query->num_rows() > 0) {
+	foreach($query->result_array() as $row) 
+	{
+            $selected = (in_array($row['id'], $preselect_id)) ? "selected" : ""; 
+            echo "<option value='$row[id]' $selected>$row[name]</option>";		
+	}
+} 
+?>

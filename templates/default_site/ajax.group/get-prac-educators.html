@@ -1,0 +1,31 @@
+<?php
+$member_id = $this->EE->session->userdata('member_id');
+$group_id = $this->EE->session->userdata('group_id');
+if($member_id == 0 || $group_id == 6 || $group_id == 7) return;  /* does not need to be accessed by educators*/
+
+$existing_eds = array();
+
+$sql = "SELECT `educator_id` FROM `otca_evidence_access` WHERE `student_id` = '$member_id'";
+$query = $this->EE->db->query($sql);
+if($query->num_rows() > 0) {
+	foreach($query->result_array() as $row) 
+	{
+            $existing_eds[] = $row['educator_id'];
+        }
+}
+
+    $sql = "SELECT DISTINCT `mem`.`member_id`, `mem`.`screen_name`, `mem`.`group_id`, `group`.`group_title`,`in`.`id` FROM
+    `exp_member_data` ed LEFT JOIN (`otca_institutions` `in`, `exp_members` `mem`, `exp_member_groups` `group`) ON
+    `ed`.`otca_institution_id` = `in`.`id` AND `mem`.`member_id` = `ed`.`member_id` AND `group`.`group_id` = `mem`.`group_id`
+    WHERE `in`.`type` <> '1' AND (`mem`.`group_id`='6' OR `mem`.`group_id` = '7');";
+$query = $this->EE->db->query($sql);         
+if($query->num_rows() > 0) {
+	foreach($query->result_array() as $row) 
+	{
+            $group_title = $row['group_title'];
+            $group_title = substr($group_title, 0, strlen($group_title)-1);
+            $selected = in_array($row['member_id'], $existing_eds) === TRUE ? "selected" : "";
+            echo "<option data-instid='$row[id]' value='$row[member_id]' title='$group_title' $selected>$row[screen_name]</option>";		
+	}
+} 
+?>

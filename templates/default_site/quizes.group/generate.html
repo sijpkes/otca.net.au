@@ -1,0 +1,40 @@
+<?php
+$step = {embed:step};
+
+$sql = "SELECT * FROM `otca_quiz_questions` WHERE `step`='$step' ORDER BY RAND();";
+
+$query = $this->EE->db->query($sql);
+
+if ($query->num_rows() > 0)
+{
+
+	echo "<ol id='quiz' style='min-height: 305px'>";
+	foreach($query->result_array() as $row)
+        {
+        $type = $row['type'];
+        if($type == "MCQ") {
+		echo "<li style='display:none; list-style: none'><p><pre style='font-family: arial, helvetica, sans-serif; font-size: 12pt'>$row[question]</pre></p>";
+		$sql_answers = "SELECT * FROM `otca_quiz_answers` WHERE `question_id` = '$row[id]' AND `step` = '$step' ORDER BY RAND() LIMIT 0, 30 ";
+		$answer_query =  $this->EE->db->query($sql_answers);
+		echo "<ol style='list-style-type: lower-alpha'>";
+		foreach($answer_query->result_array() as $answer_row)
+	        {
+                
+			if($answer_row['correct'] == 'Y') $correct = "value='1'"; else 	$correct = "";
+			echo "<li><label><input name='answer' type='radio' data-feedback='$answer_row[comment]' $correct/> $answer_row[answer]</label></li>";
+                }
+		echo"</ol>";
+		echo "</li>";
+        }
+	if($type == "SAQ") {
+		$sql_answers = "SELECT `comment` FROM `otca_quiz_answers` WHERE `question_id` = '$row[id]' AND `step` = '$step' ORDER BY RAND() LIMIT 1";
+		$answer_query =  $this->EE->db->query($sql_answers);
+		foreach($answer_query->result_array() as $answer_row)
+	        {
+			echo "<li style='display:none; list-style: none'><p><pre style='font-family: arial, helvetica, sans-serif; font-size: 12pt'>$row[question]</pre></p><textarea id='short_answer' data-feedback='$answer_row[comment]' style='min-width: 500px; min-height: 200px'></textarea></li>";
+		}
+	}
+	}
+	echo "</ol>";
+}
+?>

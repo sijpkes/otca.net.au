@@ -1,0 +1,47 @@
+<?php
+$member_id = $this->EE->session->userdata('member_id');
+$group_id = $this->EE->session->userdata('group_id');
+if($member_id == 0 || $group_id == 6 || $group_id == 7) return;  /* does not need to be accessed by educators*/
+$id = $this->EE->input->get('id');
+$where_clause = "";
+
+if(!isset($id) || $id == 0 || strlen($id) == 0) {
+            // get primary institution id
+            $sql = "SELECT `otca_institution_id` FROM `exp_member_data` WHERE `member_id` = '$member_id' LIMIT 1";
+            $query = $this->EE->db->query($sql);
+            if($query->num_rows() > 0) {
+                foreach($query->result_array() as $row) 
+                {
+                    $id = $row["otca_institution_id"];
+                }
+            }       
+}
+$where_clause = "`ed`.`otca_institution_id` = '$id' AND";  
+
+$existing_eds = array();
+
+$sql = "SELECT `educator_id` FROM `otca_evidence_access` WHERE `student_id` = '$member_id'";
+$query = $this->EE->db->query($sql);
+if($query->num_rows() > 0) {
+	foreach($query->result_array() as $row) 
+	{
+            $existing_eds[] = $row['educator_id'];
+        }
+}
+
+$sql = "SELECT `mem`.`member_id`, `mem`.`screen_name`, `mem`.`group_id`, `group`.`group_title`,`in`.`id` FROM
+`exp_member_data` ed LEFT JOIN (`otca_institutions` `in`, `exp_members` `mem`, `exp_member_groups` `group`) ON
+`ed`.`otca_institution_id` = `in`.`id` AND `mem`.`member_id` = `ed`.`member_id` AND `group`.`group_id` = `mem`.`group_id`
+WHERE $where_clause (`mem`.`group_id`='6' OR `mem`.`group_id` = '7');";
+$query = $this->EE->db->query($sql);         
+if($query->num_rows() > 0) {
+//echo "<option value='0'>--- Select one or more Educator ---</option>";
+	foreach($query->result_array() as $row) 
+	{
+            $group_title = $row['group_title'];
+            $group_title = substr($group_title, 0, strlen($group_title)-1);
+            $selected = in_array($row['member_id'], $existing_eds) === TRUE ? "selected" : "";
+            echo "<option value='$row[member_id]' title='$group_title' id='$row[id]' $selected>$row[screen_name]</option>";		
+	}
+} 
+?>

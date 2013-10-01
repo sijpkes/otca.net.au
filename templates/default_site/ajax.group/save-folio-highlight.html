@@ -1,0 +1,21 @@
+<?php
+$member_id = $this->EE->session->userdata('member_id');
+if($member_id == 0) return;
+
+$code = $this->EE->input->post('code');
+$color = $this->EE->input->post('color');
+
+$array = explode("_", $code);
+$entry_id = $array[2];
+$type = $array[0];
+
+if(!empty($color) && $color != "none") {
+    $sql = "INSERT INTO `otca_folio_highlights` (`color`, `member_id`, `entry_id`, `type`)
+    VALUES ('$color', '$member_id', '$entry_id', '$type')
+    ON DUPLICATE KEY UPDATE color = '$color'";   
+} else {
+    $sql = "DELETE FROM `otca_folio_highlights` WHERE `member_id` = '$member_id' AND
+            `entry_id` = '$entry_id' AND `type` = '$type'";
+}
+$query =  ee()->db->query($sql);
+?>

@@ -1,0 +1,22 @@
+<?php
+$member_id = $this->EE->session->userdata('member_id');
+if(!isset($member_id) || $member_id == 0) return;
+
+$key = $this->EE->input->get('id');
+$query = $this->EE->db->query("SELECT `field_id_3` as `file` FROM `exp_channel_data` WHERE `entry_id`='$key' LIMIT 1");
+
+if ($query->num_rows() > 0)
+{
+    foreach($query->result_array() as $row) // returns all evidence entries for this practice cycle
+    {	
+        $fileName = $row['file'];
+        $fileName = str_replace("{filedir_1}", "", $fileName);
+        $wd = getcwd();
+        unlink("$wd/user_evidence/$fileName");
+    }
+}
+
+$this->EE->db->query("DELETE FROM `exp_channel_titles` WHERE `entry_id`='$key'");
+$this->EE->db->query("DELETE FROM `exp_channel_data` WHERE `entry_id`='$key'");
+$this->EE->db->query("DELETE FROM `otca_evidence` WHERE `entry_id`='$key'");    
+?>

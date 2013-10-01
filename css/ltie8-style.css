@@ -1,0 +1,19 @@
+#content {
+	float: left;
+	clear: both;
+}
+
+#wrapper {
+	overflow: auto;
+	zoom: 1;
+    background-color: #131313;
+    background-image: url("/img/background-w940.png");
+    background-position: right top;
+    background-repeat: no-repeat;
+    border: 5px solid white;
+    box-shadow: 10px 10px 5px #333333;
+    margin: 0 auto;
+    min-height: 700px;
+    text-align: left;
+    width: 1130px;
+}

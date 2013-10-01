@@ -1,0 +1,23 @@
+<?php
+$member_id = $this->EE->session->userdata('member_id');
+if(!isset($member_id) || $member_id == 0) return;
+
+$remove = $this->EE->input->get('remove');
+$educator = $this->EE->input->post('educator');
+
+$updatedrows = 0;
+if($educator > 0) {
+
+if(isset($remove) && $remove == 1) {
+         $sql = "DELETE FROM `otca_evidence_access` WHERE `student_id` = '$member_id' AND `educator_id` = '$educator' LIMIT 1;";
+         $query = $this->EE->db->query($sql);
+         $updatedrows += $this->EE->db->affected_rows();
+} else {
+        $sql = "INSERT INTO `otca_evidence_access` (`student_id`, `educator_id`) VALUES ('$member_id', '$educator');";
+        $query = $this->EE->db->query($sql);
+        $updatedrows += $this->EE->db->affected_rows();
+}
+}
+
+echo "{ \"message\" : \"$updatedrows\" }";
+?>

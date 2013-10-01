@@ -1,0 +1,36 @@
+<?php 
+
+// not implemented
+$member_id = $this->EE->session->userdata('member_id');
+if(!isset($member_id) || $member_id == 0) return;
+
+//$new_cycle = $this->EE->input->get('new_cycle');
+$new_title = $this->EE->input->get('title');
+
+/*$query = $this->EE->db->query("SELECT `steps`, `level`, `beginner`, `objectives`, `history_id` FROM `otca_user_status` WHERE `member_id`='$member_id'");
+
+$steps = "[]";
+$level = '1';
+$beginner = 'false';
+$objectives = "[]";
+$history_id = 0;
+if ($query->num_rows() > 0)
+{
+	foreach($query->result_array() as $row) // returns one row
+    {
+ 		$steps = mysql_real_escape_string($row['steps']);
+		$level = $row['level'];
+		$beginner = $row['beginner'];
+		$objectives = mysql_real_escape_string($row['objectives']);
+		$history_id = $row['history_id'];	
+	}*/
+	
+// no sql escape strings required here because we've already done it on insert to otca_user_status... (except the get variable for new title)
+$title = mysql_real_escape_string($new_title);
+
+$this->EE->db->query("UPDATE `otca_user_status` SET `title`='$title' WHERE `member_id`='$member_id'");	
+
+$this->EE->db->query("UPDATE otca_user_status_history a, otca_user_status b SET a.steps = b.steps, a.level = b.level, a.beginner = b.beginner,a.objectives = b.objectives, a.title = b.title WHERE a.id = b.history_id AND a.member_id = '$member_id'");
+
+//} 
+?>

@@ -1,0 +1,101 @@
+<?php
+	$id = $this->EE->input->get('id');
+	$m = $this->EE->input->get('m');
+	$group_id = $this->EE->session->userdata('group_id');
+	
+	if( isset($m) && $m > 0
+		&& ($group_id == 1 ||
+			$group_id == 6 ||
+				$group_id == 7 ||
+					$group_id == 9)) {
+		$member_id = $m;
+	} else {
+		$member_id = $this->EE->session->userdata('member_id');
+	}
+	
+if(!function_exists("escapeJsonString")) {
+	function escapeJsonString($value) { 
+	    $escapers = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
+	    $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
+	    $result = str_replace($escapers, $replacements, $value);
+	return $result;
+	}
+}
+?>
+
+{embed="structure/header" use_my_placement_css='yes'}
+
+<h2 id='lc_heading'>Your Current Learning Contract for this Practice Placement Cycle</h2>
+
+<div class='contrast'>
+<div id='learning-contract-pane'>
+</div>
+<p><a class='button' id='printable'>Printable View of Learning Contract</a></p>
+
+<div id='criteria-data' style='display:none'></div>
+</div>
+{embed="structure/footer" js_file="jquery.learning-contract.js" login_required='true'}
+
+<script type='text/javascript'>
+$(document).ready(function() {
+var tempUserProfile;	
+<?php
+	if(isset($id) && $id > 0) { 
+		$query =  $this->EE->db->query("SELECT `entry_id`, `entry_text`,`creation_date`, `last_updated`, `tag` FROM `otca_diary` `d` LEFT JOIN (`otca_user_status` `s`)  ON (`d`.`current_practice_cycle` = '$id' AND `d`.`member_id` = `s`.`member_id`) WHERE `s`.`member_id` = '$member_id' AND `d`.`member_id` = '$member_id'");
+
+		$js_reflections_array = array();
+		if ($query->num_rows() > 0)
+		{
+			foreach($query->result_array() as $row) // returns all diary entries for this practice cycle
+    			{	
+				$entry_text_pregged = escapeJsonString($row['entry_text']);
+				$js_reflections_array[$row['tag']] = array("internalId" => $row['entry_id'], "text" => $entry_text_pregged, "date" => $row['creation_date'], "tag" => $row['tag'] );
+			}
+		} 
+
+		$query = $this->EE->db->query("SELECT `steps`, `level`, `beginner`, `objectives`, `id`, `title`,`time` FROM `otca_user_status_history` WHERE `member_id`= '$member_id' AND `id` = '$id'");
+		
+		$steps = "[]";
+		$level = '1';
+		$beginner = 'false';
+		$objectives = "[]";
+		$time = 0;
+		$title = "";
+		if ($query->num_rows() > 0)
+		{
+			foreach($query->result_array() as $row) // returns one row
+			{
+				$steps = $row['steps'];
+				$level = $row['level'];
+				$beginner = isset($row['beginner']) && $row['beginner'] != ""?$row['beginner']:0;
+				$objectives = $row['objectives'];
+				$history_id = $row['id'];
+				$title = $row['title'];
+				$time = $row['time'];
+			}
+		}
+		
+		$js_userProfile = "tempUserProfile = {
+				\"reflections\" :  $js_reflections_array,
+				\"startNewCycle\" : false,
+				\"steps\" : $steps,
+				\"level\" : $level,
+				\"beginner\" : $beginner,
+                \"objectives\" : $objectives,
+				\"history_id\" : $id,
+				\"title\" : \"$title\",
+				\"time\" : $time};\n\n";
+		
+		$readable_time = date('l dS M g:i a', $this->EE->localize->set_localized_time($time));
+		echo $js_userProfile;
+		echo "var humanTime = \"$readable_time\";";
+		?>
+		$('#lc_heading').html('Learning Contract: '+tempUserProfile.title);
+		$('#lc_heading').after('<p>Started on: '+humanTime+'</p>');
+<?php
+		}
+?>
+	
+	$("#learning-contract-pane").learningContract({ tempUserProfile : tempUserProfile });
+});
+</script>

@@ -1,0 +1,17 @@
+<img src="android-wheel.png" width="472" height="472" border="0" usemap="#map" />
+
+<map name="map">
+<!-- #$-:Image map file created by GIMP Image Map plug-in -->
+<!-- #$-:GIMP Image Map plug-in by Maurits Rijk -->
+<!-- #$-:Please do not edit lines starting with "#$" -->
+<!-- #$VERSION:2.3 -->
+<!-- #$AUTHOR:Paul -->
+<area shape="poly" coords="236,14,235,90,260,91,306,105,325,120,350,146,409,101,385,72,348,46,309,27,262,17,237,15" href="step1.html" />
+<area shape="poly" coords="348,147,410,100,442,161,451,206,453,262,450,277,376,258,376,219,370,181,352,148,350,144" href="step2.html" />
+<area shape="poly" coords="377,259,449,281,438,324,399,384,362,414,352,421,312,360,356,315,374,276,375,261,375,262,376,257" href="step3.html" />
+<area shape="poly" coords="309,360,354,423,293,447,208,455,144,433,128,426,169,362,201,377,238,381,277,377,311,358" href="step4.html" />
+<area shape="poly" coords="95,256,110,305,128,333,158,360,168,364,126,427,85,395,48,349,28,301,20,275,95,258,94,257" href="step5.html" />
+<area shape="poly" coords="95,256,18,273,18,202,39,133,67,96,128,143,101,185,92,235,97,254" href="step6.html" />
+<area shape="poly" coords="65,94,128,143,155,113,194,96,236,90,234,15,189,21,136,39,89,71,66,94" href="step7.html" />
+<area shape="circle" coords="236,235,142" href="start.html" />
+</map>

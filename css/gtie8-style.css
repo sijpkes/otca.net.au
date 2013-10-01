@@ -1,0 +1,12 @@
+/*div#content-pane { 
+	padding: 1em; 
+	width: 1130px;
+	float: left;
+	margin: 5px;
+	background-color: transparent;
+	min-height: 700px;
+}*/
+
+.home-layout > a {
+  display: block;
+}

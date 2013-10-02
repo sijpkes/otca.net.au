@@ -1,0 +1,51 @@
+{embed="structure/header"}
+		<h1>Step 5 - Goal Setting</h1>
+<div id="resource-tabs">
+<ul>
+	<li class='selected'><h2><img class="icon" alt="Video" src="/img/video.png"> Video</h2></li>
+	<li><h2><img class="icon" alt="Book" src="/img/book.png">Documents</h2></li>
+	<li><h2><img src="/img/quiz.png" alt="Quiz" class="icon">Quiz</h2></li>
+</ul>
+</div>	
+<div class='otca-tab'>	
+<h2><img src="/img/video.png" alt="Video" class="icon"> Video</h2>
+<div class='video-iframe'>
+<h3>STEP 5 - GOAL SETTING: In the Community Disability Setting - James's Occupational Goals</h3>
+<iframe id='video1' width="560" height="315" src="https://www.youtube.com/embed/etiDzeFvOY8?rel=0" frameborder="0" allowfullscreen></iframe></div><div class='video-caption-links'>
+{exp:file:entries limit="5" paginate="both" directory_id="3" orderby="title" sort='asc' category='12'}
+       
+
+        <p><a href="{file_url}"><strong>{title}</strong></a></p>
+
+{/exp:file:entries}
+</div>
+<div class="video-chapter-thumbs video1">
+ <h3>Chapters</h3>
+    <a name='chapter 1' class='chapter' data-seconds='0m26s'>1. James’s Occupational Goals</a>
+    <a name='chapter 2' class='chapter' data-seconds='4m06s'>2. Goal Setting Summary</a>
+</div>
+</div>
+
+<div class='otca-tab' style='display:none'>	
+<h2><img class="icon" alt="Book" src="/img/book.png">Documents</h2>
+{exp:file:entries limit="20" paginate="both" directory_id="3" orderby="title" sort='asc' category='14'}
+       
+
+        <p><a href="{file_url}"><strong>{title}</strong></a></p>
+
+{/exp:file:entries}
+</div>
+
+<div class='otca-tab' style='display:none'>
+<h2><img class="icon" alt="Quiz" src="/img/quiz.png">Quiz</h2>
+{embed="quizes/generate" step='5'}
+</div>
+
+
+{embed="structure/footer" js_library="jquery.video-chapters.js" js_file="quiz-formatter.js"}
+
+<script> 
+$(document).ready(function() {
+	$(".video-chapter-thumbs.video1").videoChapters("video1");
+});
+</script>

@@ -1,0 +1,26 @@
+{exp:register_alert alert_groups='1,5,6,7'}
+{html_and_head}
+{if embed:use_ot_evidencing_css}
+<link rel="stylesheet" media="screen" href="/css/ot-evidencing.css" /> 
+{/if}
+{if embed:use_my_placement_css}
+<link rel="stylesheet" media="screen" href="/css/my-placement.css" /> 
+{/if}
+<link rel="stylesheet" media="screen" href="/css/jquery.asmselect.css" /> 
+{if embed:extra_css}
+<link rel="stylesheet" media="screen" href="/css/{embed:extra_css}.css" /> 
+{/if}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/libs/jquery-1.8.3.min.js"><\/script>')</script>
+{end_head}
+{body_start}
+{embed=/system/youtube-intros}
+{wrapper_start}	
+{help_tab}
+{login_header}
+
+
+{content_start}
+{navigation_menu}
+{content_pane_start}
+{embed='structure/breadcrumbs'}

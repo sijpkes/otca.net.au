@@ -1,0 +1,39 @@
+<?php
+	$contractHTML = $this->EE->input->post("tableContractHTML");
+?>
+<!DOCTYPE html>
+<head>
+<title>{screen_name}'s Learning Contract</title>
+<style>
+body {
+	font-family: Garamond, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: normal;
+	width: 800px;
+	margin: 0 auto;
+}
+table, td {
+	border: thin solid black;
+	font-size: 10pt;
+}
+td {
+	padding: 5px;
+}
+</style>
+</head>
+<body>
+{exp:member:custom_profile_data}
+<h2>{first_name} {last_name}'s Learning Contract</h2>
+<h3>Student Number: {student_number}</h3>
+{/exp:member:custom_profile_data}
+<p>{current_time format="%d%S %F %Y"}</p>
+<table>
+<tbody>
+<?php echo $contractHTML; ?>
+<tbody>
+</table>
+<p><form>
+<input type="button" value="Print this page" onClick="window.print()">
+</form></p>
+</body>
+</html>

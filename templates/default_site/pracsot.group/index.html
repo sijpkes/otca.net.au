@@ -1,0 +1,100 @@
+<? 
+	$member_id = $this->EE->input->get('sid'); 
+	$group_id = $this->EE->session->userdata('group_id');
+	$sid = "";
+
+	if(isset($member_id) && strlen($member_id) > 0) {
+	if($group_id == 1 || $group_id == 6 || $group_id == 7 || $group_id == 9) {
+		$sid = "&sid=$member_id";
+	} 
+	}	
+?>	
+
+{if logged_in}
+{embed='pracsot/header'}
+
+<h2>Competency Units</h2>
+
+<ul style='list-style:none'>
+	<li>Competency Unit 1:<br>
+	Occupational Therapy Professional Attitudes and Behaviour<br>
+	<i>Elements:</i><ul style='list-style: none'>
+	<li>1.1 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=1.1<?php echo $sid;?>'>Adopts a client-centred approach to practice</a></li>
+	<li>1.2 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=1.2<?php echo $sid;?>'>Practices in a culturally safe professional manner</a></li>
+	<li>1.3 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=1.3<?php echo $sid;?>'>Practices in a professional manner that meets ethical and legal responsibilities</a></li>
+	<li>1.4 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=1.4<?php echo $sid;?>'>Promotes and facilitates occupation through the application of professional knowledge, skills, attitudes and evidence appropriate to the practice context</a></li>
+	<li>1.5 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=1.5<?php echo $sid;?>'>Promotes and facilitates occupation through the application of professional knowledge, skills, attitudes and evidence appropriate to the practice context</a></li>
+	<li>1.6 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=1.6<?php echo $sid;?>'>Maintains and enhances competence through lifelong learning and continuing professional development activities</a></li>
+	<li>1.7 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=1.7<?php echo $sid;?>'>Demonstrates professional knowledge, skills, and attitudes appropriate for the working environment and conditions</a></li>
+	<li>1.8 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=1.8<?php echo $sid;?>'>Contributes to the promotion and advancement of occupational therapy</a></li>
+</ul>
+</li>
+<li>	
+Competency Unit 2:<br>
+Occupational Therapy Information Gathering and Collaborative Goal Setting<br>
+<i>Elements:</i>
+<ul style='list-style: none'>
+	<li>2.1 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=2.1<?php echo $sid;?>'>Performs a relevant, comprehensive, assessment of occupational performance </a></li>
+	<li>2.2 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=2.2<?php echo $sid;?>'>Engages in critical, collaborative professional reasoning processes to determine priorities for intervention </a></li>
+	<li>2.3 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=2.3<?php echo $sid;?>'>Develops, communicates and implements an effective, efficient plan for occupational therapy intervention </a></li>
+</ul>
+</li>
+<li>
+Competency Unit 3:<br>
+Occupational Therapy Intervention and Service Implementation<br>
+<i>Elements:</i>
+<ul style='list-style: none'>
+	<li>3.1 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=3.1<?php echo $sid;?>'>Demonstrates client-centredness during intervention </a></li>
+	<li>3.2 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=3.2<?php echo $sid;?>'>Promotes client occupational performance and participation </a></li>
+	<li>3.3 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=3.3<?php echo $sid;?>'>Selects and implements intervention strategies and methods appropriate to the client </a></li>
+	<li>3.4 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=3.4<?php echo $sid;?>'>Selects and implements intervention strategies and methods appropriate to the working environment</a></li>
+	<li>3.5 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=3.5<?php echo $sid;?>'>Utilises available community resources, facilities and services</a></li>
+	<li>3.6 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=3.6<?php echo $sid;?>'>Respects and supports the role(s) of significant other(s)</a></li>
+	<li>3.7 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=3.7<?php echo $sid;?>'>Plans cessation/completion of services/effective handover </a></li>
+</ul>
+</li>
+<li>
+Competency Unit 4:<br>
+Occupational Therapy Service Evaluation<br>
+<i>Elements:</i>
+<ul style='list-style: none'>
+	<li>4.1 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=4.1<?php echo $sid;?>'>Incorporates perspectives of multiple stakeholders in evaluation of occupational therapy service provision</a></li>
+	<li>4.2 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=4.2<?php echo $sid;?>'>Demonstrates ability to understand and conduct multiple evaluation methods and techniques</a></li>
+	<li>4.3 - <i>Missing from original</i></li>
+	<li>4.4 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=4.4<?php echo $sid;?>'>Utilises evaluation outcomes to make recommendations for future practice </a></li>
+</ul>
+</li>
+<li>
+Competency Unit 5:<br>
+Occupational Therapy Professional Communication<br>
+<i>Elements:</i>
+<ul style='list-style: none'>
+	<li>5.1 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=5.1<?php echo $sid;?>'>Facilitates active participation of the client in service provision</a></li>
+	<li>5.2 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=5.2<?php echo $sid;?>'>Adopts a communication approach appropriate to the working environment</a></li>
+	<li>5.3 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=5.3<?php echo $sid;?>'>Documents and reports relevant aspects of service provision</a></li>
+	<li>5.4 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=5.4<?php echo $sid;?>'>Shares professional information responsibly </a></li>
+	<li>5.5 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=5.4<?php echo $sid;?>'>Shares professional information responsibly </a></li>
+</ul>
+</li>
+<li>
+Competency Unit 6:<br>
+Occupational Therapy Professional Education and Development<br>
+<i>Elements:</i>
+<ul style='list-style: none'>
+	<li>6.1 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=6.1<?php echo $sid;?>'>Engages in lifelong learning processes and activities to maintain professional competence </a></li>
+	<li>6.2 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=6.2<?php echo $sid;?>'>Contributes to education and professional practices of students </a></li>
+</ul>
+</li>
+<li>
+Competency Unit 7:<br>
+Occupational Therapy Professional Practice Responsibilities<br>
+<i>Elements:</i>
+<ul style='list-style: none'>
+	<li>7.1 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=7.1<?php echo $sid;?>'>Adopts an efficient, effective and systematic approach to daily workload management</a></li>
+	<li>7.2 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=7.2<?php echo $sid;?>'>Works effectively within the structure of the workplace environment</a></li>
+	<li>7.3 <a href='https://otca.net.au/pracsot/pracsot-unit-table?element=7.3<?php echo $sid;?>'>Contributes to quality assurance and service development </a></li>
+</ul>
+</li>
+{if:else}
+	This page is available for logged in users only.
+{/if}

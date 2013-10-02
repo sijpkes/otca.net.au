@@ -1,0 +1,21 @@
+{embed="structure/header" use_my_placement_css='yes'}
+<h2>Your Learning Contract with Learning Objectives</h2>
+<div class="contrast">
+<p>As you can see, your learning objectives have been added to the table below.</p>  
+<div id='learning-contract-pane'>
+
+</div>
+<p><a id="continue" class="button" href="/practice-placement/plan-for-your-placement">Plan for your placement &rarr;</a></p>
+</div>
+<div id='criteria-data' style='display:none'></div>
+
+{embed="structure/footer" login_required='true'}
+
+{exp:practice_placement:learning_contractjs 
+allowed_group_ids='5' 
+no_access_message='This functionality is only available to Student members.' 
+jquery_selector='#learning-contract-pane'
+planning = 'false'
+evidence = 'false'
+objectives = 'true'	
+}

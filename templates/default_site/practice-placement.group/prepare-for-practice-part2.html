@@ -1,0 +1,64 @@
+{embed="structure/header" use_my_placement_css='yes'}
+<h2>Prepare For Practice (Part 2)</h2>
+<div class='contrast'>
+<h3>1. What is the Occupational Therapy Practice Process (OTPP)?</h3>
+<label for='wheel'>Find out about the {ot-practice-process-link}, why you need to use it and how it will help you develop your Learning Contract.</label>
+<p id='otpp-thumb'>
+<a href='#'>
+<!--[if lt IE 9]>
+<img src='/svg/wheel.png' width='250' height='250'/>
+<![endif]-->
+
+<!--[if  !IE | (gte IE 9)]> <!-- -->
+<img width="250" height="250" src="/svg/wheel.svg" id="wheel"/>
+<!-- <![endif]-->
+
+</a></p>
+<br>
+<h3>2. Choose your Step for this Practice Placement Cycle</h3>
+<label for="steps">Which step(s) of the {ot-practice-process-link} will you focus on?</label>
+<p>&nbsp;</p>
+<p style="font-size: 12pt;"><strong><u>Select one or more process steps for your focus:</u></strong></p>
+<p>
+<select id="steps" multiple="multiple" title='Occupational Therapy Practice Process Steps'>
+<option val="1">1 - Request for Service</option>
+<option val="2">2 - Information Gathering</option>
+<option val="3">3 - Occupational Assessment</option>
+<option val="4">4 - Identification of Occupational Issues</option>
+<option val="5">5 - Goal Setting</option>
+<option val="6">6 - Intervention</option>
+<option val="7">7 - Evaluation</option>
+</select>
+</p>
+<p>The central section of the {ot-practice-process-link}, "Being a Professional" is always automatically included with the other step(s) you choose because being a professional is central to, and always occurs at each step of the process</p>
+<p>The three Occupational Therapy Competency Development Levels:</p>
+<p>&nbsp;</p> 
+<h3>3. Choose your Level for this Practice Placement Cycle</h3>
+<p>
+<div id='step-defs' style='cursor: pointer'>
+	{competency_levels}    
+</div><br>
+<a href="/docs/Occupational%20Therapy%20Competency%20Development%20Levels%20&amp;%20Levels%20of%20Evidence.pdf">
+Levels of Evidence &amp; Types of Evidence (PDF - 426 kB)
+</a>
+</p>
+
+<p><label for="level">Which level do you see yourself achieving after this practice cycle?</label>
+<select id="level">
+<option value="1">Emerging</option>
+<option value="2">Consolidating</option>
+<option value="3">Competent at Graduation</option>
+</select></p>
+</span>
+
+<p><a id="continue" class="button" href="/practice-placement/intro-learning-contract">Save &amp Continue to Introduction to your learning contract &rarr;</a></p>
+<br clear='all'/><div style='float:right'><em>All saved content will be saved to {eportfolio-link}</em></div>
+</div>
+<div id='otpp' style='display:none'> 
+<div id='exit-button'></div>
+    <object width="650" height="650" id="wheel" type="image/svg+xml" style="float:right; clear:right;" data="/svg/wheel.svg">
+  </object>
+</div>
+
+{embed="structure/footer" login_required='true' js_file='level-defs-window.js'}
+{exp:practice_placement:prepare_for_practice_part2js allowed_group_ids='5' no_access_message='This functionality is only available to Student members.'}

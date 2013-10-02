@@ -1,0 +1,36 @@
+<a href="#close" class="exit"><img src="/img/close-icon.png" alt="close"></a>
+<div class='file-viewer-inner'>
+{exp:safecracker  
+        channel="my_evidence" 
+        return="safecracker/ENTRY_ID"  
+        safecracker_head="no"
+        use_live_url="no"
+        entry_id="{segment_3}"
+        url_title="" 
+        json="yes"
+	rules:title="required"
+}
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title" value="{title}"><br>
+
+	 <label for="step">Step</label>
+	 {field:step}<br>   
+	<label for="level">Level</label>
+	 {field:level}<br>	
+	
+	<input type='hidden' name='cycle_name' id='cycle_name' value='{cycle_name}'>
+
+        <label for="description">Description</label>
+        {field:description}<br>
+       	
+        <label for="evidence">Supporting file (optional) (Max 5MB)</label>
+        {field:evidence}<br>
+
+	{field:criteria_mapping}
+	{field:searchable_mapping}
+
+        <input type="submit" value="Save">
+{/exp:safecracker}
+
+
+</div>

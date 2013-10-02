@@ -1,0 +1,61 @@
+{embed="structure/header"}
+		<h1>Step 3 - Occupational Assessment</h1>
+<div id='resource-tabs'>
+<ul>
+	<li class='selected'><h2><img src="/img/video.png" alt="Video" class="icon"> Video</h2></li>
+	<li><h2><img src="/img/book.png" alt="Book" class="icon">Documents</h2></li>
+	<li><h2><img class="icon" alt="Links" src="/img/web-link.png">Useful Links</h2></li>
+	<li><h2><img class="icon" alt="Quiz" src="/img/quiz.png">Quiz</h2></li>
+</ul>
+</div>
+
+<div class='otca-tab'>			
+<div class='video-iframe'><h3>STEP 3 - OCCUPATIONAL ASSESSMENT: Family/Person-Centred Practice</h3>
+<iframe id='video1' width="560" height="315" src="https://www.youtube.com/embed/P1b51NVTDRE?rel=0" frameborder="0" allowfullscreen></iframe></div><div class='video-caption-links'>
+<h3>Video Related Documents<h3>
+{exp:file:entries limit="5" paginate="both" directory_id="3" orderby="title" sort='asc' category='8'}
+       
+
+        <p><a href="{file_url}"><strong>{title}</strong></a></p>
+
+{/exp:file:entries}
+<p style='font-size:8pt'>O'Toole, G (2012). <i>Communication: Core interpersonal skills for health professionals.</i> (2nd ed., pp. 11-19) Sydney, Australia: Elsevier.</p>
+</div>
+
+<div class="video-chapter-thumbs video1">
+<h3>Chapters</h3>
+   <a name='chapter 1' class='chapter' data-seconds='0m21s'>1. Informing Self &amp; Others</a>
+    <a name='chapter 2' class='chapter' data-seconds='0m42s'>2. Family/Person-centred Goals &amp; Practice (F/P-cP)</a>
+    <a name='chapter 3' class='chapter' data-seconds='1m44s'>3. Mutual Understanding</a>	
+    <a name='chapter 4' class='chapter' data-seconds='2m01s'>4. Respect, Empathy &amp; Trust</a>	
+    
+    <a name='chapter 5' class='chapter' data-seconds='3m57s'>5. The Therapeutic Relationship</a>
+    <a name='chapter 6' class='chapter' data-seconds='4m35s'>6. Rapport, Empowerment &amp; Collaboration</a>
+    <a name='chapter 7' class='chapter' data-seconds='5m55s'>7. Effective Listening</a>	
+    <a name='chapter 8' class='chapter' data-seconds='6m20s'>8. Positive Emotions</a>	
+    <a name='chapter 8' class='chapter' data-seconds='7m02s'>9. Summary</a>
+</div> 
+
+</div>
+<div class='otca-tab' style='display:none'>
+{exp:file:entries limit="5" paginate="both" directory_id="3" orderby="title" sort='asc' category='9'}
+       
+
+        <p><a href="{file_url}"><strong>{title}</strong></a></p>
+
+{/exp:file:entries}
+</div>
+<div class='otca-tab' style='display:none'>
+<p><b>Mental Health 4 Occupational Therapists Website</b></p>
+<p><a href="http://mh4ot.com/">http://mh4ot.com/</a></p>
+</div>
+<div class='otca-tab' style='display:none'>
+{embed='/quizes/generate' step='3'}
+</div> 
+
+{embed="structure/footer" js_library="jquery.video-chapters.js" js_file='quiz-formatter.js'}
+<script> 
+$(document).ready(function() {
+	$(".video-chapter-thumbs.video1").videoChapters("video1");
+});
+</script>

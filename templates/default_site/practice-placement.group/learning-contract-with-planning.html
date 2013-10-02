@@ -1,0 +1,21 @@
+{embed="structure/header" use_my_placement_css='yes'}
+<h2>Your Learning Contract with your Planning Added</h2>
+<div class="contrast">
+<p>You've completed your planning, and your plans have been added to your learning contract. You can complete and update your planning at any stage in your practice placement.</p>  
+<div id='learning-contract-pane'>
+
+</div>
+<p><a id="continue" class="button" href="/practice-placement/resources-to-develop-your-competencies">Resources to Develop your Competencies &rarr;</a></p>
+</div>
+<div id='criteria-data' style='display:none'></div>
+<p><a id="printable" class="button">Printable View of Learning Contract</a></p>
+
+{embed="structure/footer" login_required='true'}
+{exp:practice_placement:learning_contractjs 
+allowed_group_ids='5' 
+no_access_message='This functionality is only available to Student members.' 
+jquery_selector='#learning-contract-pane'
+planning = 'true'
+evidence = 'false'
+objectives = 'true'	
+}

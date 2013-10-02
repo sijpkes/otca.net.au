@@ -1,0 +1,30 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+	<title>Testing...</title>	
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+</head>
+<body>
+Testing...
+<div style='display: none' data-crit=""[
+></div>
+<script type='text/javascript'>
+
+$(document).ready(function() {
+
+$.getJSON("http://otaltc.net/pages/user-criteria-data", 
+function(data) { 
+	$.each(data, function(i, ob) {
+		console.log(i);
+		$.each(ob, function(index, value) {
+			console.log(index + " " + value);
+		});
+	});
+});
+
+
+});
+</script>
+
+</body>
+</html>

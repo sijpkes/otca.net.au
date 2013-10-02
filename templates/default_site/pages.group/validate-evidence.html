@@ -1,0 +1,58 @@
+<?php
+$code = $this->EE->uri->segment(3);
+$this->EE->load->helper('url');
+$this->EE->load->helper('date');
+$this->EE->load->library('email');
+$this->EE->load->helper('text');
+
+if($code) {
+	$query = $this->EE->db->query("SELECT `entry_id`, `validated`, `authorised_by_email`, `filename`, `upload_time` FROM otca_evidence WHERE `validation_key` = '$code'");
+	if ($query->num_rows() > 0)
+	{
+		foreach($query->result_array() as $row)
+    		{
+			$validated = $row['validated'];
+			$entry_id = $row['entry_id'];
+			$authorised_by_email = $row['authorised_by_email'];
+			$upload_time = $this->EE->localize->decode_date($this->EE->localize->format['DATE_RFC2822'], $row['upload_time']);
+			$filename = $row['filename'];
+		}
+	}
+	
+	$query = $this->EE->db->query("SELECT b.email, b.screen_name FROM exp_channel_titles a, exp_members b WHERE a.entry_id = '$entry_id' AND a.author_id = b.member_id");
+	if ($query->num_rows() > 0)
+	{
+		foreach($query->result_array() as $row)
+    		{
+			$userEmail = $row['email'];
+			$screen_name = $row['screen_name'];
+		}
+	}
+	
+	$message = "Dear ".$screen_name.",\n\nThe evidence file, '".$filename."', that you uploaded to the OTCA website on ".$upload_time." (Australian Eastern Standard Time) has been successfully validated by ".$authorised_by_email.".  This evidence will now be counted towards your overall competency level. Please do not reply to this email.\n\n \tRegards,\n\n\t\tThe OTCA Team.";
+
+	$this->EE->email->initialize();
+    	$this->EE->email->from("noreply@otaltc.net");
+    	$this->EE->email->to($userEmail);
+    	$this->EE->email->subject("OTCA - evidence file ".$filename." successfully validated by ".$authorised_by_email);
+    	$this->EE->email->message(entities_to_ascii($message));
+    	$this->EE->email->Send();
+	$this->EE->email->clear();
+
+	// @TODO: get more info about user with entry_id 
+	if($validated != 'TRUE') {
+		$query = $this->EE->db->query("UPDATE otca_evidence SET `validated`='TRUE' WHERE `entry_id`='$entry_id'");	
+		$output = "<h1>Thank you.</h1><p>Thank you for taking the time to approve this evidence. The student has been notified by email.</p>";
+	} else {
+		$output = "<h1>Evidence already validated.  Thank you!</h1><p>You have already validated this piece of evidence.  Thanks for your time.</p>";	
+	}
+}
+?>
+{embed='structure/header'}
+<div class='story-pane-750px'>
+<?php 
+	echo $output;
+?>
+<form><input type="button" value="Close this Window" onclick="window.close()"></input>
+</div>
+{embed='structure/footer'}

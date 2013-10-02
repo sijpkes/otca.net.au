@@ -1,0 +1,27 @@
+<?php
+/* strip any whitespace from within the string */
+$ids = preg_replace( '/\s+/', '', $this->EE->input->get('ids'));
+
+$ids = preg_replace('/[0-99]+\.[0-99]+\.[0-99]+/', "'$0'", $ids);
+
+if($ids) {
+	$query = $this->EE->db->query("SELECT id, question FROM otca_pracsot where id in ($ids)");
+} else {
+	$query = $this->EE->db->query("SELECT id, question FROM otca_pracsot");
+}
+
+if ($query->num_rows() > 0)
+{
+$r = 0;
+echo "[";
+    foreach($query->result_array() as $row)
+    {
+	if($r++ > 0) echo ",";
+        echo '{ "id" : "'.$row['id'].'" , "question" : "'.$row['question'].'" }';
+    }
+echo "]";
+} else {
+
+echo "No results found";
+}
+?>

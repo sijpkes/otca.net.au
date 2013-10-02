@@ -1,0 +1,11 @@
+  {if logged_out}
+  	<div class='noaccess-overlay'>   
+ {/if}
+		<div class='evidencing-app'>
+	{exp:channel:entries channel="evidencing_matrix" limit="10" orderby="title" sort='asc'}
+				<p>{text_body}</p>
+			{/exp:channel:entries}	
+		</div>
+ {if logged_out}
+  	</div>
+ {/if}

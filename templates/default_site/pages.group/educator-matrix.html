@@ -1,0 +1,24 @@
+{embed="structure/header" use_ot_evidencing_css='yes'}
+
+ {if logged_out}
+  	<div class='noaccess-overlay'>   
+ {/if}
+<h2>OTCEM Showing Ticked Competencies with Supporting Descriptive and/or Uploaded Evidence</h2>
+<div class='contrast'>
+<p>
+	The Occupational Therapy Competency Evidencing Matrix (OTCEM) is mapped and linked to the Performance Record for the Australian Competency Standards for Occupational Therapists (PRACSOT) Occupational Therapy Australia, 2010 - <a href='/pages/otcem-information' target='_blank'>click here for more information</a></p>
+</div>
+<div class='feedback'>
+<h3>"{segment_5}"</h3>
+<p><strong id='submitted_by'>Submitted by: .</strong></p>
+</div>
+		<div class='evidencing-app'>
+			{exp:channel:entries channel="evidencing_matrix" limit="10" orderby="title" sort="asc" dynamic="no"}
+				<p>{text_body}</p>
+			{/exp:channel:entries}	
+		</div>
+ {if logged_out}
+  	</div>
+ {/if}<br />
+
+{embed="structure/footer" external_js_uri="/javascript/jquery.OTevidencingEducatorView?id={segment_3}&member={segment_4}&sname={segment_6}" login_required='true' js_command="$('.evidencing-app').evidencing()"}

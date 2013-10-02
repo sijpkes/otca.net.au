@@ -1,0 +1,24 @@
+{embed="structure/header" use_my_placement_css='yes'}
+
+<h2>Your Learning Contract</h2>
+<div class="contrast">
+<p>Now that you have been introduced to the {ot-practice-process-link} and you have chosen your process <b>Step/s</b> and your appropriate Competency Development <b>Level</b> for this practice placement cycle, you have begun to develop your {learning-contract-link}. </p>  
+<p>As you progress through your practice placement cycle, your {learning-contract-link} will grow as you set learning objectives against the Occupational Therapy Competency Evidencing Matrix (OTCEM) competency statements, write how you plan to meet them, and finally, evidence them in practice.</p>
+
+<p>Below is your current, empty learning contract with the <b>Step/s</b> and <b>Level</b> you have selected.</p>
+<div id='learning-contract-pane'>
+
+</div>
+<p><a id="continue" class="button" href="/practice-placement/set-your-learning-objectives">Set your learning objectives &rarr;</a></p>
+</div>
+
+{embed="structure/footer" login_required='true'}
+{exp:practice_placement:learning_contractjs 
+allowed_group_ids='5' 
+no_access_message='This functionality is only available to Student members.' 
+jquery_selector='#learning-contract-pane'
+planning = 'false'
+evidence = 'false'
+objectives = 'false'	
+}
+

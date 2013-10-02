@@ -1,0 +1,93 @@
+{embed="structure/header"}
+
+<h1>Being a Professional</h1>
+<div id="resource-tabs">
+<ul>
+	<li class="selected"><h2><img class="icon" alt="Video" src="/img/video.png"> Video</h2></li>
+	<li><h2><img class="icon" alt="Book" src="/img/book.png">Documents</h2></li>
+	<li><h2><img class="icon" alt="Book" src="/img/book.png">Holistic Evidence Examples</h2></li>
+	<li><h2><img class="icon" alt="Book" src="/img/book.png">Reflection Examples</h2></li>
+	<li><h2><img src="/img/web-link.png" alt="Links" class="icon">Useful Links</h3></li>
+	<li><h2><img src="/img/quiz.png" alt="Quiz" class="icon">Quiz</h2></li>
+</ul>
+</div>
+<br clear='both'>
+<div class='otca-tab'>		
+<h2><img src="/img/video.png" alt="Audio" class="icon"> Video</h2>
+<div class='video-iframe'>
+<h3>BEING A PROFESSIONAL: Writing Learning Objectives, Reflecting & Personal Development</h3>
+<iframe id='video1' width="560" height="315" src="https://www.youtube.com/embed/YG6G46RFeXQ?rel=0" frameborder="0" allowfullscreen></iframe></div><div class='video-caption-links'>
+{exp:file:entries limit="5" paginate="both" directory_id="3" orderby="title" sort='asc' category='12'}
+       
+
+        <p><a href="{file_url}"><strong>{title}</strong></a></p>
+
+{/exp:file:entries}
+</div>
+<div class="video-chapter-thumbs video1">
+    <h3>Chapters</h3>
+    <a name='chapter 1' class='chapter' data-seconds='0m22s'>1. Introduction</a>
+    <a name='chapter 2' class='chapter' data-seconds='1m02s'>2. Writing Your Learning Objectives for Your Practice Placement</a>	
+    <a name='chapter 3' class='chapter' data-seconds='3m06s'>3. How Your Learning Objectives Help You Become a Professional</a>
+    <a name='chapter 4' class='chapter' data-seconds='4m07s'>4. How Writing Learning Objectives For One Placement Can Help You Write Learning Objectives For The Next Placement</a>	
+    <a name='chapter 5' class='chapter' data-seconds='5m41s'>5. Linking Learning Objectives to Your Skills Acquisition List & the Occupational Therapy Competency Evidencing Matrix</a>
+    <a name='chapter 6' class='chapter' data-seconds='6m50s'>6. Family and Culture in Relation to Evaluating Outcomes</a>
+    <a name='chapter 7' class='chapter' data-seconds='9m33s'>7. Conclusion</a>
+</div>
+</div>
+
+<div class='otca-tab' style='display:none'>	
+<h2><img class="icon" alt="Book" src="/img/book.png">Documents</h2>
+{exp:file:entries limit="30" paginate="both" directory_id="3" orderby="title" sort='asc' category='15'}
+       
+
+        <p><a href="{file_url}"><strong>{title}</strong></a></p>
+
+{/exp:file:entries}
+</div>
+<div class='otca-tab' style='display:none'>
+<h2><a name='holistic'/>Holistic Evidence Examples</h2>
+{exp:file:entries limit="30" paginate="both" directory_id="3" orderby="title" sort='asc' category='16'}
+       
+
+        <p><a href="{file_url}"><strong>{title}</strong></a></p>
+
+{/exp:file:entries}
+</div>
+<div class='otca-tab' style='display:none'>
+<h2><a name='reflection'></a>Reflection Examples</h2>
+{exp:file:entries limit="1" paginate="both" directory_id="3" orderby="title" sort='asc' category='18'}
+       
+
+        <p><a href="{file_url}"><strong>{title}</strong></a></p>
+
+{/exp:file:entries}
+
+<p>These particular student reflection examples below include academic references to models of reflection.</p>
+<p>Under normal circumstances personal reflections do not require academic references.</p>
+{exp:file:entries limit="30" paginate="both" directory_id="3" orderby="title" sort='asc' category='17'}
+       
+
+        <p><a href="{file_url}"><strong>{title}</strong></a></p>
+
+{/exp:file:entries}
+</div>
+<div class='otca-tab' style='display:none'>
+<h2><img class="icon" alt="Links" src="/img/web-link.png">Useful Links</h2>
+<h3>Models of Reflection</h3>
+<p><a href='http://www.voced.edu.au/content/ngv35820'>Boud & Walker’s Preparation and Reflection Model , Boud. D. & Walker, D. (1992)</a></p>
+<p><a href='http://academic.regis.edu/ed205/Kolb.pdf'>Kolb’s Learning Cycle Model, Kolb. DA. (1984) pp. 21-24</a></p>
+<p><a href='http://www.ingentaconnect.com/content/caot/cjot/2009/00000076/00000005/art00004'>Bannigan & Moores’ Model of Professional Thinking, Bannigan. K. & Moores. A. (2009)</a></p>
+</div>
+<div class='otca-tab' style='display:none'>
+<h2><img class="icon" alt="Quiz" src="/img/quiz.png">Quiz</h2>
+{embed='quizes/generate' step='8'}
+</div>
+
+{embed="structure/footer" js_library="jquery.video-chapters.js" js_file="quiz-formatter.js"}
+
+<script> 
+$(document).ready(function() {
+	$(".video-chapter-thumbs.video1").videoChapters("video1");
+});
+</script>

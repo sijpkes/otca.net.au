@@ -1,0 +1,93 @@
+{embed="structure/header" use_ot_evidencing_css='yes'}
+ {if logged_out}
+  	<div class='noaccess-overlay'>   
+ {/if}
+{if segment_3 == 'overview'}
+<h2>Cumulative Overview of Your Self-Assessed OTCEM</h2>
+<h3>Read only version</h3>
+{if:elseif segment_3 == 'add_evidence'} 
+<h2>Self-Assess Your OTCEM</h2>
+{/if}
+
+<div class='feedback'>
+{if segment_3 == 'overview'}
+	<p>
+    This is a read only overview of all the OTCEM competency statements you have self-assessed (ticked) and your Practice Educators’ verification. It also
+    links to a record of any supporting Documented Evidence (a description or hard/documented evidence) that you have uploaded to your ePortfolio to
+    demonstrate how you achieved the ticked competency statements and to build your portfolio of evidence.
+</p>
+<p>
+    This overview is an OTCEM summary of all your placements up to this point where you have used this website. This is a cumulative record of your achieved
+    competence.
+</p>
+<p>
+    Use the <strong>'Self-Assess Your OTCEM'</strong> option in ‘Your Toolbar’ to self-assess your competence.
+</p>
+{if:elseif segment_3 == 'add_evidence'} 
+	<p>
+    Here you self-assess your competency by ticking the OTCEM competency statements have achieved. This will save to your ePortfolio.
+</p>
+<p>
+    Your Practice Educator will verify your self-assessment by agreeing or disagreeing. This is Observable Evidence.
+</p>
+<p>
+    <strong><a href='/pages/important-otcem-info' style='color: red !important'>Click here for IMPORTANT INSTRUCTIONS &amp; INFORMATION for Self-Assessing Your OTCEM</u>
+    . You MUST read this information first.</a></strong>
+</p>
+{if:else} 
+The competency statements marked as assessed (in yellow) in the OTCEM have been completed by the evidence detailed here:
+<h3>Evidence Title: <i>"{segment_4}"</i></h3>
+<p><strong>Submitted by: {screen_name}.</strong></p>
+<p>Note: competency statements marked in blue indicate evidence that has not yet been assessed.</p>
+{/if}
+<p>
+    <a href="https://otca.net.au/pages/evidencing-matrix">More information about the OTCEM.</a>
+</p>
+</div>
+		<div class='evidencing-app'>
+			{exp:channel:entries channel="evidencing_matrix" limit="10" orderby="title" sort="asc" dynamic="no"}
+				<p>{text_body}</p>
+			{/exp:channel:entries}	
+		</div>
+
+ {if logged_out}
+  	</div>
+ {/if}<br />
+
+{embed="structure/footer" login_required='true'}
+
+{exp:matrix:studentjavascript 
+	id='{segment_3}' 
+	jquery-selector='.evidencing-app'
+	legend-title='Self-Assessment/Verification Legend'
+	legend-current='Current Verified Competencies'
+	legend-previous='Previously Verified Competencies'
+	legend-waiting='Self-Assessed Competencies Awaiting Verification'
+	legend-colors="FFB510, 852C8A, 1BBFE0"
+	step-label='View the OTPP Step'
+}
+	<p>
+Tick the competency statements that you have achieved then    <a href="#" id='save_otcem'>click here to SAVE and upload to “Your ePortfolio”</a>.
+</p>
+<p>
+    Then get your Practice Educator to verify your self-assessment.
+</p>
+<p>
+    You can also use the Save window to upload Documented Evidence – this is either a description or a piece of hard/documented evidence that supports your
+    ticked self-assessment.
+</p>
+<p>
+    <strong>
+        You DO NOT have to add an individual piece of Documented Evidence (description or hard evidence) for EACH ticked competency statement. Consult the
+        Course Guide/Outline for your University Occupational Therapy Course for details on how much evidence is required. Check the Important Instruction
+        Information link in the box above for further information about this.
+    </strong>
+</p>
+<p>
+See further information about how to self-assess and evidence your competence using the OTCEM in the    <strong>Important Instruction Information link box</strong> above.
+</p>
+<p>
+  	<a href="/docs/Occupational%20Therapy%20Competency%20Development%20Levels%20&%20Levels%20of%20Evidence.pdf">Levels of Evidence &amp; Types of Evidence</a>
+</p> 
+{/exp:matrix:studentjavascript}
+

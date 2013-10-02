@@ -1,0 +1,17 @@
+{embed="structure/header" use_ot_evidencing_css='yes'}
+ 
+ {if logged_out}
+  	<div class='noaccess-overlay'>   
+ {/if}
+<h2>Evidencing Matrix</h2>
+<p>for {screen_name} </p>
+		<div class='evidencing-app'>
+	{exp:channel:entries channel="evidencing_matrix" limit="10" orderby="title" sort='asc'}
+				<p>{text_body}</p>
+			{/exp:channel:entries}	
+		</div>
+ {if logged_out}
+  	</div>
+ {/if}<br />
+
+{embed="structure/footer" js_file="jquery.OTevidencing.js" js_command="$('.evidencing-app').evidencing()"}

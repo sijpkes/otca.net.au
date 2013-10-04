@@ -1,5 +1,8 @@
 .DS_Store
 
+#cache file for Ant build
+./cache.properties
+
 # Images
 images/avatars/
 images/captchas/

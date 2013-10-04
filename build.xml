@@ -14,6 +14,7 @@
 			<include name="img/*.*"/>
 			<include name="images/*.*"/>
 			<include name="resources/**"/>
+			<include name="audio/*.*"/>
 			<exclude name="system/"/>
 			<exclude name="build.xml"/>
 			<exclude name="cache.properties"/>

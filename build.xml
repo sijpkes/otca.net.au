@@ -13,25 +13,45 @@
 			<include name="unity/*.*"/>
 			<include name="img/*.*"/>
 			<include name="images/*.*"/>
+			<include name="resources/**"/>
 			<exclude name="system/"/>
 			<exclude name="build.xml"/>
-			<exclude name="cache.properties"/>	
+			<exclude name="cache.properties"/>
+			<modified update="true" seldirs="true" cache="propertyfile" algorithm="digest" comparator="equal">
+						<param name="cache.cachefile" value="cache.properties" />
+						<param name="algorithm.algorithm" value="MD5" />
+			</modified>
 		</fileset>	
 	
 	</copy>
 <copy todir="${dest.path}/system/expressionengine/third_party" overwrite="false" verbose="true">
 <fileset dir="${base.path}/system/expressionengine/third_party">
 	<include name="**"/>
+	<exclude name="cache.properties"/>
+	<modified update="true" seldirs="true" cache="propertyfile" algorithm="digest" comparator="equal">
+				<param name="cache.cachefile" value="cache.properties" />
+				<param name="algorithm.algorithm" value="MD5" />
+	</modified>
 </fileset>
 </copy>
 <copy todir="${dest.path}/templates" overwrite="false" verbose="true">
 <fileset dir="${base.path}/templates">
 	<include name="**"/>
+	<exclude name="cache.properties"/>
+	<modified update="true" seldirs="true" cache="propertyfile" algorithm="digest" comparator="equal">
+				<param name="cache.cachefile" value="cache.properties" />
+				<param name="algorithm.algorithm" value="MD5" />
+	</modified>
 </fileset>
 </copy>
 	<copy todir="${dest.path}/themes" overwrite="false" verbose="true">
 	<fileset dir="${base.path}/themes">
 		<include name="**"/>
+		<exclude name="cache.properties"/>
+		<modified update="true" seldirs="true" cache="propertyfile" algorithm="digest" comparator="equal">
+					<param name="cache.cachefile" value="cache.properties" />
+					<param name="algorithm.algorithm" value="MD5" />
+		</modified>
 	</fileset>
 	</copy>
 </target>

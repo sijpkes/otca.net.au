@@ -1,9 +1,9 @@
 .DS_Store
 
 #cache file for Ant build
-./cache.properties
+cache.properties
 #project file for Eclipse
-./.project 
+.project 
 
 # Images
 images/avatars/

@@ -2,6 +2,8 @@
 
 #cache file for Ant build
 ./cache.properties
+#project file for Eclipse
+./.project 
 
 # Images
 images/avatars/

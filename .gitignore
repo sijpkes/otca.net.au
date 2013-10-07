@@ -1,4 +1,6 @@
 .DS_Store
+.project
+cache.properties
 
 # Images
 images/avatars/

@@ -1,0 +1,60 @@
+<?xml version="1.0"?> 
+<project name="otca.net.au" default="development" basedir=".">
+<property name="base.path" value="/workspace/otca.net.au"/>
+<property name="dest.path" value="/Library/WebServer/Documents/dev-host"/>	
+<target name="development" description="Copy newest files to local dev server.">
+	<copy todir="${dest.path}" overwrite="false" verbose="true">
+	
+		<fileset dir="${base.path}">
+			<include name="css/*.css"/>
+			<include name="js/**/*.js"/>
+			<include name="svg/*.svg"/>
+			<include name="docs/*.*"/>
+			<include name="unity/*.*"/>
+			<include name="img/*.*"/>
+			<include name="images/*.*"/>
+			<include name="resources/**"/>
+			<include name="audio/*.*"/>
+			<exclude name="system/"/>
+			<exclude name="build.xml"/>
+			<exclude name="cache.properties"/>
+			<modified update="true" seldirs="true" cache="propertyfile" algorithm="digest" comparator="equal">
+						<param name="cache.cachefile" value="cache.properties" />
+						<param name="algorithm.algorithm" value="MD5" />
+			</modified>
+		</fileset>	
+	
+	</copy>
+<copy todir="${dest.path}/system/expressionengine/third_party" overwrite="false" verbose="true">
+<fileset dir="${base.path}/system/expressionengine/third_party">
+	<include name="**"/>
+	<exclude name="cache.properties"/>
+	<modified update="true" seldirs="true" cache="propertyfile" algorithm="digest" comparator="equal">
+				<param name="cache.cachefile" value="cache.properties" />
+				<param name="algorithm.algorithm" value="MD5" />
+	</modified>
+</fileset>
+</copy>
+<copy todir="${dest.path}/templates" overwrite="false" verbose="true">
+<fileset dir="${base.path}/templates">
+	<include name="**"/>
+	<exclude name="cache.properties"/>
+	<modified update="true" seldirs="true" cache="propertyfile" algorithm="digest" comparator="equal">
+				<param name="cache.cachefile" value="cache.properties" />
+				<param name="algorithm.algorithm" value="MD5" />
+	</modified>
+</fileset>
+</copy>
+	<copy todir="${dest.path}/themes" overwrite="false" verbose="true">
+	<fileset dir="${base.path}/themes">
+		<include name="**"/>
+		<exclude name="cache.properties"/>
+		<modified update="true" seldirs="true" cache="propertyfile" algorithm="digest" comparator="equal">
+					<param name="cache.cachefile" value="cache.properties" />
+					<param name="algorithm.algorithm" value="MD5" />
+		</modified>
+	</fileset>
+	</copy>
+</target>
+	
+</project>

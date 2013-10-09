@@ -1,7 +1,5 @@
 {embed="structure/header" use_ot_evidencing_css='yes'}
- {if logged_out}
-  	<div class='noaccess-overlay'>   
- {/if}
+
 {if segment_3 == 'overview'}
 <h2>Cumulative Overview of Your Self-Assessed OTCEM</h2>
 <h3>Read only version</h3>
@@ -31,7 +29,7 @@
     Your Practice Educator will verify your self-assessment by agreeing or disagreeing. This is Observable Evidence.
 </p>
 <p>
-    <strong><a href='/pages/important-otcem-info' style='color: red !important'>Click here for IMPORTANT INSTRUCTIONS &amp; INFORMATION for Self-Assessing Your OTCEM</u>
+    <strong><a href='/pages/important-otcem-info' style='color: red !important'>Click here for IMPORTANT INSTRUCTIONS &amp; INFORMATION for Self-Assessing Your OTCEM
     . You MUST read this information first.</a></strong>
 </p>
 {if:else} 
@@ -49,12 +47,9 @@ The competency statements marked as assessed (in yellow) in the OTCEM have been 
 				<p>{text_body}</p>
 			{/exp:channel:entries}	
 		</div>
+<br />
 
- {if logged_out}
-  	</div>
- {/if}<br />
-
-{embed="structure/footer" login_required='true'}
+{embed="structure/footer" login_required='false'}
 
 {exp:matrix:studentjavascript 
 	id='{segment_3}' 

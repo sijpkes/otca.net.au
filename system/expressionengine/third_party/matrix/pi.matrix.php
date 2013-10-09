@@ -106,6 +106,8 @@ return $form;
 }
 
 public function studentJavascript() {
+$emptyUserProfile = "";	
+if($this->id !== "overview") {
         $form = "";
 
 // get item directly, as self assessed regardless of whether or not it has been assessed by an educator. 
@@ -145,6 +147,22 @@ if ($query->num_rows() > 0)
 		$assess_array[] = array('raw_date' => $row['date_assessed'], 'is_current_entry' => $current,'entry_date' => ee()->localize->format_date('%D, %F %d, %Y %g:%i:%s%a',$row['entry_date']), 'entry_id' => $row['entry_id'], 'title' => $row['title'] /* added 5/06/13 */, 'date_assessed' => $date_assessed, 'supervisor_assessment' => "$sa", 'screen_name' => $row['screen_name'], 'email' => $row['email'], 'group_id' => $row['group_id'], 'self_assessment' => "$selfa", 'feedback' => $row['feedback']);
 	}
 }
+} else {
+	$emptyUserProfile = "window.userProfile = {
+			\"reflections\" : {},
+			\"startNewCycle\" : false,
+			\"steps\" : [],
+			\"level\" : 0,
+			\"beginner\" : true,
+			\"objectives\" : [],
+			\"history_id\" : 0,
+			\"title\" : \"\",
+			\"time\" : 0
+	}; 
+	
+	window.stepDefinitions = [ \"null\", \"Request for Service\", \"Information Gathering\", \"Occupational Assessment\", \"Identification of Occupational Issues\", \"Goal Setting\", \"Intervention\",
+\"Evaluation\", \"Being a Professional\" ];"; 
+}
 
 if(isset($assess_array)) {
 	$items = json_encode($assess_array);
@@ -157,11 +175,11 @@ if(isset($self_assessed_array)) {
 } else
     $self_assessed_item_js = "var self_assessed_item = [];\n\n";
 
-$form .= self::fetchStudentAppJS($this->id, $assessed_items_js, $self_assessed_item_js, ee()->TMPL->tagdata);
+$form .= self::fetchStudentAppJS($this->id, $assessed_items_js, $self_assessed_item_js, $emptyUserProfile, ee()->TMPL->tagdata);
 return $form;
 }
 
-private static function fetchStudentAppJS($id, $assessed_items_js, $self_assessed_item_js, $info) {
+private static function fetchStudentAppJS($id, $assessed_items_js, $self_assessed_item_js, $emptyUserProfile = "", $info) {
     $id = is_string($id)?"\"$id\"":$id;
     
     $selector = ee()->TMPL->fetch_param('jquery-selector');

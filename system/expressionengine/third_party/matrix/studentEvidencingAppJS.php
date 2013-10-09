@@ -1,4 +1,7 @@
 <script>
+
+<?= $emptyUserProfile ?>
+
    (function( $ ) {
 $.fn.evidencing = function() {
 	var $me = this;

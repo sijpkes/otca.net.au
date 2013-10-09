@@ -42,7 +42,7 @@
 		<script type='text/javascript' src="/js/{embed:js_file}"></script>
 {/if}
 
-{if embed:login_required}
+{if embed:login_required == 'true'}
 	{if logged_out}
 		<script type='text/javascript' src="/js/register-message.js"></script>
 	{/if}

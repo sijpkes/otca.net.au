@@ -11,8 +11,10 @@ $plugin_info = array(
 
 class Folio {
 
+private $statement_tags = array('letters' => 'prepare-statement', 'reflections' => 'self-assess-statement');
+
 private $grouped_diary_entry_types = array('prepare-statement' => "Introductory Letter to Educator",
-                                         'self-assess-statement' => 'Self Assessment'
+                                         'self-assess-statement' => 'Reflection/Planning'
                                          );
 private $member_id = 0;
 
@@ -27,6 +29,19 @@ $output = "";
 $diary = ee()->input->get('diary');
 $evidence = ee()->input->get('evidence');
 $contracts = ee()->input->get('contracts');
+$letters = ee()->input->get('letters');
+$reflections = ee()->input->get('reflections');
+
+  $whereClause = "";
+    
+    if($letters == 1) {
+        $str = $this->statement_tags['letters'];
+        $whereClause .= " AND `tag` LIKE '%$str%'";   
+    }   
+    if($reflections == 1) {
+        $str = $this->statement_tags['reflections'];
+        $whereClause .= " AND `tag` LIKE '%$str%'";   
+    }  
 
 if($evidence == 1) {
 /* evidence query */
@@ -44,7 +59,7 @@ if ($query->num_rows() > 0)
 }
  
 if($diary == 1) {
-$sql = "SELECT `creation_date` FROM `otca_diary` WHERE `member_id`='$this->member_id' ORDER BY `creation_date` DESC";
+$sql = "SELECT `creation_date` FROM `otca_diary` WHERE `member_id`='$this->member_id' $whereClause ORDER BY `creation_date` DESC";
 
 $query =  ee()->db->query($sql);
 
@@ -99,6 +114,19 @@ $end =  ee()->input->get('end');
 $evidence = ee()->input->get('evidence');
 $diary = ee()->input->get('diary');
 $contracts = ee()->input->get('contracts');
+$letters = ee()->input->get('letters');
+$reflections = ee()->input->get('reflections');
+
+$whereClause = "";
+    
+    if($letters == 1) {
+        $str = $this->statement_tags['letters'];
+        $whereClause .= " AND `tag` LIKE '%$str%'";   
+    }   
+    if($reflections == 1) {
+        $str = $this->statement_tags['reflections'];
+        $whereClause .= " AND `tag` LIKE '%$str%'";   
+    }  
 
 $record_array = array();
 $countDuplicates = array();
@@ -217,10 +245,9 @@ $record_array[$upload_time] = "<li $styling><span style=\"font-family: courier,c
 }
 
 if($diary == 1) {
+
 $sql = "SELECT `entry_id`, `entry_text`, `last_updated`, `creation_date`, `hidden`, `tag`, `current_practice_cycle` FROM `otca_diary`
-    WHERE `member_id`='$this->member_id' ORDER BY `last_updated` DESC";
-    
-    /*  AND `creation_date` >= $end AND `creation_date` < $start */
+    WHERE `member_id`='$this->member_id' $whereClause ORDER BY `last_updated` DESC";
 
 $query =  ee()->db->query($sql);
 
@@ -385,6 +412,21 @@ $evidence = ee()->input->get('evidence');
 $diary = ee()->input->get('diary');
 $suid = ee()->input->get('suid');
 $contracts = ee()->input->get('contracts');
+$letters = ee()->input->get('letters');
+$reflections = ee()->input->get('reflections');
+
+$whereClause = "";
+    
+    if($letters == 1) {
+        $str = $this->statement_tags['letters'];
+        $whereClause .= " AND `tag` LIKE '%$str%'";   
+    }   
+    if($reflections == 1) {
+        $str = $this->statement_tags['reflections'];
+        $whereClause .= " AND `tag` LIKE '%$str%'";   
+    }  
+
+
 $ho = ee()->input->get('ho'); /* highlights only */
 
 $record_array = array();
@@ -469,9 +511,12 @@ if((!empty($ho) && !empty($styling)) || empty($ho) ) {
     }
 }
 
-if($diary == 1) {
+if($diary == 1) { 
 
-$sql = "SELECT `entry_id`, `entry_text`, `tag`, `creation_date`, `last_updated`, `current_practice_cycle`, `hidden` FROM `otca_diary` WHERE `member_id`='$suid' AND `hidden` = '0' ORDER BY `last_updated` DESC";
+$sql = "SELECT `entry_id`, `entry_text`, `tag`, `creation_date`, `last_updated`, `current_practice_cycle`, `hidden` FROM `otca_diary` WHERE `member_id`='$suid' AND `hidden` = '0' $whereClause ORDER BY `last_updated` DESC";
+
+//echo $sql; 
+
 $query =  ee()->db->query($sql);
 
 if ($query->num_rows() > 0)
@@ -621,6 +666,19 @@ $diary = ee()->input->get('diary');
 $evidence = ee()->input->get('evidence');
 $suid = ee()->input->get('suid');
 $contracts = ee()->input->get('contracts');
+$letters = ee()->input->get('letters');
+$reflections = ee()->input->get('reflections');
+
+$whereClause = "";
+    
+    if($letters == 1) {
+        $str = $this->statement_tags['letters'];
+        $whereClause .= " AND `tag` LIKE '%$str%'";   
+    }   
+    if($reflections == 1) {
+        $str = $this->statement_tags['reflections'];
+        $whereClause .= " AND `tag` LIKE '%$str%'";   
+    }   
 
 if($evidence == 1) {
 /* evidence query */
@@ -638,7 +696,8 @@ if ($query->num_rows() > 0)
 }
 
 if($diary == 1 && ($group_id == 7 || $group_id == 9 || $group_id == 1)) {
-    $sql = "SELECT `last_updated`,`creation_date` FROM `otca_diary` WHERE `member_id`='$suid' AND `hidden`='0' ORDER BY `last_updated` DESC";
+    
+    $sql = "SELECT `last_updated`,`creation_date`, `tag` FROM `otca_diary` WHERE `member_id`='$suid' AND `hidden`='0' $whereClause ORDER BY `last_updated` DESC";
     
     $query =  ee()->db->query($sql);
     
@@ -688,279 +747,20 @@ public function educatorJavascript() {
     $student_id = ee()->TMPL->fetch_param('student_id');
     $screen_name = ee()->TMPL->fetch_param('screen_name');
     
-    $str = <<<javascript
-        <script>
-        \$(document).ready(function() {	
-	window.evStudentId = '$student_id';
-        window.evStudentScreenName = '$screen_name';
-	var tabExpand = "<span style=\"float:right; font-family: verdana, arial, sans-serif; font-size:11px\"><a class=\"link-expand\" href=\"#\">Expand Tab</a></span>";
-	
-	var loader = '<img src=/img/ajax-loader-circle.gif class=loader></img>';
-	
-	\$.fn.collapse = function() {\$("li", this).each(function() {
-								    var myheight = $(this).css('height');
-								   $(this).data('origHeight', myheight).prepend(tabExpand).addClass('collapsed');
-					    });
-				   }
-				   
-	var loadContainer = function() { 
-		var diary = \$("input#diary:checked").length > 0 ? 1 : 0;
-		var evidence = \$("input#evidence:checked").length > 0 ? 1 : 0;
-		var contracts = \$("input#contracts:checked").length > 0 ? 1 : 0;
-		var letters = \$("input#letters:checked").length > 0 ? 1 : 0;
-		var reflections = \$("input#reflections:checked").length > 0 ? 1 : 0;
-		
-		\$('#timeline-container').html(loader).load("/ajax/educator-timeline-list?suid=$student_id&diary="+diary+"&evidence="+evidence+"&contracts="+contracts+"&letters="+letters
-						+"&reflections="+reflections, function() {
-					    $(this).addClass("open-panel");
-					    
-					   $(this).collapse();
-	
-		});
-		
-	};
-		
-		/*\$('#timeline-container').
-		html(loader).
-		load('/ajax/educator-timeline-container?evidence='+evidence+"&diary="+diary+'&suid='+window.evStudentId+'&contracts='+contracts, 
-		function() {
-		
-			\$('.timeline-label').click( 
-				function(e){		
-						var end = \$(this).parent().data('end');
-						var start = \$(this).parent().data('start');
-			
-						var label = \$(this).clone();
-						var folks = \$(this).parent();
-						
-						\$(folks).html('').
-							addClass('open-panel').
-							html("").
-							html(loader).
-							load('/ajax/educator-timeline-list?start='+start+'&end='+end+'&diary='+diary+'&evidence='+evidence+'&suid='+window.evStudentId+'&contracts='+contracts, 
-							function() {
-								\$('.open-panel li').each(function() {
-								    var myheight = $(this).css('height');
-								   $(this).data('origHeight', myheight).prepend(tabExpand).addClass('collapsed');
-								});
-								\$(this).prepend(label);
-							}
-						);
-				}
-			).first().click();
-			
-		}
-	);*/	
-      
-      var loadHighlights = function() {
-		\$('#highlights-container').
-		html(loader).addClass('open-panel').html("").
-			   load('/ajax/educator-timeline-list?ho=1&diary=1&evidence=1&contracts=1&letters=1&reflections=1&suid=$student_id',
-			   function() {
-			    $(this).collapse();
-			   });
-      };
-	
-	
-
-\$("input#diary, input#evidence, input#contracts").change(
-	function() {
-		loadContainer();
-	}
-);
-
-\$("select[name='checkAction']").change(function(){
-	var text = \$(this).text().toLowerCase();
-	
-	if(text=='share') {
-		\$("input#action:checked").each(function(i,v) {
-			
-		});
-	}
-});
-
-\$(document).on('click', 'a.link-expand', function(e) {
-	e.preventDefault();
-	var li = \$(this).closest('li');
-	var ydif = li.data('origHeight');
-	
-	if(li.hasClass('collapsed')) {
-	    \$(this).text('Collapse Tab');
-	    var str = "+="+ydif;
-	    \$(this).closest('li').animate({height: str}, 500).removeClass('collapsed').addClass('expanded');
-	    
-	} else {
-	    var str = "-="+ydif;
-	    \$(this).closest('li').animate({height: str}, 500).removeClass('expanded').addClass('collapsed');
-	    \$(this).text('Expand Tab'); 
-	}
-});
-  
-loadHighlights();
-loadContainer();
-});
-</script>
-javascript;
-
-return $str;
+    ob_start();
+        include 'educator.js';
+    $str = ob_get_clean();
+    
+return "<script>$str</script>";
 }
 
 public function studentJavascript() {
-    $str = <<<javascript
-    <script>    
-    \$(document).ready(function() {	
-	var loader = '<img src=/img/ajax-loader-circle.gif class=loader></img>';
-	var split = location.search.replace('?', '').split('=');
-	var highlightID = split[1];
-	
-	//alert("Testing this page "+split[0]+" "+split[1]);
-	
-	\$.checkHistoryID(function() { 
-		window.location.href = '/practice-placement/prepare-for-practice';
-	}, 
-		true /* no reload on history_id > 0 */
-	);
-	
-	var loadContainer = function() { 
-		var diary = \$("input#diary:checked").length > 0 ? 1 : 0;
-		var evidence = \$("input#evidence:checked").length > 0 ? 1 : 0;
-		var contracts = \$("input#contracts:checked").length > 0 ? 1 : 0;
-		var letters = \$("input#letters:checked").length > 0 ? 1 : 0;
-		var reflections = \$("input#reflections:checked").length > 0 ? 1 : 0;
-		
-		\$('#timeline-container').html(loader).load("/ajax/timeline-list?diary="+diary+"&evidence="+evidence+"&contracts="+contracts+"&letters="+letters
-						+"&reflections="+reflections, function() {
-					    $(this).addClass("open-panel");
-					    
-					    var highlightedItem = \$(this).find("a[href*='assessed-matrix/"+highlightID+"']").closest("li");
-								
-								if(typeof highlightedItem !== 'undefined') {
-								    highlightedItem.css("background-color", "#FFFF9C");
-								    try {
-									\$('html, body').animate({
-										scrollTop: highlightedItem.offset().top
-								     }, 500);
-								     } catch(e) {
-									console.log('no scroll, student not adding');
-								     }
-								 } else {
-								    console.log("highlightedItem undefined: "+highlightID);
-								 }
-		});
-		
-    }
-\$("input#diary, input#evidence, input#contracts").change(
-	function() {
-		loadContainer();
-	}
-);
-
-\$(document).on('change', "input#hide", function() {
-	var entry_id = \$(this).data('id');
-	var value = \$(this).is(":checked") ? 1 : 0;
-	var group_type = \$(this).closest('li').attr('class');
-	\$(this).before(loader+" ");
-	\$.post('/ajax/hide-diary-entry/', { entry_id: entry_id, hidden: value, group_type: group_type }, function(data) {
-		\$("img.loader").remove();
-	});
-});
-
-\$(document).on('change', "select#highlight", function() {
-	\$(this).after("  "+loader);
-	var code = \$(this).data("code");
-	var serverColorVal = \$(":selected", this).val();
-	var colorVal = "thick solid " + serverColorVal;
-	\$me = \$(this);
-	if(typeof colorVal === 'undefined' || serverColorVal == 'none') {
-		colorVal = "thin solid #663399";
-	}
-		\$.post('/ajax/save-folio-highlight', { code : code, color : serverColorVal } , function()
-		{
-				\$me.closest("li").css({ border : colorVal });
-				
-				if(serverColorVal != 'none') {
-					\$me.closest("li").find("input#hide:checked").trigger('click');	
-				} else {
-					\$me.closest("li").find("input#hide:not(:checked)").trigger('click');	
-				}
-				\$('.loader').remove();
-		}
-	);
-	
-});
-
-\$(document).on('click', 'img.exit', function(e) {
-e.preventDefault();
-var confirmed = \$(e.target).data('confirmed');
-var str_id = \$(e.target).prev('select#highlight').data('code');
-
-var id_arr = str_id.split("_");
-var type = id_arr[0];
-var member = id_arr[1];
-var id = id_arr[2];
-var eTarget = \$(e.target);
-var parentDiv = eTarget.parents('.open-panel').first();
-
-var removeEmptyPanel = function() {
-	// remove parent;
-	var liLen = \$(parentDiv).find("li").length;
-	if(liLen == 0) {
-		if(parentDiv.hasClass('timeline-top')) {
-			parentDiv.next().removeClass('timeline-center').addClass('timeline-top');
-		}
-		if(parentDiv.hasClass('timeline-bottom')) {
-			parentDiv.prev().removeClass('timeline-center').addClass('timeline-bottom');
-		}
-		\$(parentDiv).remove();		
-	}	
-};
- 
-if(typeof confirmed != 'undefined' && confirmed == 1) {
-\$(e.target).parents('.otca-textbox').find('br').before("<img id='loader' src='/img/ajax-loader-circle.gif'></img>");
-	
-	if(typeof id !== 'undefined') {
-		
-	if(typeof type !== 'undefined') {
-		switch(type) {
-		case 'diary':
-			\$.get('/ajax/remove-diary-entry?id='+id, function() {
-				var box = \$(e.target).parents('li');
-				\$(box).remove();
-				removeEmptyPanel();
-			});
-		break;
-		case 'evidence':
-			\$.get('/ajax/remove-evidence-entry?id='+id, function() {
-				var box = \$(e.target).parents('li');
-				\$(box).remove();
-				removeEmptyPanel();
-			});
-		break;
-		}
-	}
-	
-	}
-} else {
-\$('div#confirm-message').remove();
-\$('img.exit').each(function(i, v) {
-if(v != e.target) {
-\$(v).removeAttr('data-confirmed').removeData('confirmed');
-}
-});
-if(typeof id !== 'undefined') {
-\$(e.target).after('<div id="confirm-message">\
-			Are you sure? Click again to delete the item forever.<br> </div>');
-\$('div#confirm-message').css({top: e.pageY-10, left: e.pageX+20});
-\$(e.target).data('confirmed', 1);
-}
-}
-});
-loadContainer();
-});
-</script>
-javascript;
     
-return $str;    
+    ob_start();
+    include 'student.js';
+    $str = ob_get_clean();
+    
+return "<script>$str</script>";    
 }
  
 public static function usage()

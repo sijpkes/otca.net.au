@@ -69,7 +69,7 @@ $(document).ready(function(){
 		$('.cycle-toolbar a#save').click(function(e){
 			e.preventDefault();
 				
-			if(confirm("This will begin a new Practice Placement Cycle (PPC).  If you choose 'OK' and you want to revert to a previous cycle later,\n\n you can restore that PPC by selecting 'Restore' in the toolbar.\n\n Continue?")) {
+			if(confirm("This will begin a new Practice Placement Cycle (PPC).  If you choose 'OK' and you want to revert to a previous cycle later,\n you can restore that PPC by selecting 'Manage Practice Placement Cycle' in Your Toolbar.\n\n Continue?")) {
 				window.userProfile = window.emptyUserProfile;
 					//update database
 					$.post('/ajax/user-status', 

@@ -707,15 +707,14 @@ $.fn.evidencing = function() {
 	});
 	
 	$me.on('change', '#table-nav', function() {
-	
-	    /* go by nth table */
-	    var selectedTableId = $('option:selected', this).data("tableid");
-	    $("table:eq("+selectedTableId+") td p[data-pracsot]").each(function() { $(this).additionalCellInfo(selectedTableId) });
-	    $("table:eq("+selectedTableId+") a").first().focus();
+	     var selectedTableId = $('option:selected', this).data("tableid");
+        $("table:eq("+selectedTableId+") td p[data-pracsot]").each(function() { $(this).additionalCellInfo(selectedTableId) });
+        $("table:eq("+selectedTableId+") a").first().focus();  
 	});
 	
 	$("input[type='checkbox']", $me).attr('disabled', 'disabled');
 	$me.find('#table-nav').after(legend);
+	$('#table-nav').trigger('change');
 	// add evidence view
 	if(entry_id == 'add_evidence') {
 		add_evidence();

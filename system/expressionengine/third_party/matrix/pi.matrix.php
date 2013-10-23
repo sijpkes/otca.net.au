@@ -107,9 +107,10 @@ return $form;
 
 public function studentJavascript() {
 $emptyUserProfile = "";	
-if($this->id !== "overview") {
-        $form = "";
+$form = "";
 
+if($this->id !== "guest") {
+       
 // get item directly, as self assessed regardless of whether or not it has been assessed by an educator. 
 $sql = "SELECT title.entry_date, data.entry_id, title.author_id, data.field_id_6 AS self_assessment, student.screen_name, student.email, student.group_id, title.title
 FROM exp_channel_data data, exp_channel_titles title, otca_evidence ev, exp_members student WHERE data.entry_id = ev.entry_id

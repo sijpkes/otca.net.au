@@ -14,8 +14,8 @@ $(document).ready(function(){
 			console.log($(v).val());
 		});
 		
-		window.userProfile.letterEdName = $("#edname").val(); // not that ed name is not saved in db
-	
+		window.userProfile.letterEdName = $("#edname").val(); 
+		
 		var jsonProfile = JSON.stringify(window.userProfile);
 		//update database
 		$.post('/ajax/user-status', 
@@ -24,7 +24,7 @@ $(document).ready(function(){
 				callback();
 			} 
 		,'json');
-	}
+	};
 	
 	$('#openLocator strong').click(function(e) {
 		$(this).unbind('click').css('cursor','inherit');

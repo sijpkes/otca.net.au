@@ -12,7 +12,7 @@ $plugin_info = array(
 class Diary {
     
 public function __construct() {
-    
+    $member_id = ee()->session->userdata('member_id');
 }
  
 public static function usage()

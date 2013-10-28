@@ -11,7 +11,8 @@ $plugin_info = array(
 
 class Folio {
 
-private $statement_tags = array('letters' => 'prepare-statement', 'reflections' => 'self-assess-statement');
+private $statement_tags = array('letters' => 'prepare-statement', 'reflections' => 'self-assess-statement', 
+                                'general' => 'general_diary_entry');
 
 private $grouped_diary_entry_types = array('prepare-statement' => "Introductory Letter to Educator",
                                          'self-assess-statement' => 'Reflection/Planning'
@@ -34,13 +35,23 @@ $reflections = ee()->input->get('reflections');
 
   $whereClause = "";
     
+    if($diary == 1) {
+        $str = $this->statement_tags['general'];
+        $whereClause .= "`tag` LIKE '%$str%'";   
+    }
     if($letters == 1) {
+        if(strlen($whereClause) > 0) {
+            $whereClause .= " OR ";
+        }
         $str = $this->statement_tags['letters'];
-        $whereClause .= " AND `tag` LIKE '%$str%'";   
+        $whereClause .= "`tag` LIKE '%$str%'";   
     }   
     if($reflections == 1) {
+        if(strlen($whereClause) > 0) {
+            $whereClause .= " OR ";
+        }
         $str = $this->statement_tags['reflections'];
-        $whereClause .= " AND `tag` LIKE '%$str%'";   
+        $whereClause .= "`tag` LIKE '%$str%'";   
     }  
 
 if($evidence == 1) {
@@ -58,8 +69,8 @@ if ($query->num_rows() > 0)
 }
 }
  
-if($diary == 1) {
-$sql = "SELECT `creation_date` FROM `otca_diary` WHERE `member_id`='$this->member_id' $whereClause ORDER BY `creation_date` DESC";
+if($diary == 1 || $letters == 1 || $reflections == 1) {
+$sql = "SELECT `creation_date` FROM `otca_diary` WHERE `member_id`='$this->member_id' AND ($whereClause) ORDER BY `creation_date` DESC";
 
 $query =  ee()->db->query($sql);
 
@@ -119,13 +130,23 @@ $reflections = ee()->input->get('reflections');
 
 $whereClause = "";
     
+   if($diary == 1) {
+        $str = $this->statement_tags['general'];
+        $whereClause .= "`tag` LIKE '%$str%'";   
+    }
     if($letters == 1) {
+        if(strlen($whereClause) > 0) {
+            $whereClause .= " OR ";
+        }
         $str = $this->statement_tags['letters'];
-        $whereClause .= " AND `tag` LIKE '%$str%'";   
+        $whereClause .= "`tag` LIKE '%$str%'";   
     }   
     if($reflections == 1) {
+        if(strlen($whereClause) > 0) {
+            $whereClause .= " OR ";
+        }
         $str = $this->statement_tags['reflections'];
-        $whereClause .= " AND `tag` LIKE '%$str%'";   
+        $whereClause .= "`tag` LIKE '%$str%'";   
     }  
 
 $record_array = array();
@@ -244,10 +265,10 @@ $record_array[$upload_time] = "<li $styling><span style=\"font-family: courier,c
 }
 }
 
-if($diary == 1) {
+if($diary == 1 || $letters == 1 || $reflections == 1) {
 
 $sql = "SELECT `entry_id`, `entry_text`, `last_updated`, `creation_date`, `hidden`, `tag`, `current_practice_cycle` FROM `otca_diary`
-    WHERE `member_id`='$this->member_id' $whereClause ORDER BY `last_updated` DESC";
+    WHERE `member_id`='$this->member_id' AND ($whereClause) ORDER BY `last_updated` DESC";
 
 $query =  ee()->db->query($sql);
 
@@ -391,9 +412,16 @@ if($contracts == 1) {
 }
 // sort array by key to maintain date ordering
 krsort($record_array);
+
 $output .= "<ul>";
-foreach($record_array as $list_item){
-	$output .= $list_item;
+if( count($record_array) > 0 ) {
+    
+    foreach($record_array as $list_item){
+    	$output .= $list_item;
+    }
+    
+} else {
+    $output .= "<li>Nothing to show!</li>";
 }
 
 $output .= "</ul>";
@@ -417,15 +445,24 @@ $reflections = ee()->input->get('reflections');
 
 $whereClause = "";
     
+if($diary == 1) {
+        $str = $this->statement_tags['general'];
+        $whereClause .= "`tag` LIKE '%$str%'";   
+    }
     if($letters == 1) {
+        if(strlen($whereClause) > 0) {
+            $whereClause .= " OR ";
+        }
         $str = $this->statement_tags['letters'];
-        $whereClause .= " AND `tag` LIKE '%$str%'";   
+        $whereClause .= "`tag` LIKE '%$str%'";   
     }   
     if($reflections == 1) {
+        if(strlen($whereClause) > 0) {
+            $whereClause .= " OR ";
+        }
         $str = $this->statement_tags['reflections'];
-        $whereClause .= " AND `tag` LIKE '%$str%'";   
+        $whereClause .= "`tag` LIKE '%$str%'";   
     }  
-
 
 $ho = ee()->input->get('ho'); /* highlights only */
 
@@ -511,9 +548,9 @@ if((!empty($ho) && !empty($styling)) || empty($ho) ) {
     }
 }
 
-if($diary == 1) { 
+if($diary == 1 || $letters == 1 || $reflections == 1) { 
 
-$sql = "SELECT `entry_id`, `entry_text`, `tag`, `creation_date`, `last_updated`, `current_practice_cycle`, `hidden` FROM `otca_diary` WHERE `member_id`='$suid' AND `hidden` = '0' $whereClause ORDER BY `last_updated` DESC";
+$sql = "SELECT `entry_id`, `entry_text`, `tag`, `creation_date`, `last_updated`, `current_practice_cycle`, `hidden` FROM `otca_diary` WHERE `member_id`='$suid' AND `hidden` = '0' AND ($whereClause) ORDER BY `last_updated` DESC";
 
 //echo $sql; 
 
@@ -646,9 +683,16 @@ if(count($contract_highlights) > 0) {
 // sort array by key to maintain date ordering
 krsort($record_array);
 $output .= "<ul>";
-foreach($record_array as $list_item){
-	$output .= $list_item; 
+if( count($record_array) > 0 ) {
+    
+    foreach($record_array as $list_item){
+        $output .= $list_item;
+    }
+    
+} else {
+    $output .= "<li>Nothing to show!</li>";
 }
+
 $output .= "</ul>";
 
 return $output;
@@ -671,14 +715,24 @@ $reflections = ee()->input->get('reflections');
 
 $whereClause = "";
     
+if($diary == 1) {
+        $str = $this->statement_tags['general'];
+        $whereClause .= "`tag` LIKE '%$str%'";   
+    }
     if($letters == 1) {
+        if(strlen($whereClause) > 0) {
+            $whereClause .= " OR ";
+        }
         $str = $this->statement_tags['letters'];
-        $whereClause .= " AND `tag` LIKE '%$str%'";   
+        $whereClause .= "`tag` LIKE '%$str%'";   
     }   
     if($reflections == 1) {
+        if(strlen($whereClause) > 0) {
+            $whereClause .= " OR ";
+        }
         $str = $this->statement_tags['reflections'];
-        $whereClause .= " AND `tag` LIKE '%$str%'";   
-    }   
+        $whereClause .= "`tag` LIKE '%$str%'";   
+    }  
 
 if($evidence == 1) {
 /* evidence query */
@@ -695,9 +749,9 @@ if ($query->num_rows() > 0)
 }
 }
 
-if($diary == 1 && ($group_id == 7 || $group_id == 9 || $group_id == 1)) {
+if(($diary == 1 || $letters == 1 || $reflections == 1) && ($group_id == 7 || $group_id == 9 || $group_id == 1)) {
     
-    $sql = "SELECT `last_updated`,`creation_date`, `tag` FROM `otca_diary` WHERE `member_id`='$suid' AND `hidden`='0' $whereClause ORDER BY `last_updated` DESC";
+    $sql = "SELECT `last_updated`,`creation_date`, `tag` FROM `otca_diary` WHERE `member_id`='$suid' AND `hidden`='0' AND ($whereClause) ORDER BY `last_updated` DESC";
     
     $query =  ee()->db->query($sql);
     

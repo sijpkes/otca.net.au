@@ -6,7 +6,15 @@
    
    var $viewer = $('div.file-viewer.upload-box');   
    var $dialog = $('div.file-viewer.dialog');
-   
+   var tabExpand = "<span style=\"float:right; font-family: verdana, arial, sans-serif; font-size:11px; margin-right: 1em\"><a class=\"link-expand\" href=\"#\">Expand Tab</a></span>";
+        
+    $.fn.collapse = function(link_html) {
+               $("li", this).each(function() {
+                                    var myheight = $(this).css('height');
+                                   $(this).data('origHeight', myheight).addClass('collapsed');
+                                   $('#hide', this).parent().after(link_html);
+                        });
+               };
     
     var loader = '<img src=/img/ajax-loader-circle.gif class=loader></img>';
     var split = location.search.replace('?', '').split('=');
@@ -154,6 +162,8 @@
                                  } else {
                                     console.log("highlightedItem undefined: "+highlightID);
                                  }
+                                 
+                      $(this).collapse(tabExpand);
         }); 
         
         add_evidence();   
@@ -161,6 +171,7 @@
         
 <?php
     include 'input_eventHandler.js';
+    include 'link_expand_eventHandler.js';
 ?>
 
 $(document).on('change', "input#hide", function() {

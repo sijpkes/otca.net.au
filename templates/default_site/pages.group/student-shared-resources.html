@@ -12,13 +12,12 @@
 
 <p>This is {segment_4}'s history. Select items to filter by below.</p>
 Show: <label for='evidence'><input id='evidence' type='checkbox' checked='checked'>Evidence</label>
- <input id='contracts' type='checkbox' checked='checked'>Learning Contracts</label>
+ <label for='contracts'><input name='contracts' id='contracts' type='checkbox' checked='checked'>Learning Contracts</label>
  
 {if (group_id == 7 OR group_id == 9 OR group_id == 1)}   
-<label for='diary'> 
-    <input id='diary' type='checkbox' checked='checked'>Diary Entries</label>
-    (<label for='letters'><input name='diary_subs' id='letters' type='radio'>Letters to Educator</label>
-    <label for='reflections'><input name='diary_subs' id='reflections' type='radio'>Reflection/Planning</label>)
+	<label for='diary'> <input id='diary' type='checkbox' checked='checked'>Diary Entries</label>
+    <label for='letters'><input name='letters' id='letters' type='checkbox'>Letters to Educator</label>
+    <label for='reflections'><input name='reflections' id='reflections' type='checkbox'>Reflection/Planning</label>
 {/if}
    
 	<div id='timeline-container' style='width:750px; max-width:750px'>

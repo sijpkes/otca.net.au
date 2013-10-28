@@ -7,7 +7,7 @@ $member_id = $this->EE->session->userdata('member_id');
 
 if(!isset($member_id) || $member_id == 0) return;
 
-$query = $this->EE->db->query("SELECT * FROM `otca_diary` WHERE `member_id`='$member_id' ORDER BY `creation_date` DESC");  
+$query = $this->EE->db->query("SELECT * FROM `otca_diary` WHERE `member_id`='$member_id' AND `tag` = 'general_diary_entry' ORDER BY `creation_date` DESC");  
 if ($query->num_rows() > 0)
 {
 foreach($query->result_array() as $row) {

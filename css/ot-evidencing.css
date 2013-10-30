@@ -308,3 +308,6 @@ p#message {
 .feedback h3 {
 margin-top: 3px;
 }
+a#save_otcem {
+    font-size: 16pt;
+}

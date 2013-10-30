@@ -12,7 +12,12 @@
                $("li", this).each(function() {
                                     var myheight = $(this).css('height');
                                    $(this).data('origHeight', myheight).addClass('collapsed');
-                                   $('#hide', this).parent().after(link_html);
+                                   
+                                   if($('#hide', this).length > 0) {
+                                        $('#hide', this).parent().after(link_html);
+                                   } else {
+                                       $(this).prepend(link_html);
+                                   }
                         });
                };
     
@@ -146,6 +151,7 @@
         
         $('#timeline-container').html(loader).load("/ajax/timeline-list?diary="+diary+"&evidence="+evidence+"&contracts="+contracts+"&letters="+letters
                         +"&reflections="+reflections, function() {
+                        $(this).collapse(tabExpand);
                         $(this).addClass("open-panel");
                         
                         var highlightedItem = $(this).find("a[href*='assessed-matrix/"+highlightID+"']").closest("li");
@@ -162,8 +168,6 @@
                                  } else {
                                     console.log("highlightedItem undefined: "+highlightID);
                                  }
-                                 
-                      $(this).collapse(tabExpand);
         }); 
         
         add_evidence();   

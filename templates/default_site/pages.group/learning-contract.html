@@ -1,4 +1,7 @@
 <?php
+
+/* @TODO convert this to an EE plugin
+*/
 	$id = $this->EE->input->get('id');
 	$m = $this->EE->input->get('m');
 	$group_id = $this->EE->session->userdata('group_id');
@@ -75,8 +78,10 @@ var tempUserProfile;
 			}
 		}
 		
+		$ref_json = json_encode($js_reflections_array);
+		
 		$js_userProfile = "tempUserProfile = {
-				\"reflections\" :  $js_reflections_array,
+				\"reflections\" :  $ref_json,
 				\"startNewCycle\" : false,
 				\"steps\" : $steps,
 				\"level\" : $level,

@@ -104,7 +104,7 @@ if(isset($self_assessed_array)) {
 
 if(empty($form)) $form = "";
 
-$form .= $this->fetchEducatorAppJS($entry_id, $this->member_id, $student_screen_name, $student_email, $assessed_items_js, $self_assessed_item_js);
+$form .= $this->fetchEducatorAppJS($entry_id, $student_id, $student_screen_name, $student_email, $assessed_items_js, $self_assessed_item_js);
 return $form;
 }
 

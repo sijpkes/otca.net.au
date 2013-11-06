@@ -24,7 +24,7 @@ $.fn.evidencing = function() {
     
 <?= $assessed_items_js ?>
 <?= $self_assessed_item_js ?>
-var suid = <?= $student_id ?>
+var suid = <?= $student_id ?>;
 
     jQuery.expr[":"].Contains = jQuery.expr.createPseudo(function(arg) {
         return function( elem ) {

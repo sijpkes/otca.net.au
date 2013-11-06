@@ -586,6 +586,8 @@ var suid = <?= $student_id ?>
     $me.on("change", "input[type='radio']", function() {
         var checkboxInput = $(this).parent().prevAll('input');
         var criteria = checkboxInput.data('criteria');
+        checkboxInput.unbind('change');
+        
         if(parseInt($(this).val()) == 1) {
             checkboxInput.attr('checked', 'checked');
             criteria.agreed = 1;
@@ -593,7 +595,8 @@ var suid = <?= $student_id ?>
             checkboxInput.removeAttr('checked');
             criteria.agreed = 0;    
         }
-        checkboxInput.data('criteria', criteria);
+        
+        checkboxInput.data('criteria', criteria).attr('disabled','disabled');
         $(this).parents('label').closest('p').addClass('assessed').css({borderColor: 'red'});  
     });
     

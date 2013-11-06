@@ -77,7 +77,10 @@ var suid = <?= $student_id ?>
             //var currentAssessment = false;
             
             /* check if this is an un-verified AND self-assessed competency statement */    
-            if(typeof self_assessed_item !== 'undefined' && self_assessed_item !== false) {
+            if(typeof self_assessed_item !== 'undefined' && 
+                self_assessed_item !== false &&
+                typeof self_assessed_item.self_assessment !== 'undefined' &&
+                 self_assessed_item.self_assessment !== false) {
              var statements =  self_assessed_item.self_assessment.length > 0 ? JSON.parse(self_assessed_item.self_assessment) : {};
                 $(statements).each(function() {
                 if(criteria.step == this.step &&

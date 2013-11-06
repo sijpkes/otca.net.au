@@ -21,4 +21,23 @@
   	</div>
  {/if}<br />
 
-{embed="structure/footer" external_js_uri="/javascript/jquery.OTevidencingEducatorView?id={segment_3}&member={segment_4}&sname={segment_6}" login_required='true' js_command="$('.evidencing-app').evidencing()"}
+{embed="structure/footer" login_required='true'}
+
+{exp:matrix:educatorjavascript 
+	id='add_evidence' 
+	jquery-selector='.evidencing-app'
+	legend-title='Self-Assessment/Verification Legend'
+	legend-current='Current Verified Competencies'
+	legend-previous='Previously Verified Competencies'
+	legend-waiting='Self-Assessed Competencies Awaiting Verification'
+	legend-colors="FFB510, 852C8A, 1BBFE0"
+	step-label='View the OTPP Step'
+	entry_id='{segment_3}'
+	member='{segment_4}'
+	sname='{segment_6}'
+}
+
+
+
+{/exp:matrix:educatorjavascript}
+

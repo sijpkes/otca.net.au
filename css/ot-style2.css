@@ -831,14 +831,15 @@ div#message_side {
   /*visibility: hidden;*/
 }
 .web-contact-list td, th {
-     border: thin solid white;
+     border: thin solid #eee;
      padding: 10px;			
 }
 .web-contact-list th {
      background-color: #639;
+     color: #FFB510 !important;
 }
 .web-contact-list thead {
-    border-bottom: medium solid white;
+    border-bottom: medium solid #eee;
 }
 div#youtube-intro {
   display: block;

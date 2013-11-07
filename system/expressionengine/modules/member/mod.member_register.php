@@ -241,7 +241,7 @@ class Member_register extends Member {
 		$data['id']	= 'register_member_form';
 		$data['class'] = 'contrast'; // add the *&!^! contrast here, nice separation of presentation from function Ellislabs!
         $header = "<h1>Registration</h1>"; // and believe it or not, we can't change the heading in the template!!!  (yes i'm angry, wasted hours on this!)
-		// Return the final rendered form
+		// Return the final rendered form and f&!ng heading!
 		return $header . ee()->functions->form_declaration($data).$reg_form."\n"."</form>";
 	}
 

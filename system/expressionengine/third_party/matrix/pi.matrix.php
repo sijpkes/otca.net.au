@@ -1,5 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+include "libs/JSMin.php";
+
 $plugin_info = array(
 	'pi_name' => 'EEPortfolio Matrix',
 	'pi_version' => '1.0.0',
@@ -202,22 +204,25 @@ private static function fetchStudentAppJS($id, $assessed_items_js, $self_assesse
     
     ob_start();
 	include 'studentEvidencingAppJS.php';
-    $js = ob_get_clean();
+    $str = ob_get_clean();
+    $js = JSMin::minify($str);
 
-return $js;
+return "<script>$js</script>";
 }
    
 private static function fetchEducatorAppJS($entry_id, $student_id, $student_screen_name, $student_email, $assessed_items_js = "", $self_assessed_item_js = "") {
         
     ob_start();
      include 'educatorEvidencingAppJS.php';
-    $js = ob_get_clean();
-
-return $js;
+    $str = ob_get_clean();
+    $js = JSMin::minify($str);
+    
+return "<script>$js</script>";
 }
-    public static function usage()
-    {
-        ob_start();  ?>
+
+public static function usage()
+{
+    ob_start();  ?>
 
 The Matrix Plugin outputs HTML Rubric tables with additional features specified in the database.
 

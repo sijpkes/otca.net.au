@@ -1,5 +1,4 @@
-<script> 
-    window.stepDefinitions = [ "null", "Request for Service", "Information Gathering", "Occupational Assessment", 
+window.stepDefinitions = [ "null", "Request for Service", "Information Gathering", "Occupational Assessment", 
                                 "Identification of Occupational Issues", "Goal Setting", "Intervention",
                                 "Evaluation", "Being a Professional" ];
 
@@ -98,9 +97,13 @@ var suid = <?= $student_id ?>;
                 radioCount++;
                 selfChecked = true;
                 str += radioButtons;
-                if(!item.is_current_entry) {
-                str += "<br><a href='/pages/educator-matrix/"+item.entry_id+"/"+suid+"/"+item.title+"'>View Unverified Supporting Evidence/Description:<br>"+ item.title +"   &ndash;   "+ item.entry_date+"</a>";
-                }
+                       try {
+                            if(!self_assessed_item.is_current_entry) {
+                                str += "<br><a href='/pages/educator-matrix/"+item.entry_id+"/"+suid+"/"+item.title+"'>View Unverified Supporting Evidence/Description:<br>"+ item.title +"   &ndash;   "+ item.entry_date+"</a>";
+                            }
+                      } catch(e) {
+                          console.exception(e);
+                      }
                         //str += item.screen_name + ", <a style='color:"+bgcolor+"' href='mailto:"+item.email+"'>"+item.email+"</a>";
                     }
                 }
@@ -183,7 +186,7 @@ var suid = <?= $student_id ?>;
             }
             var isChecked = wasAssessed ? assessor_agreed : selfChecked; 
             return { assessorsStr : str, wasAssessed : wasAssessed, isChecked : isChecked, highlightColor: bgcolor/*, currentAssessment: selfChecked*/};            
-        } // end addCheckBoxes
+        } // end verifyCheckBoxes
     
     // traverse rows
         var rowspan = 0;
@@ -192,16 +195,11 @@ var suid = <?= $student_id ?>;
     if(rowi > 2) {
         var nocells = $('td', rowo).length;
         $(rowo).find('td').each(function(coli, colo) {
-            //var tempRowSpan = Number($(colo).attr('rowspan'));
-
             if(! (nocells == 4 && coli == 0) ) {// skip column headers
-                //if(nocells < 4) coli += 1;
                         $(colo).find('p').each(function(cbi, cbo) {
                             var criteria = { step: stepn, row: rowi, level: coli, checkbox: cbi, pracsot: 'empty' };
                             var assessCheck = verifyCheckBox(criteria);
-                            /*if(assessCheck.currentAssessment) {
-                                $(cbo).addClass('current');    
-                            }*/
+                         
                             var assessed = "<p style='color: "+assessCheck.highlightColor+"; font-size: 12px'>  "+assessCheck.assessorsStr+"</p>";
                             var checked =  assessCheck.isChecked?"checked":"";  
                             var criteriaStr = JSON.stringify(criteria);
@@ -210,13 +208,9 @@ var suid = <?= $student_id ?>;
                             if(assessCheck.wasAssessed || assessCheck.isChecked) { $(cbo).css({'border':'1px solid '+assessCheck.highlightColor}); }
                         });
             }
-            /*if (typeof tempRowSpan !== 'undefined' && tempRowSpan !== false) {
-                if(!isNaN(tempRowSpan) && rowspan == 0) {
-                    rowspan = tempRowSpan;
-                } 
-            }*/
+           
         });
-        //rowspan = rowspan>0 ? rowspan-1 : 0;
+ 
     }
     });
     };
@@ -368,39 +362,6 @@ var suid = <?= $student_id ?>;
         return this;
     };
     
-   /* $me.on("mouseenter", "td:not(.nocheckbox) p", function(event) {
-        //$("span", this).remove();
-        if($("span", this).length == 0) {
-        if (event.type == 'mouseenter') {
-            var pracsotChck = $(this).data('pracsot');
-            if(typeof pracsotChck === 'undefined') return false;
-            var pracsotArr = $(this).data('pracsot').split(',');
-            
-            var level = $(this).closest('td').index();
-            var cellCount = $(this).closest('td').parent().find("td").length;
-            
-            if(cellCount == 3) {
-                level = level + 1;              
-            }
-            
-            var row = $(this).closest("tr").index()-2;
-                
-            var pracsotStr = $("#table-nav option:selected").data("tableid") == 0 ? "" : "<span><br><a id='behaviours' data-level='"+level+"' data-row='"+row+"' href='#'>Observed behaviours</a></span>";
-            pracsotStr += "<span id='pracsot-crit'><br><br>PRACSOT Performance Criteria:<br>";
-            var comma = "";
-            $(pracsotArr).each(function(i, v) {
-                if(i > 0) comma = ", ";
-                pracsotStr += comma+"<a class='getPracsot' href='"+pracsotChck+"'>"+v+"</a>";
-            });
-            
-            pracsotStr += "</span>";
-            $(this).append(pracsotStr);//.css({border: 'thin solid #ccc'}).animate({borderWidth: "5px", margin: "-=2px", padding : "+=3px"}, 100);
-            
-        }
-        }
-    return false;
-    });*/
-    
     $(document).on('click', 'span > a#behaviours', function(e) {
         e.preventDefault();
         $("div.ajax-loader").show();
@@ -509,16 +470,6 @@ var suid = <?= $student_id ?>;
     
     $me.after("<div class='contrast'><p id='feedback'>Please provide meaningful written feedback for the student.  The word limit has been removed.<br><textarea style='min-width: 700px; height: 180px;'></textarea></p><br><button id='submitFeedback'>Submit and Complete Assessment</button></div>");
        
-    /*$("#feedback textarea").on('keyup', function() {
-        var chars = $(this).val().length;
-        $('#charmsg').html((100-chars)+" characters to go.");
-        if(chars > 100) {
-            $(this).parent().nextAll("#submitFeedback").removeAttr('disabled');
-        } else {
-            $(this).parent().nextAll("#submitFeedback").attr('disabled', 'disabled');
-        }
-    });*/
-    
     $('button#submitFeedback').on('click', function() {
         $(this).after("<img href='/img/ajax_loader.gif'/>");
         var criteria = getAssessedCriteria();
@@ -565,15 +516,6 @@ var suid = <?= $student_id ?>;
         console.log('mouseleave');
         $(e.target).removeCriteria();
     });
-
-    //$me.find("a.button").css('visibility','hidden');
-    
-    /*$me.on('click', "td input", function(e) {
-        if($('td input:checked').length > 0) 
-            $me.find("a.button").removeAttr('disabled');
-        else 
-            $me.find("a.button").removeAttr('disabled');
-    });*/
     
     $me.on('click', 'div.file-viewer a.exit', function(e) {
             e.preventDefault();
@@ -650,6 +592,7 @@ var suid = <?= $student_id ?>;
 
 })( jQuery );
 
-$('.evidencing-app').evidencing();
-$('.evidencing-app select#table-nav').trigger('change');
-</script>
+$(document).ready(function() {
+    $('.evidencing-app').evidencing();
+    $('.evidencing-app select#table-nav').trigger('change');
+});

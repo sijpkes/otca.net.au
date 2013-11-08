@@ -1,5 +1,3 @@
-<script>
-
 <?= $emptyUserProfile ?>
 
    (function( $ ) {
@@ -726,4 +724,3 @@ $.fn.evidencing = function() {
 $(document).ready(function() {
     $('<?= $selector ?>').evidencing();
 });
-</script>

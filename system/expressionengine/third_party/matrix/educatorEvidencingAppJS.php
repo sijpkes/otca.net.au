@@ -550,16 +550,20 @@ var suid = <?= $student_id ?>;
         var criteria =  $(this).data('criteria');
         if($(this).closest('label').find("input[type='radio']").length == 0) {
             var bgcolor = window.yellow;
-            var radioButtons = "<p style=\"color: #FFB510; font-size: 12px\" id='radios'>Agree: <input type='radio' disabled='disabled' value='1' name='radio"+radioCount+"' checked='checked'> Disagree: <input type='radio' value='0' disabled='disabled' name='radio"+radioCount+"'></p>";
+            var radioButtons = "<p style=\"color: #FFB510; font-size: 12px\" id='radios'>Agree: <input type='radio' value='1' name='radio"+radioCount+"' checked='checked'> Disagree: <input type='radio' value='0' name='radio"+radioCount+"'></p>";
             radioCount++;
             $(this).closest('label').parent().addClass('assessed');
             $(this).closest('label').append(radioButtons).parent().css('border', 'thin solid red');
-            criteria.agreed = 1;
         } else {
             $(this).closest('label').parent().css('border', 'none').removeClass('assessed');
-            $(this).closest('label').find("input[type='radio']").parent().remove();
-            criteria.agreed = 0;
+           // $(this).closest('label').find("input[type='radio']").parent().remove();
         }
+        if($(this).is(':checked')) {
+            criteria.agreed = 1;
+        } else {
+            criteria.agreed = 0;
+        }  
+        $(this).parent().find("input[type='radio'][value='"+criteria.agreed+"']").attr('checked','checked');   
         $(this).data('criteria', criteria);
     });
     

@@ -41,6 +41,11 @@ if(!empty($userProfileInput)) {
         $objectives = isset($userProfile->objectives)?mysql_real_escape_string(json_encode($userProfile->objectives)):"[]";
         $title = isset($userProfile->title)?mysql_real_escape_string($userProfile->title):"";
     
+    if(empty($title)) {
+        $error_msg = array("error" => "Error saving user profile!");
+        return json_encode($error_msg);
+    }
+    
     // create blank history item ready for saving this in the history later on... and so we can get the history_id  
     if($userProfile->history_id == 0) {
             $query = ee()->db->query("INSERT INTO `otca_user_status_history` (`member_id`, `steps`, `level`, `beginner`,`objectives`, `title`, `time`) VALUES ('$this->member_id','$steps','$level','$beginner','$objectives', '$title', UNIX_TIMESTAMP() );");

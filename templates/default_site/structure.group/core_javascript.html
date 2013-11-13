@@ -27,15 +27,21 @@ $(document).ready(function() {
 				
 				var cycle_name = $("#dialog-box input[name='cycle_name']").val();
 				
-				if(typeof cycle_name !== 'undefined' && cycle_name.length > 0) {
+				if(cycle_name !== null && typeof cycle_name !== 'undefined' && cycle_name.length > 0) {
 						window.userProfile.title = cycle_name;
+						
 						$('#ajax-loader').show();
 						$.post('/ajax/user-status', 
 							{ "userProfile" : JSON.stringify(window.userProfile) }, 
 							function(data) {
-								$('#ajax-loader').hide();
-								window.userProfile.history_id = data.history_id;
-								callback(cycle_name);
+								if(typeof data.error === 'undefined') {
+									$('#ajax-loader').hide();
+									window.userProfile.history_id = data.history_id;
+									callback(cycle_name);
+								} else {
+										$("#dialog-box #errorMsg").remove();
+										$("#dialog-box input[name='cycle_name']").css('border', 'thin solid red').after("<p style='color: red' id='errorMsg'>There was a problem saving this cycle, please try again.</p>");
+								}
 							} 
 							,'json');
 				} else {
@@ -45,8 +51,6 @@ $(document).ready(function() {
 				}
 		return false;
 		};
-		
-		
 		
 		$(document).on('keypress', "#dialog-box input[name='cycle_name']", function(e) {
 			if(e.which == 13) {
@@ -106,10 +110,8 @@ if ($group_id == 1) {
 
 if(!empty($member_id)) {
 
-
 $toolbarChange = "window.toolbarHeightChange =  '=246px';";
 $toolbarMax = "window.toolbarMaxHeight = 246;";
-
 
 $query =  $this->EE->db->query("SELECT `entry_id`, `entry_text`,`creation_date`, `last_updated`, `tag` FROM `otca_diary` `d` LEFT JOIN (`otca_user_status` `s`)  ON (`d`.`current_practice_cycle` = `s`.`history_id` AND `d`.`member_id` = `s`.`member_id`) WHERE `s`.`member_id` = '$member_id' AND `d`.`member_id` = '$member_id'");
 
@@ -358,7 +360,8 @@ $(document).ready(function() {
 			$(this).closest('div').slideUp();
 		});
 		
-		$("#youtube-intro input#dontshow").click(function() {
+		// not implemented
+		/*$("#youtube-intro input#dontshow").click(function() {
 			var ytframe = $(this).closest('div');
 			
 			if($(this).is(':checked')) {
@@ -369,7 +372,7 @@ $(document).ready(function() {
 				 
 			$(ytframe).slideUp();	 
 			}
-		});
+		});*/
 	<?php } ?>		
 });
 </script>

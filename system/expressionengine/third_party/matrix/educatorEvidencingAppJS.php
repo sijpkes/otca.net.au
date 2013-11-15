@@ -517,7 +517,7 @@ var suid = <?= $student_id ?>;
         $(e.target).removeCriteria();
     });
     
-    $me.on('click', 'div.file-viewer a.exit', function(e) {
+    $(document).on('click', 'div.file-viewer a.exit', function(e) {
             e.preventDefault();
             $(this).closest('div.file-viewer').hide(100);
     }); 

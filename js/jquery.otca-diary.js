@@ -15,7 +15,7 @@
 					$('img#loader').after("<strong id='savedMsg'> Entry saved...</strong>").remove();
 				});
 			$("button#save").attr('disabled','disabled');
-		}
+		};
 		
 		// tricky save button, all it does is force user to move focus from textarea to trigger
 		// this... saves us saving stuff that hasn't changed.
@@ -35,6 +35,7 @@
 		$(document).on('click', 'img.add', function(e) {
 				e.preventDefault();	
 				$(e.target).parent().before(cleanTextArea).after('<br>');
+				$(e.target).parent().prev().autosize();
 		});
 		
 		$(document).on('click', 'img.exit', function(e) {
@@ -66,7 +67,7 @@
 		});
 		
 		return this;
-	}
+	};
 	
 	$("a.button#printable").click(function(e) {
 		e.preventDefault();

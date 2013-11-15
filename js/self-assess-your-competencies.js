@@ -13,19 +13,6 @@ $(document).ready(function(){
 		$("ul#objectives").append("<li>"+v+"</li>");
 	});
 	
-	/*$('textarea').each(function(i,v) {
-		if(typeof array_reflections != 'undefined') {
-			for(var j = 0; j < array_reflections.length; j++) {
-				if(typeof array_reflections[j] != 'undefined') {
-					if($(v).data('tag') == array_reflections[j].tag) {
-						$(v).val(array_reflections[j].text);
-						$(v).data('iuid', array_reflections[j].internalId); 
-					}
-				}
-			}
-		}
-	});*/
-	
 	$('textarea').each(function(i,v) {
 	    var me = this;
 
@@ -37,22 +24,6 @@ $(document).ready(function(){
 		    }
 		}	
 	});
-	
-	
-	/*var merge_arrays = function(arr1, arr2) {
-	
-		var arr3 = [];
-			for(var i in arr1){
-				var shared = false;
-				for (var j in arr2)
-					if (arr2[j].internalId == arr1[i].internalId) {
-					 shared = true;
-					 break;
-			}
-		if(!shared) arr3.push(arr1[i])
-		}
-	return arr3.concat(arr2);			
-	};*/
 	
 	$('a.button#continue').click(function(e) {
 		e.preventDefault();
@@ -69,8 +40,6 @@ $(document).ready(function(){
 			userProfile.reflections[my_tag] = {text: $(this).val(), date: unixtime, internalId : $(this).data('iuid'), tag : my_tag };
 		});
 		
-		//userProfile.reflections = merge_arrays(userProfile.reflections, new_reflections);
-		//localStorage.userProfile = JSON.stringify(userProfile);
 		var jsonProfile = JSON.stringify(window.userProfile);
 		
 			//update database
@@ -82,5 +51,24 @@ $(document).ready(function(){
 				,'json');
 		});
 	});
+	
+	$("a.button#printable").click(function(e) {
+        e.preventDefault();
+        
+        var txtBoxContents = "";
+        
+        var data = { 
+            statement1: $("#revisedStrengthsStatement").val(),
+            statement2: $("#learnedStatement").val(),
+            statement3: $("#improvementStatement").val(),
+            statement4: $("#reflectStatement").val()
+        };
+        
+        $.post("/printview/reflection_planning", data, function(data) {
+            var w = window.open();
+            $(w.document.body).html(data);
+        });
+    });
+	
 	}
 });

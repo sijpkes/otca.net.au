@@ -1,6 +1,5 @@
 <?php
 $member_id = $this->EE->session->userdata('member_id');
-if($member_id == 0) return;
 
 $group_id = $this->EE->session->userdata('group_id');
 if($group_id == 6 || $group_id == 7 || $group_id == 9 || $group_id == 1) {
@@ -35,20 +34,21 @@ $sql = "SELECT `id`, `question` FROM `otca_pracsot` WHERE `id` LIKE('$element.%'
 
 $query = $this->EE->db->query($sql);
 
+if(!empty($member_id)) { 
 $assess_sql = "SELECT * FROM (SELECT `data`.`entry_id`, `data`.`field_id_6` as `self_assessment`, `av`.`matrix_ids` as `supervisor_assessment`, `av`.`date_assessed` FROM  `exp_channel_data` `data` LEFT JOIN (`exp_channel_titles` `title` , `otca_evidence` `ev`, `otca_evidence_validated` `av`) ON (`data`.`entry_id` = `ev`.`entry_id` AND `title`.`entry_id` = `ev`.`entry_id` AND `ev`.`entry_id` = `av`.`evidence_id`) WHERE `title`.`author_id` = '$member_id' order by `data`.`entry_id`, `av`.`date_assessed` desc) `ua` GROUP BY `ua`.`entry_id`";
  
 $comparison_query = $this->EE->db->query($assess_sql);
 
-if ($comparison_query->num_rows() > 0)
-{
-	foreach($comparison_query->result_array() as $row)
-    {	
-		// add option to compare later ...? maybe
-		$temp_array = json_decode("[$row[supervisor_assessment]]");
-		foreach($temp_array as $item) {
-			$evidence_array[] = $item;
+	if ($comparison_query->num_rows() > 0)
+	{
+		foreach($comparison_query->result_array() as $row)
+	    {	
+			// add option to compare later ...? maybe
+			$temp_array = json_decode("[$row[supervisor_assessment]]");
+			foreach($temp_array as $item) {
+				$evidence_array[] = $item;
+			}
 		}
-		//$self_assessed[] = json_decode("[$row[self_assessment]]");			
 	}
 }
 ?>	

@@ -3,22 +3,22 @@
 <div class="contrast diary">
 <p><a class='button' id='printable'>Printable View of Diary</a></p><br clear='all'>    
 <?php
-$member_id = $this->EE->session->userdata('member_id');
+$member_id = ee()->session->userdata('member_id');
 
-if(!isset($member_id) || $member_id == 0) return;
+if(empty($member_id)) return;
 
-$query = $this->EE->db->query("SELECT * FROM `otca_diary` WHERE `member_id`='$member_id' AND `tag` = 'general_diary_entry' ORDER BY `creation_date` DESC");  
+$query = ee()->db->query("SELECT * FROM `otca_diary` WHERE `member_id`='$member_id' AND `tag` LIKE '%general_diary_entry%' ORDER BY `creation_date` DESC");  
 if ($query->num_rows() > 0)
 {
 foreach($query->result_array() as $row) {
-	$date = date('l dS M, Y g:i a', $this->EE->localize->set_localized_time($row['creation_date']));
+	$date = date('l dS M, Y g:i a', ee()->localize->set_localized_time($row['creation_date']));
 	echo "<p class='otca-textbox'>$date<br><textarea data-tag='$row[tag]' data-id='$row[entry_id]' class='diary-entry'>";
 	echo $row['entry_text'];
 	echo "</textarea><img class=\"add\" src=\"/img/plus-icon.png\"><img class=\"exit\" src=\"/img/close-icon-white.png\"><br><button id='save'>Save</button><label><input type='checkbox' id='printhis' title='Include this entry in the print view'/>Include entry in print view.</label></p>";
 }
 } else {
 $date = date('l dS M, Y g:i a', $this->EE->localize->set_localized_time(time()));
-echo "<p id='otca-textbox'>$date<br><textarea data-tag='general-diary-entry' data-id='0' class='diary-entry'>";
+echo "<p class='otca-textbox'>$date<br><textarea data-tag='general-diary-entry' data-id='0' class='diary-entry'>";
 echo "Your diary is completely empty.  Make this your first entry!</textarea><img class=\"add\" src=\"/img/plus-icon.png\"><img class=\"exit\" src=\"/img/close-icon-white.png\"><br><button id='save'>Save</button></p>";
 
 } ?>

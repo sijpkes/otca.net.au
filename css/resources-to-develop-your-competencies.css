@@ -141,6 +141,11 @@ div#dyc-step7 {
     top: -1124px;
     width: 10em;
 }
+#ot-practice-process-model > div#text-step8 {
+  left: 112px;
+  top: -980px;
+  width: 16em;
+}
 .unfocus {
     background-color: #CCCCCC;
     opacity: 0.5;

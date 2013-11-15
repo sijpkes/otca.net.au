@@ -1,4 +1,3 @@
-{if logged_in}
 <style type='text/css'>
 body {
 	margin: 0 10%;
@@ -337,8 +336,9 @@ ul > li:nth-child(7) > ul > li > a:hover {
     text-decoration: none;
 }
 </style>
+{if logged_in}
 <h1>Personal PRACSOT Progress Report</h1>
 <h2>{current_time format="%D, %F %d"}</h2>
+{/if}
 <p class="pracsot-main-heading">PRACSOT</p>
 <p class="P79"><span class="T52">P</span><span class="T53">erformance </span><span class="T52">R</span><span class="T53">ecord for the </span><span class="T52">A</span><span class="T53">ustralian <br></span><span class="T52">C</span><span class="T53">ompetency </span><span class="T52">S</span><span class="T53">tandards for </span><span class="T52">O</span><span class="T53">ccupational </span><span class="T52">T</span><span class="T53">herapists</span></p>
-{/if}

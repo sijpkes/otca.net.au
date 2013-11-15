@@ -20,8 +20,29 @@
 				if(typeof window.video_source[iframeID] === 'undefined') {
 					window.video_source[iframeID] = $(video).attr('src');
 				}
+				/*  to use it with a normal anchor change this to something like the below, of course it will vary for URL
+				 *  so it'd be better to use a regex, but I'll let someone else worry about that.
+				 *
+				 *   var str = $(e.target).attr('href').split('#t')[1];
+				 *   var nstr = $(str).split("s")[0];
+				 *   var mstr = $(nstr).split("m");
+				 *   var min = Number(mstr[0]);
+				 *   var sec = Number(mstr[1]);
+				 *   
+				 * */
+				
 				var seconds = $(e.target).data('seconds');
-				var newSource = window.video_source[iframeID] + "&autoplay=1&#t="+seconds;
+				
+				/* youtube dropped old min/secs format, now we convert what's there to pure seconds */
+				var splsec = seconds.split('m');
+				var min = Number(splsec[0]);
+				var sec = Number(splsec[1].split('s')[0]);
+				
+				min = min * 60;
+				
+				var total = min + sec; 
+				
+				var newSource = window.video_source[iframeID] + "?start="+total+"&autoplay=1&rel=0";
 				$(video).attr('src', newSource);
 		});
 

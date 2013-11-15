@@ -671,8 +671,9 @@ $.fn.evidencing = function() {
 		console.log('mouseleave');
 		$(e.target).removeCriteria();
 	});
-
-	$me.on('click', 'div.file-viewer a.exit', function(e) {
+    
+    /* scoped to document for earlier version of Mozilla */
+	$(document).on('click', 'div.file-viewer a.exit', function(e) {
 			e.preventDefault();
 			$(this).closest('div.file-viewer').hide(100);
 	}); 

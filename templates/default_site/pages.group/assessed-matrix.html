@@ -33,9 +33,17 @@
     . You MUST read this information first.</a></strong>
 </p>
 {if:else} 
-The competency statements marked as assessed (in yellow) in the OTCEM have been completed by the evidence detailed here:
-<h3>Evidence Title: <i>"{segment_4}"</i></h3>
-<p><strong>Submitted by: {screen_name}.</strong></p>
+The competency statements marked as assessed (in yellow) in the OTCEM have been completed by the evidence detailed here:<br><br>
+
+<strong style='font-size: 14px'>Title: {segment_4}</strong><br>
+<strong style='font-size: 12px'>Level: {segment_5}</strong><br>
+<strong style='font-size: 12px'>Step: {segment_6}</strong><br>
+
+{exp:member:custom_profile_data}
+<strong>Submitted by: {first_name} {last_name}</strong><br>
+<strong>Student Number: {student_number}</strong>
+{/exp:member:custom_profile_data}
+
 <p>Note: competency statements marked in blue indicate evidence that has not yet been assessed.</p>
 {/if}
 <p>
@@ -62,13 +70,13 @@ The competency statements marked as assessed (in yellow) in the OTCEM have been 
 	step-label='View the OTPP Step'
 }
 	<p>
-Tick the competency statements that you have achieved then    <a href="#" id='save_otcem'>click here to SAVE and upload to “Your ePortfolio”</a>.
+Tick the competency statements that you have achieved then    <a href="#" id='save_otcem'>click here to SAVE and upload to Your ePortfolio</a>.
 </p>
 <p>
     Then get your Practice Educator to verify your self-assessment.
 </p>
 <p>
-    You can also use the Save window to upload Documented Evidence – this is either a description or a piece of hard/documented evidence that supports your
+    You can also use the Save window to upload Documented Evidence� this is either a description or a piece of hard/documented evidence that supports your
     ticked self-assessment.
 </p>
 <p>

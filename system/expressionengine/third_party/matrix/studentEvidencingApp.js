@@ -99,7 +99,7 @@ $.fn.evidencing = function() {
 				str += radioButtons;
 				console.log('entry_id '+entry_id+'item.entry_id '+item.entry_id);
 				if(!item.is_current_entry) {
-				str += "<br><a href='/pages/assessed-matrix/"+item.entry_id+"/"+item.title+"'>View Unverified Supporting Evidence/Description:<br>"+ item.title +"   &ndash;   "+ item.entry_date+"</a>";
+				str += "<br><a href='/pages/assessed-matrix/"+item.entry_id+"/"+item.title+"/"+item.level+"/"+item.step+"'>View Unverified Supporting Evidence/Description:<br>"+ item.title +"   &ndash;   "+ item.entry_date+"</a>";
 				}
 						//str += item.screen_name + ", <a style='color:"+bgcolor+"' href='mailto:"+item.email+"'>"+item.email+"</a>";
 					}
@@ -181,7 +181,7 @@ $.fn.evidencing = function() {
 					radioCount++;
 							str += radioButtons + "Assessed by: "; 
 							str += item.screen_name + ", <a style='color:"+bgcolor+"' href='mailto:"+item.email+"'>"+item.email+"</a><br>";
-							str += "<br><a href='/pages/assessed-matrix/"+item.entry_id+"/"+item.title+"'>View Supporting Evidence/Description:<br>"+ item.title +"   &ndash;   "+ item.entry_date+"</a>";
+							str += "<br><a href='/pages/assessed-matrix/"+item.entry_id+"/"+item.title+"/"+item.level+"/"+item.step+"'>View Supporting Evidence/Description:<br>"+ item.title +"   &ndash;   "+ item.entry_date+"</a>";
 						}
 					}
 					});
@@ -203,7 +203,7 @@ $.fn.evidencing = function() {
 			}
 			var isChecked = wasAssessed ? assessor_agreed : selfChecked; 
 			return { assessorsStr : str, wasAssessed : wasAssessed, isChecked : isChecked, highlightColor: bgcolor};			
-		}
+		};
 
 	// traverse rows
 	var rowspan = 0;

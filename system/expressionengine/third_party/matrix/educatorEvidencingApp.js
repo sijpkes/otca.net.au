@@ -99,7 +99,7 @@ var suid = <?= $student_id ?>;
                 str += radioButtons;
                        try {
                             if(!self_assessed_item.is_current_entry) {
-                                str += "<br><a href='/pages/educator-matrix/"+item.entry_id+"/"+suid+"/"+item.title+"'>View Unverified Supporting Evidence/Description:<br>"+ item.title +"   &ndash;   "+ item.entry_date+"</a>";
+                                str += "<br><a href='/pages/educator-matrix/"+item.entry_id+"/"+suid+"/"+item.title+"/"+item.level+"/"+item.step+"'>View Unverified Supporting Evidence/Description:<br>"+ item.title +"   &ndash;   "+ item.entry_date+"</a>";
                             }
                       } catch(e) {
                           console.exception(e);
@@ -178,7 +178,7 @@ var suid = <?= $student_id ?>;
                     radioCount++;
                             str += radioButtons + "Assessed by: "; 
                             str += item.screen_name + ", <a style='color:"+bgcolor+"' href='mailto:"+item.email+"'>"+item.email+"</a><br>";
-                            str += "<br><a href='/pages/educator-matrix/"+item.entry_id+"/"+suid+"/"+item.title+"'>View Supporting Evidence/Description:<br>"+ item.title +"   &ndash;   "+ item.entry_date+"</a>";
+                            str += "<br><a href='/pages/educator-matrix/"+item.entry_id+"/"+suid+"/"+item.title+"/"+item.level+"/"+item.step+"'>View Supporting Evidence/Description:<br>"+ item.title +"   &ndash;   "+ item.entry_date+"</a>";
                         }
                     }
                     });

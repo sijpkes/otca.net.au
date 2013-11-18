@@ -57,10 +57,12 @@ if ($query->num_rows() > 0)
 }
 
 // get item directly, as self assessed regardless of whether or not it has been assessed by an educator. 
-$sql = "SELECT title.entry_date, data.entry_id, title.author_id, data.field_id_6 AS self_assessment, student.screen_name, student.email, student.group_id
+/* ALL SQL statements revised 15/11/13 to add step and level */
+
+$sql = "SELECT title.entry_date, data.entry_id, title.author_id, data.field_id_6 AS self_assessment, data.field_id_13 as step, data.field_id_14 as level, student.screen_name, student.email, student.group_id
 FROM exp_channel_data data, exp_channel_titles title, otca_evidence ev, exp_members student WHERE data.entry_id = ev.entry_id
 AND title.entry_id = ev.entry_id AND student.member_id = title.author_id AND student.member_id = '$student_id' AND data.entry_id = '$entry_id'
-AND ev.last_assessed = '0'";
+AND ev.last_assessed = '0' LIMIT 0, 500";
 
 $query =  ee()->db->query($sql);
 
@@ -70,16 +72,20 @@ if ($query->num_rows() > 0)
     {   
         $self_assessment = $row['self_assessment'];
         $current = $row['entry_id'] == $entry_id;
-        $self_assessed_array = array('is_current_entry' => $current, 'entry_date' => ee()->localize->format_date('%D, %F %d, %Y %g:%i:%s%a',$row['entry_date']),'entry_id' => $row['entry_id'], 'group_id' => $row['group_id'], 'self_assessment' => "$self_assessment");
+        $self_assessed_array = array('is_current_entry' => $current, 
+                            'entry_date' => ee()->localize->format_date('%D, %F %d, %Y %g:%i:%s%a',$row['entry_date']),
+                            'entry_id' => $row['entry_id'], 'group_id' => $row['group_id'], 
+                            'self_assessment' => "$self_assessment",'step' => $row['step'], 'level' => $row['level']);
     }
 }
 
 // get history of matrix assessments for the historical view of the matrix.
-$sql = "SELECT title.entry_date, data.entry_id, title.author_id, title.title, data.field_id_6 as self_assessment, av.matrix_ids as supervisor_assessment,
+$sql = "SELECT title.entry_date, data.entry_id, title.author_id, title.title, data.field_id_6 as self_assessment, 
+    data.field_id_13 as step, data.field_id_14 as level, av.matrix_ids as supervisor_assessment,
     av.date_assessed, m.screen_name, m.email, m.group_id FROM  exp_channel_data data, exp_channel_titles title , otca_evidence ev,
     otca_evidence_validated av, exp_members m, exp_members student WHERE data.entry_id = ev.entry_id AND title.entry_id = ev.entry_id
     AND ev.entry_id = av.evidence_id AND m.member_id = av.assessor_id AND student.member_id = title.author_id
-    AND student.member_id ='$student_id' ORDER BY m.group_id, av.date_assessed DESC, data.entry_id";
+    AND student.member_id ='$student_id' ORDER BY m.group_id, av.date_assessed DESC, data.entry_id LIMIT 0, 500";
 
 $query =  ee()->db->query($sql);
 
@@ -90,7 +96,12 @@ if ($query->num_rows() > 0)
         $sa = $row['supervisor_assessment'];
         $selfa = $row['self_assessment'];
         $current = $row['entry_id'] == $entry_id;
-        $assess_array[] = array('is_current_entry' => $current, 'entry_date' => ee()->localize->format_date('%D, %F %d, %Y %g:%i:%s%a',$row['entry_date']),'entry_id' => $row['entry_id'], 'title' => $row['title'] /* added 5/06/13 */,'date_assessed' => $row['date_assessed'], 'supervisor_assessment' => "$sa", 'screen_name' => $row['screen_name'], 'email' => $row['email'], 'group_id' => $row['group_id'], 'self_assessment' => "$selfa");
+        $assess_array[] = array('is_current_entry' => $current, 
+                                'entry_date' => ee()->localize->format_date('%D, %F %d, %Y %g:%i:%s%a',$row['entry_date']),
+                                'entry_id' => $row['entry_id'], 'title' => $row['title'] /* added 5/06/13 */,
+                                'date_assessed' => $row['date_assessed'], 'supervisor_assessment' => "$sa", 
+                                'screen_name' => $row['screen_name'], 'email' => $row['email'], 'group_id' => $row['group_id'], 
+                                'self_assessment' => "$selfa", 'step' => $row['step'], 'level' => $row['level']);
     }
 }
 if(isset($assess_array)) {
@@ -117,9 +128,11 @@ $form = "";
 if($this->id !== "guest") {
        
 // get item directly, as self assessed regardless of whether or not it has been assessed by an educator. 
-$sql = "SELECT title.entry_date, data.entry_id, title.author_id, data.field_id_6 AS self_assessment, student.screen_name, student.email, student.group_id, title.title
+$sql = "SELECT title.entry_date, data.entry_id, title.author_id, data.field_id_6 AS self_assessment,  data.field_id_13 as step, data.field_id_14 as level, 
+student.screen_name, student.email, student.group_id, title.title
 FROM exp_channel_data data, exp_channel_titles title, otca_evidence ev, exp_members student WHERE data.entry_id = ev.entry_id
-AND title.entry_id = ev.entry_id AND student.member_id = title.author_id AND student.member_id = '$this->member_id' AND ev.last_assessed = '0'";
+AND title.entry_id = ev.entry_id AND student.member_id = title.author_id AND student.member_id = '$this->member_id' AND ev.last_assessed = '0' 
+LIMIT 0, 500";
 
 $query =  ee()->db->query($sql);
 $numrows = $query->num_rows();
@@ -130,11 +143,25 @@ if ($query->num_rows() > 0)
 	{
 		$self_assessment = $row['self_assessment'];
 		$current = $row['entry_id'] == $this->id;
-		$self_assessed_array[] = array('is_current_entry' => $current, 'entry_date' => ee()->localize->format_date('%D, %F %d, %Y',$row['entry_date']),'entry_id' => $row['entry_id'], 'title' => $row['title'], 'group_id' => $row['group_id'], 'self_assessment' => "$self_assessment");
+		$self_assessed_array[] = array('is_current_entry' => $current, 'entry_date' => ee()->localize->format_date('%D, %F %d, %Y',$row['entry_date']),
+		                               'entry_id' => $row['entry_id'], 'title' => $row['title'], 'group_id' => $row['group_id'], 
+		                               'self_assessment' => "$self_assessment", 'step' => $row['step'], 'level' => $row['level']);
 	}
 }
 
-$sql = "SELECT * FROM (SELECT title.entry_date, data.entry_id, title.author_id, title.title, data.field_id_6 as self_assessment, av.matrix_ids as supervisor_assessment, av.feedback, av.date_assessed, m.screen_name, m.email, m.group_id FROM  exp_channel_data data, exp_channel_titles title , otca_evidence ev, otca_evidence_validated av, exp_members m, exp_members student WHERE data.entry_id = ev.entry_id AND title.entry_id = ev.entry_id AND ev.entry_id = av.evidence_id AND m.member_id = av.assessor_id AND student.member_id = title.author_id AND student.member_id ='$this->member_id' ORDER BY av.date_assessed DESC, m.group_id, data.entry_id) ua";
+$sql = "SELECT * FROM (SELECT title.entry_date, data.entry_id, title.author_id, title.title, 
+        data.field_id_6 as self_assessment, data.field_id_13 as step, data.field_id_14 as level, 
+        av.matrix_ids as supervisor_assessment, av.feedback, av.date_assessed, m.screen_name, m.email, 
+        m.group_id FROM  exp_channel_data data, exp_channel_titles title , otca_evidence ev, otca_evidence_validated av, 
+        exp_members m, exp_members student WHERE data.entry_id = ev.entry_id 
+            AND title.entry_id = ev.entry_id 
+            AND ev.entry_id = av.evidence_id 
+            AND m.member_id = av.assessor_id 
+            AND student.member_id = title.author_id 
+            AND student.member_id ='$this->member_id' 
+        ORDER BY av.date_assessed DESC, 
+        m.group_id, data.entry_id) ua
+        LIMIT 0, 500";
 
 $debugsql = $sql;
 
@@ -150,7 +177,13 @@ if ($query->num_rows() > 0)
 		$selfa = $row['self_assessment'];
 		$date_assessed = ee()->localize->format_date('%D, %F %d, %Y %g:%i:%s%a', $row['date_assessed']);
 		$current = $row['entry_id'] == $this->id;
-		$assess_array[] = array('raw_date' => $row['date_assessed'], 'is_current_entry' => $current,'entry_date' => ee()->localize->format_date('%D, %F %d, %Y %g:%i:%s%a',$row['entry_date']), 'entry_id' => $row['entry_id'], 'title' => $row['title'] /* added 5/06/13 */, 'date_assessed' => $date_assessed, 'supervisor_assessment' => "$sa", 'screen_name' => $row['screen_name'], 'email' => $row['email'], 'group_id' => $row['group_id'], 'self_assessment' => "$selfa", 'feedback' => $row['feedback']);
+		$assess_array[] = array('raw_date' => $row['date_assessed'], 'is_current_entry' => $current,
+		                  'entry_date' => ee()->localize->format_date('%D, %F %d, %Y %g:%i:%s%a',$row['entry_date']), 
+		                  'entry_id' => $row['entry_id'], 'title' => $row['title'] /* added 5/06/13 */, 
+		                  'date_assessed' => $date_assessed, 'supervisor_assessment' => "$sa", 
+		                  'screen_name' => $row['screen_name'], 'email' => $row['email'], 'group_id' => $row['group_id'], 
+		                  'self_assessment' => "$selfa", 'feedback' => $row['feedback'], 
+		                  'step' => $row['step'], 'level' => $row['level']);
 	}
 }
 } else {
@@ -203,7 +236,7 @@ private static function fetchStudentAppJS($id, $assessed_items_js, $self_assesse
     $info = json_encode($info);
     
     ob_start();
-	include 'studentEvidencingAppJS.php';
+	include 'studentEvidencingApp.js';
     $str = ob_get_clean();
     $js = JSMin::minify($str);
 
@@ -213,7 +246,7 @@ return "<script>$js</script>";
 private static function fetchEducatorAppJS($entry_id, $student_id, $student_screen_name, $student_email, $assessed_items_js = "", $self_assessed_item_js = "") {
         
     ob_start();
-     include 'educatorEvidencingAppJS.php';
+     include 'educatorEvidencingApp.js';
     $str = ob_get_clean();
     $js = JSMin::minify($str);
     

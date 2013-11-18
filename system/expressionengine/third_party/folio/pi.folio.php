@@ -205,7 +205,11 @@ $query =  ee()->db->query($sql);
 
 if($evidence == 1) {
 /* evidence query */
-$sql = "SELECT `ev`.`upload_time`, `ev`.`entry_id`, `ev`.`filename`, `ev`.`last_assessed`, `ti`.`title`, `data`.`field_id_4` as `description`, `data`.`field_id_3` as `file_url` FROM `exp_channel_titles` `ti`, `otca_evidence` `ev`, `exp_channel_data` `data` WHERE `ti`.`entry_id` = `ev`.`entry_id` AND `data`.`entry_id`= `ev`.`entry_id` AND `ti`.`author_id` = '$this->member_id'
+$sql = "SELECT `ev`.`upload_time`, `ev`.`entry_id`, `ev`.`filename`, `ev`.`last_assessed`, 
+`ti`.`title`, `data`.`field_id_4` as `description`, `data`.`field_id_3` as `file_url`, 
+`data`.`field_id_13` as `step`, `data`.`field_id_14` as level 
+FROM `exp_channel_titles` `ti`, `otca_evidence` `ev`, `exp_channel_data` `data` 
+WHERE `ti`.`entry_id` = `ev`.`entry_id` AND `data`.`entry_id`= `ev`.`entry_id` AND `ti`.`author_id` = '$this->member_id'
 	ORDER BY `ev`.`upload_time` DESC";
 	
 /*AND `ev`.`upload_time` >= $end AND `ev`.`upload_time` <= $start*/
@@ -244,6 +248,8 @@ $hc = str_replace("%options%", $options, $hc);
 $hc = str_replace("%delete_option%", $deleteControl, $hc);
 
 $title = strlen($row['title']) > 0? $row['title']:"";
+$level = strlen($row['level']) > 0? $row['level']:"";
+$step  = strlen($row['step']) > 0? $row['step']:"";
 $filename = strlen($row['filename']) > 0? $row['filename']:"";
 $description = strlen($row['description']) > 0? "<p><em>$row[description]</em></p>":"";
 
@@ -509,7 +515,11 @@ if(count($evidence_highlights) > 0) {
 	$highlight_sql = "`ev`.`entry_id` IN ($hids)";
 }*/
 
-$sql = "SELECT `ev`.`upload_time`, `ev`.`entry_id`, `ev`.`filename`, `ti`.`title`, `data`.`field_id_4` as `description`, `data`.`field_id_3` as `file_url` FROM `exp_channel_titles` `ti`, `otca_evidence` `ev`, `exp_channel_data` `data` WHERE `ti`.`entry_id` = `ev`.`entry_id` AND `data`.`entry_id`= `ev`.`entry_id` AND `ti`.`author_id` = '$suid' ORDER BY `ev`.`upload_time` DESC";
+$sql = "SELECT `ev`.`upload_time`, `ev`.`entry_id`, `ev`.`filename`, `ti`.`title`, 
+`data`.`field_id_4` as `description`, `data`.`field_id_3` as `file_url`,
+`data`.`field_id_13` as `step`, `data`.`field_id_14` as level FROM `exp_channel_titles` `ti`, `otca_evidence` `ev`, `exp_channel_data` `data` 
+WHERE `ti`.`entry_id` = `ev`.`entry_id` AND `data`.`entry_id`= `ev`.`entry_id` AND `ti`.`author_id` = '$suid' 
+ORDER BY `ev`.`upload_time` DESC";
 
 $query =  ee()->db->query($sql);
 
@@ -535,6 +545,8 @@ if ($query->num_rows() > 0)
 $localEntryTime = ee()->localize->format_date('%d %M %Y', $row['upload_time']);
 
 $title = strlen($row['title']) > 0? $row['title']:"";
+$level = strlen($row['level']) > 0? $row['level']:"";
+$step  = strlen($row['step']) > 0? $row['step']:"";
 $filename = strlen($row['filename']) > 0? $row['filename']:"";
 $description = strlen($row['description']) > 0? "<p><em>$row[description]</em></p>":"";
 $file_link = strlen($row['file_url']) > 0? "<a href='$row[file_url]/$row[entry_id]' title='Download this file' style='color: #369' target='_blank'>Open attached file in a new tab</a>":"";
@@ -542,7 +554,11 @@ $file_link = strlen($row['file_url']) > 0? "<a href='$row[file_url]/$row[entry_i
 $file_link = preg_replace('~\{(.*?)\}~', '/download/secure/', $file_link);
 
 if((!empty($ho) && !empty($styling)) || empty($ho) ) {
-    $record_array[$upload_time] = "<li $styling><span style=\"font-family: courier,courier-new,sans-serif; color: rgb(68, 68, 68); font-size:15px\"><p style=\"margin-top: 0\"><strong><u>Evidence Entry</u></strong><br><a href='/pages/educator-matrix/$row[entry_id]/$suid/$row[title]' style='color: blue; line-height: 22px'>Assess OTCEM Competency Statements for this Evidence</a></p> <p> $title </p> $description $file_link <em style=\"float: right; line-height:0px\">$localEntryTime</em></span></li>";
+    $record_array[$upload_time] = "<li $styling><span style=\"font-family: courier,courier-new,sans-serif; color: rgb(68, 68, 68); font-size:15px\">
+                <p style=\"margin-top: 0\"><strong><u>Evidence Entry</u></strong><br><a href='/pages/educator-matrix/$row[entry_id]/$suid/$title/$level/$step' 
+                style='color: blue; line-height: 22px'>Assess OTCEM Competency Statements for this Evidence</a></p> 
+                <p> $title </p> $description $file_link <em style=\"float: right; line-height:0px\">$localEntryTime</em></span>
+                </li>";
 }
 	}
     }

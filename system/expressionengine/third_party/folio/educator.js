@@ -33,9 +33,9 @@ $(document).ready(function() {
       var loadHighlights = function() {
        $('#highlights-container').
         html(loader).addClass('open-panel').html("").
-               load('/ajax/educator-timeline-list?ho=1&diary=1&evidence=1&contracts=1&letters=1&reflections=1&suid=$student_id',
+               load('/ajax/educator-timeline-list?ho=1&diary=1&evidence=1&contracts=1&letters=1&reflections=1&suid=<?= $student_id ?>',
                function() {
-                $(this).collapse();
+                $(this).collapse(tabExpand);
                });
       };
     

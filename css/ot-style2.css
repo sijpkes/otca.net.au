@@ -1092,7 +1092,7 @@ cursor: pointer;
   color: #639;
 }
 .open-panel li.collapsed {
-height: 14px;
+height: 8px;
 overflow: hidden;
 border-width: 2px !important;
 border-radius: 15px 15px 0px 0px !important;

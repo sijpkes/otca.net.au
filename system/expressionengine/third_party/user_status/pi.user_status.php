@@ -32,8 +32,20 @@ $userProfileInput = ee()->input->post('userProfile');
 
 if(!empty($userProfileInput)) {
     $userProfile = json_decode($userProfileInput);
-    if($userProfile->startNewCycle == 'true') $endCycle = TRUE;
-    else $endCycle = FALSE;
+    
+    /* fail safe for empty PRACSOTS */
+    foreach($userProfile->objectives as &$obj) {
+        if(empty($obj->pracsot)) {
+            $error_msg = array("error" => "Error saving user profile! PRACSOT not set for $obj->text");
+            return json_encode($error_msg);
+        }
+    }
+    
+    
+    if($userProfile->startNewCycle == 'true') 
+        $endCycle = TRUE;
+    else 
+        $endCycle = FALSE;
     
         $steps = isset($userProfile->steps)?mysql_real_escape_string(json_encode($userProfile->steps)):'';
         $level = isset($userProfile->level)?$userProfile->level:0;
@@ -70,7 +82,7 @@ if(!empty($userProfileInput)) {
            }
     }
 // save status
-$query = ee()->db->query("INSERT INTO `otca_user_status` (`member_id`, `steps`, `level`, `beginner`,`objectives`,`title`, `history_id`)
+ee()->db->query("INSERT INTO `otca_user_status` (`member_id`, `steps`, `level`, `beginner`,`objectives`,`title`, `history_id`)
                             VALUES ('$this->member_id','$steps','$level','$beginner','$objectives', '$title', '$history_id')
                             ON DUPLICATE KEY UPDATE `steps`='$steps', `level`='$level', `beginner`='$beginner', `objectives`='$objectives',
                             `title`='$title', `history_id`='$history_id'");

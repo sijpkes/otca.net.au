@@ -29,8 +29,9 @@ class Otca_ajax {
         $result_array = array();  
         $json = json_encode($result_array);  
             
-        $query = ee()->db->query("SELECT a.`id`, a.`title`, a.`time`, (a.`id` = b.`history_id`) is_current FROM `otca_user_status_history` a, `otca_user_status` b
-                                    WHERE a.`member_id` = b.`member_id` AND a.`member_id` = '$this->member_id()'");
+        $query = ee()->db->query("SELECT a.`id`, a.`title`, a.`time`, (a.`id` = b.`history_id`) is_current 
+                                    FROM `otca_user_status_history` a, `otca_user_status` b
+                                        WHERE a.`member_id` = b.`member_id` AND a.`member_id` = '$this->member_id()'");
         
         if ($query->num_rows() > 0)
         {
@@ -58,11 +59,23 @@ class Otca_ajax {
         return $json;
     }
     
+    /*
+     * Currently not implemented within the otca site
+     * 
+     */
     public function evidence_learning_contract() {
-        $sql = "SELECT * FROM (select `data`.`entry_id`, `data`.`field_id_6` as `self_assessment`, av.matrix_ids as supervisor_assessment, av.date_assessed, ev.filename FROM `exp_channel_data` `data` LEFT JOIN (exp_channel_titles title , otca_evidence ev, otca_evidence_validated av) ON (data.entry_id = ev.entry_id AND title.entry_id = ev.entry_id AND ev.entry_id = av.evidence_id) WHERE title.author_id = '$this->member_id' order by data.entry_id, av.date_assessed desc) ua GROUP BY ua.entry_id";
+        $sql = "SELECT * FROM (select `data`.`entry_id`, `data`.`field_id_6` as `self_assessment`, 
+                av.matrix_ids as supervisor_assessment, av.date_assessed, ev.filename 
+                FROM `exp_channel_data` `data` 
+                LEFT JOIN (exp_channel_titles title , otca_evidence ev, otca_evidence_validated av) 
+                ON (data.entry_id = ev.entry_id AND title.entry_id = ev.entry_id AND ev.entry_id = av.evidence_id) 
+                WHERE title.author_id = '$this->member_id' 
+                ORDER BY data.entry_id, av.date_assessed desc) ua 
+                GROUP BY ua.entry_id";
+                
         $json = json_encode(array());
         
-        $comparison_query = $this->EE->db->query($sql);
+        $comparison_query = ee()->db->query($sql);
         
         if ($comparison_query->num_rows() > 0)
         {

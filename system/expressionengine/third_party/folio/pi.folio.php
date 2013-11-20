@@ -212,9 +212,6 @@ FROM `exp_channel_titles` `ti`, `otca_evidence` `ev`, `exp_channel_data` `data`
 WHERE `ti`.`entry_id` = `ev`.`entry_id` AND `data`.`entry_id`= `ev`.`entry_id` AND `ti`.`author_id` = '$this->member_id'
 	ORDER BY `ev`.`upload_time` DESC";
 	
-/*AND `ev`.`upload_time` >= $end AND `ev`.`upload_time` <= $start*/
-//echo $sql;
-
 $query =  ee()->db->query($sql);
 
 if ($query->num_rows() > 0)
@@ -264,8 +261,12 @@ $file_link = strlen($row['file_url']) > 0? "<a href='$row[file_url]/$row[entry_i
 
 $file_link = preg_replace('~\{(.*?)\}~', '/download/secure/', $file_link);
 
-$record_array[$upload_time] = "<li $styling><span style=\"font-family: courier,courier-new,sans-serif; color: rgb(68, 68, 68); font-size:15px\"><p style=\"margin-top: 0\"><strong><u>Evidence Entry</u></strong><br><a href='/pages/assessed-matrix/$row[entry_id]/$row[title]' style='color: blue; line-height: 22px'>View Assessed OTCEM Competency Statements for this Evidence</a></p> <p> $title $recently_assessed
-</p> $description $file_link <em style=\"float: right; line-height:0px\">$localEntryTime</em></span>$hc</li>";
+$record_array[$upload_time] = "<li $styling><span style=\"color: rgb(68, 68, 68); font-size:15px\">
+<p style=\"margin-top: 0\"><strong><u style='font-size: 12px'>OTCEM Evidence/Supporting Evidence</u> &ndash; \"$title\"
+<span style='font-size:10px'>($step, $level)</span></strong> 
+<br><a href='/pages/assessed-matrix/$row[entry_id]/$row[title]' style='color: blue; line-height: 22px'>
+View Assessed OTCEM Competency Statements for this Evidence</a></p> <p>$recently_assessed
+</p> $description $file_link <span style=\"float: right; line-height:0px\">$localEntryTime</span></span>$hc</li>";
 
 	}
 }
@@ -353,7 +354,7 @@ if ($query->num_rows() > 0)
         $ghc = str_replace("%options%", $options, $ghc);
         $ghc = str_replace("%delete_option%", $deleteControl, $ghc);
         $record_array[$group_date] = "<li $styling class='$group_type'><label style='float: right'><input id='hide' type='checkbox' data-id='$group_entry_id' data-entrytype='checkbox' name='action' title='Hide this item from educators.  Untick this if you wish to share this diary entry with your educators.' $group_hidden> Hidden</label>
-	<span style=\"font-family: cursive,helvetica,sans-serif; color: rgb(68, 68, 68); font-size:15px\"><p style=\"margin-top: 0\"><strong><u>$group_label</u></strong></p> <em>$grouped_entry_text</em> <em style=\"float: right\">$groupLocalTime</em></span>$ghc</li>";        
+	<span style=\"color: rgb(68, 68, 68); font-size:13px\"><p style=\"margin-top: 0\"><strong><u>$group_label</u></strong> $grouped_entry_text</p> <span style=\"float: right; font-size: 10px; margin-right: 2em\">$groupLocalTime</span></span>$ghc</li>";        
     }    
     
     foreach($results as $row) // returns all diary entries for this practice cycle
@@ -383,7 +384,8 @@ if ($query->num_rows() > 0)
                 $hc = str_replace("%code%", $unique_code, $hlSelectControl);
                 $hc = str_replace("%options%", $options, $hc);
                 $hc = str_replace("%delete_option%", $deleteControl, $hc);
-		$record_array[$creation_date] = "<li $styling><label style='float: right'><input id='hide' type='checkbox' data-id='$hide_id' data-entrytype='checkbox' name='action' title='Hide this item from educators.  Untick this if you wish to share this diary entry with your educators.' $hidden> Hidden</label><span style=\"font-family: cursive,helvetica,sans-serif; color: rgb(68, 68, 68); font-size:15px\"><p style=\"margin-top: 0\"><strong><u>Diary Entry</u></strong></p> <em>$row[entry_text]</em> <em style=\"float: right\">$localEntryTime</em></span>$hc</li>";
+		$record_array[$creation_date] = "<li $styling><label style='float: right'><input id='hide' type='checkbox' data-id='$hide_id' data-entrytype='checkbox' name='action' title='Hide this item from educators.  Untick this if you wish to share this diary entry with your educators.' $hidden> Hidden</label>
+		<span style=\"color: rgb(68, 68, 68); font-size:13px\"><p style=\"margin-top: 0\"><strong><u>Diary Entry</u></strong> $row[entry_text] </p> <span style=\"float: right\">$localEntryTime</span></span>$hc</li>";
 	}
 }
 }
@@ -412,7 +414,10 @@ if($contracts == 1) {
             $hc = str_replace("%code%", $unique_code, $hlSelectControl);
             $hc = str_replace("%options%", $options, $hc);
             $hc = str_replace("%delete_option%", "", $hc); /* no delete option for learning contracts */
-            $record_array[$creation_date] = "<li $styling><span style=\"font-family: arial,helvetica,sans-serif; color: black; font-size:12pt\"><p style=\"margin-top: 0\"><strong>Learning Contract</strong></p> <a href='/pages/learning-contract?id=$row[id]'>$row[title]</a> <span style=\"float: right\"><strong>Started: $localEntryTime</strong></span>$hc</li>";
+            $record_array[$creation_date] = "<li $styling><a href='/pages/learning-contract?id=$row[id]'><span style=\"font-family: arial,helvetica,sans-serif; color: black; font-size:12pt\">
+            <p style=\"margin-top: 0\">Learning Contract for Practice Placement Cycle: 
+            \"$row[title]\"</a> 
+            <span style=\"float: right; margin-right:2em; font-size: 10px\">$localEntryTime</span></p>$hc</li>";
         }
     }
 }
@@ -509,12 +514,6 @@ $query =  ee()->db->query($sql);
 
 if($evidence == 1) {
 
-/*$highlight_sql = "`ev`.`upload_time` >= $end AND `ev`.`upload_time` < $start";
-if(count($evidence_highlights) > 0) {
-	$hids = implode(",", $evidence_highlights);
-	$highlight_sql = "`ev`.`entry_id` IN ($hids)";
-}*/
-
 $sql = "SELECT `ev`.`upload_time`, `ev`.`entry_id`, `ev`.`filename`, `ti`.`title`, 
 `data`.`field_id_4` as `description`, `data`.`field_id_3` as `file_url`,
 `data`.`field_id_13` as `step`, `data`.`field_id_14` as level FROM `exp_channel_titles` `ti`, `otca_evidence` `ev`, `exp_channel_data` `data` 
@@ -554,10 +553,12 @@ $file_link = strlen($row['file_url']) > 0? "<a href='$row[file_url]/$row[entry_i
 $file_link = preg_replace('~\{(.*?)\}~', '/download/secure/', $file_link);
 
 if((!empty($ho) && !empty($styling)) || empty($ho) ) {
-    $record_array[$upload_time] = "<li $styling><span style=\"font-family: courier,courier-new,sans-serif; color: rgb(68, 68, 68); font-size:15px\">
-                <p style=\"margin-top: 0\"><strong><u>Evidence Entry</u></strong><br><a href='/pages/educator-matrix/$row[entry_id]/$suid/$title/$level/$step' 
+    $record_array[$upload_time] = "<li $styling><span style=\"color: rgb(68, 68, 68); font-size:13px\">
+                <p style=\"margin-top: 0\"><strong><u>OTCEM Evidence/Supporting Evidence</u> &ndash; \"$title\" 
+                <span style='font-size: 10px'>($step, $level)</span></strong><br>
+                <a href='/pages/educator-matrix/$row[entry_id]/$suid/$title/$level/$step' 
                 style='color: blue; line-height: 22px'>Assess OTCEM Competency Statements for this Evidence</a></p> 
-                <p> $title </p> $description $file_link <em style=\"float: right; line-height:0px\">$localEntryTime</em></span>
+                <p> $title </p> $description $file_link <span style=\"float: right; line-height:0px\">$localEntryTime</span></span>
                 </li>";
 }
 	}
@@ -637,7 +638,8 @@ if ($query->num_rows() > 0)
         $groupLocalTime = ee()->localize->format_date("%d %M %Y",$group_date);
         
 	if((isset($ho) && $ho > 0 && !empty($styling)) || (!isset($ho) || empty($ho)) ) {
-	    $record_array[$group_date] = "<li $styling><span style=\"font-family: cursive,helvetica,sans-serif; color: rgb(68, 68, 68); font-size:15px\"><p style=\"margin-top: 0\"><strong><u>$group_label</u></strong></p> <em>".nl2br($grouped_entry_text)."</em> <em style=\"margin-left: 500px\">$groupLocalTime</em></span></li>";        
+	    $record_array[$group_date] = "<li $styling><span style=\"color: rgb(68, 68, 68); font-size:13px\"><p style=\"margin-top: 0\"><strong><u>$group_label</u></strong> &ndash; "
+	    .nl2br($grouped_entry_text)."</p> <span style=\"float: right; font-size: 10px\">$groupLocalTime</span></span></li>";        
 	}
     }
     
@@ -663,19 +665,14 @@ if ($query->num_rows() > 0)
 		$localEntryTime = date('d/M/Y g:i a', ee()->localize->set_localized_time($row['creation_date']));
 		$radio_name = $row['entry_id'];
 		if((isset($ho) && $ho > 0 && !empty($styling)) || (!isset($ho) || empty($ho)) ) {
-		    $record_array[$creation_date] = "<li $styling><span style=\"font-family: cursive,helvetica,sans-serif; color: rgb(68, 68, 68); font-size:15px\"><p style=\"margin-top: 0\"><strong><u>Diary Entry</u></strong></p> <em>".nl2br($row['entry_text'])."</em> <em style=\"float: right\">$localEntryTime</em></span></li>";
+		    $record_array[$creation_date] = "<li $styling><span style=\"color: rgb(68, 68, 68); font-size:15px\"><p style=\"margin-top: 0\"><strong><u>Diary Entry</u></strong> ".
+		                          nl2br($row['entry_text'])."</p><span style=\"float: right; font-size: 10px\">$localEntryTime</span></span></li>";
 		}    
 	}
 }
 }
 
 if($contracts == 1) {
-/*$highlight_sql = "`time` >= $end AND `time` < $start";
-if(count($contract_highlights) > 0) {
-	$hids = implode(",", $contract_highlights);
-	$highlight_sql = "`id` IN ($hids)";
-}*/
-
     $sql = "SELECT `id`, `time`,`title` FROM `otca_user_status_history` WHERE `member_id` = '$suid' ORDER BY `time` DESC";
     $query =  ee()->db->query($sql);
     if ($query->num_rows() > 0)
@@ -691,7 +688,10 @@ if(count($contract_highlights) > 0) {
 	    
             $localEntryTime = date('d/M/Y g:i a', ee()->localize->set_localized_time($creation_date));
             if((isset($ho) && $ho > 0 && !empty($styling)) || (!isset($ho) || empty($ho)) ) {
-	       $record_array[$creation_date] = "<li $styling><span style=\"font-family: arial,helvetica,sans-serif; color: black; font-size:12pt\"><p style=\"margin-top: 0\"><strong>Learning Contract</strong></p> <a href='/pages/learning-contract?id=$row[id]&m=$suid'>$row[title]</a> <span style=\"float: right\"><strong>Started: $localEntryTime</strong></span></li>";
+	       $record_array[$creation_date] = "<li $styling><p style=\"margin-top: 0; font-size: 13px\">
+	       <a href='/pages/learning-contract?id=$row[id]&m=$suid'>
+	       Learning Contract for Practice Placement Cycle: \"$row[title]\"</a></p>  
+	       <span style=\"float: right; font-size: 10px\">$localEntryTime</span></li>";
 	    }		
         }
     }

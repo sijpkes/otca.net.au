@@ -36,6 +36,7 @@ $.fn.evidencing = function() {
 	$me.append("<div class='file-viewer pracsot' style='display: none;'>\
 				</div>");
 	$me.append("<div class='ajax-loader' style='display: none;'> </div>");
+
 	var $viewer = $('div.file-viewer.upload-box');
 	var $pracsot_viewer = $('div.file-viewer.pracsot');
 	var $dialog = $('div.file-viewer.dialog');
@@ -334,7 +335,7 @@ $.fn.evidencing = function() {
 		var selectTxt = "";
 		if(i==0) { selectTxt = "Being a Professional"; } else { selectTxt = "Step "+i+" - "+window.stepDefinitions[i]; }
 		
-		$me.find("select#table-nav").append('<option data-tableid='+i+'>'+selectTxt+'</option>');
+		$me.find("select#table-nav").append("<option data-tableid='"+i+"' value='"+i+"'>"+selectTxt+"</option>");
 	});
 	/*
 		removes duplicate entries in array1 from array2
@@ -503,6 +504,7 @@ $.fn.evidencing = function() {
 		$("td input[type='checkbox']").removeAttr('disabled').removeAttr('checked');
 		
 		$('select#table-nav').after(<?= $info ?>);
+		
 		if(entry_id != 'add_evidence') {
 			$("#save_otcem").after("<p style='font-size: 14pt'><a href='#' id='cancel' style='color: #639'>Cancel upload of evidence and refresh.</a></p>");
 		}
@@ -724,4 +726,5 @@ $.fn.evidencing = function() {
 
 $(document).ready(function() {
     $('<?= $selector ?>').evidencing();
+     $('<?= $selector ?>').progress();
 });

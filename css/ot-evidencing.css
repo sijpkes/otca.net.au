@@ -311,3 +311,28 @@ margin-top: 3px;
 a#save_otcem {
     font-size: 16pt;
 }
+/* progress plugin */
+.evidencing-app > #progress {
+  background: none repeat scroll 0 0 #CCCCCC;
+  border: 2px solid #663399;
+  border-radius: 15px;
+  display: none;
+  height: 400px;
+  left: 157px;
+  opacity: 0.95;
+  padding: 1em;
+  position: fixed;
+  top: 100px;
+  width: 180px;
+}
+
+#progress > ul {
+  list-style: none outside none;
+  margin: 0;
+  padding: 0 0 0.2em;
+}
+#progress > select {
+  font-size: 13px;
+  width: 173px;
+}
+

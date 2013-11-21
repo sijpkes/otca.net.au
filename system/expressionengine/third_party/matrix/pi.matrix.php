@@ -206,16 +206,27 @@ if ($query->num_rows() > 0)
 if(isset($assess_array)) {
 	$items = json_encode($assess_array);
 	$assessed_items_js = "var assessed_items = $items;\n\n";
-} else
+} else {
     $assessed_items_js = "var assessed_items = [];\n\n";
+}
 if(isset($self_assessed_array)) {
 	$sa_item = json_encode($self_assessed_array);
 	$self_assessed_item_js = "var self_assessed_item = $sa_item;\n\n";
-} else
+} else {
     $self_assessed_item_js = "var self_assessed_item = [];\n\n";
+}
 
+$form .= self::embedProgressPlugin();
 $form .= self::fetchStudentAppJS($this->id, $assessed_items_js, $self_assessed_item_js, $emptyUserProfile, ee()->TMPL->tagdata);
 return $form;
+}
+
+private static function embedProgressPlugin() {
+     ob_start();
+    include 'jquery.matrix-progress.js';
+    $js = ob_get_clean();
+    //$js = JSMin::minify($str);
+    return "<script>$js</script>";
 }
 
 private static function fetchStudentAppJS($id, $assessed_items_js, $self_assessed_item_js, $emptyUserProfile = "", $info) {
@@ -233,7 +244,7 @@ private static function fetchStudentAppJS($id, $assessed_items_js, $self_assesse
 	$colors[$key] = trim($color);
     }
     
-    $info = json_encode($info);
+    $info = json_encode($info); 
     
     ob_start();
 	include 'studentEvidencingApp.js';

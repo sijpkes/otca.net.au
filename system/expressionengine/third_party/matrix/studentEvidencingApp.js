@@ -380,7 +380,7 @@ $.fn.evidencing = function() {
 			$(this).append(pracsotStr);
 	}
 	return this;
-	}
+	};
 	
 	$.fn.addTableRow = function(step, level, statement) {
 		if(statement.text().length == 0) { return this; }
@@ -424,7 +424,7 @@ $.fn.evidencing = function() {
 		$('input[name=search]').val('');
 		$("table#searchResults").fadeOut().remove();
 		$($me.currentTableView).fadeIn();
-	}
+	};
 	
 	$me.find('button#clearSearch').click(function(e) {
 		resetSearch();
@@ -498,7 +498,8 @@ $.fn.evidencing = function() {
 		$(e.target).setSelectedTab();
 	});
 	
-	
+<?php include("genStepLevel.js") ?>	
+
 	var add_evidence = function() {
 		
 		$("td input[type='checkbox']").removeAttr('disabled').removeAttr('checked');
@@ -525,14 +526,20 @@ $.fn.evidencing = function() {
 		
 		$.each(data[0], function(i, o) {
 			critJSONdata.push(o);
+			genStepLevel(o);
 		});
 					
 		$viewer.load('/pages/evidence-upload', 
 		function() { 
+		        $viewer.find("form#publishForm #step").text(window.saveStepStr);  
+		        $viewer.find("form#publishForm #level").text(window.saveLevelStr);  
 			    $viewer.find("form#publishForm #criteria_mapping").text(JSON.stringify(critJSONdata));
 			    $viewer.find("form#publishForm #searchable_mapping").text(JSON.stringify(sData));
 				$viewer.find('form#publishForm textarea#supervisor_emails').after("<input id='emailMe' name='emailMe' type='checkbox'/><label for='emailMe'>Send me a copy of this email.</label>");
 			    $viewer.find("form#publishForm input[name='cycle_name']").val(window.userProfile.title);
+			    
+			    $viewer.find("form#publishForm input[type='submit']").before("<p>When you click 'Save', this OTCEM Self assessment and any uploaded items,\
+			    will be uploaded as fulfilling<br> <strong>Step(s): "+window.saveStepStr+"<br>Level(s): "+window.saveLevelStr+" </strong></p>");
 			    $viewer.show();
 			    
 				$("div.ajax-loader").hide();
@@ -612,7 +619,7 @@ $.fn.evidencing = function() {
 			    });
 			 });
 		});	
-	}
+	};
 	
 	$me.on('click', '.show-files', function(e) {
 		e.preventDefault();

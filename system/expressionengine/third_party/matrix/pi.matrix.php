@@ -249,7 +249,7 @@ private static function fetchStudentAppJS($id, $assessed_items_js, $self_assesse
     ob_start();
 	include 'studentEvidencingApp.js';
     $str = ob_get_clean();
-    $js = JSMin::minify($str);
+    $js = $str;//JSMin::minify($str);
 
 return "<script>$js</script>";
 }

@@ -191,8 +191,12 @@ div#table-nav li:hover {
   background-color: #000;
   color: #FFF;
 }
-
-form#publishForm #criteria_mapping, form#publishForm #searchable_mapping {
+/*
+ * #field_id_13, #field_id_14 are step, level respectively
+ * 
+ */
+form#publishForm #criteria_mapping, form#publishForm #searchable_mapping,
+form#publishForm #step, form#publishForm #level { 
 	display: none;
 }
 

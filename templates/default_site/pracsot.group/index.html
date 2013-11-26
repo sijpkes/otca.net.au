@@ -1,9 +1,9 @@
 <? 
-	$member_id = $this->EE->input->get('sid'); 
-	$group_id = $this->EE->session->userdata('group_id');
+	$member_id = ee()->input->get('sid'); 
+	$group_id = ee()->session->userdata('group_id');
 	$sid = "";
 
-	if(isset($member_id) && strlen($member_id) > 0) {
+	if(!empty($member_id)) {
 	if($group_id == 1 || $group_id == 6 || $group_id == 7 || $group_id == 9) {
 		$sid = "&sid=$member_id";
 	} 

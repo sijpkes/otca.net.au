@@ -1,11 +1,11 @@
 <?php
-$member_id = $this->EE->session->userdata('member_id');
+$member_id = ee()->session->userdata('member_id');
 if($member_id == 0) return;
 
 define('BEING_A_PROFESSIONAL', 1); // check for holistic item which spans all PRACSOT levels
 
-$element = $this->EE->input->get('element');
-$suid = $this->EE->input->get('suid');
+$element = ee()->input->get('element');
+$suid = ee()->input->get('suid');
 
 $unit_code = substr($element, 0, 1);
 $unit_color = "unit$unit_code-color";
@@ -17,7 +17,7 @@ if(strlen($element) < 3) return;
 
 $sql = "SELECT `id`,`header` FROM `otca_pracsot_headers` WHERE id = '$element'";
 
-$query = $this->EE->db->query($sql);
+$query = ee()->db->query($sql);
 
 if ($query->num_rows() > 0)
 {
@@ -29,11 +29,11 @@ if ($query->num_rows() > 0)
 
 $sql = "SELECT `id`, `question` FROM `otca_pracsot` WHERE `id` LIKE('$element.%')";
 
-$query = $this->EE->db->query($sql);
+$query = ee()->db->query($sql);
 
 $assess_sql = "SELECT * FROM (SELECT data.entry_id, title.author_id, data.field_id_6 as self_assessment, av.matrix_ids as supervisor_assessment, av.date_assessed, m.screen_name, m.email, m.group_id FROM  exp_channel_data data, exp_channel_titles title , otca_evidence ev, otca_evidence_validated av, exp_members m, exp_members student WHERE data.entry_id = ev.entry_id AND title.entry_id = ev.entry_id AND ev.entry_id = av.evidence_id AND m.member_id = av.assessor_id AND student.member_id = title.author_id AND student.member_id ='$suid' ORDER BY m.group_id, av.date_assessed DESC, data.entry_id) ua GROUP BY ua.entry_id";
 
-$comparison_query = $this->EE->db->query($assess_sql);
+$comparison_query = ee()->db->query($assess_sql);
 
 if ($comparison_query->num_rows() > 0)
 {
@@ -52,7 +52,7 @@ if ($comparison_query->num_rows() > 0)
 <p style='text-align:right'><input type="button" value="Print this page" onClick="window.print()"></p>
 {embed='pracsot/header'}
 <p>&nbsp;</p>
-{embed='pracsot/<?php echo $unit_heading; ?> unit_color='<?php echo $unit_color; ?>'}	
+{embed='pracsot/<?php echo $unit_heading; ?>' unit_color='<?php echo $unit_color; ?>'}	
 		<table cellspacing="0" cellpadding="0" border="0" class="pracsot-table">
 			<colgroup>
 				<col width="513">

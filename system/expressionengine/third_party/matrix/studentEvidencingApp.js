@@ -24,15 +24,15 @@ $.fn.evidencing = function() {
 	jQuery.expr[":"].Contains = jQuery.expr.createPseudo(function(arg) {
 	    return function( elem ) {
 	        return jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
-	    };
+    	    };
 	});
 	
 	/* setup table drop-down selector -updated */
 	$me.prepend("<?= $step_label ?> <select id='table-nav'></select>");
 			
 	/* setup file viewer window and ajax loader */
-	$me.append("<div class='file-viewer upload-box' style='display: none;'> </div>");
-	$me.append("<div class='file-viewer dialog' style='display: none;'><a href='#close' class='exit'><img src='/img/close-icon.png' alt='close'></a><span id='message'></span></div>");
+	$("body").append("<div class='file-viewer upload-box' style='display: none;'> </div>");
+	$("body").append("<div class='file-viewer dialog' style='display: none;'><a href='#close' class='exit'><img src='/img/close-icon.png' alt='close'></a><span id='message'></span></div>");
 	$me.append("<div class='file-viewer pracsot' style='display: none;'>\
 				</div>");
 	$me.append("<div class='ajax-loader' style='display: none;'> </div>");
@@ -507,7 +507,7 @@ $.fn.evidencing = function() {
 		$('select#table-nav').after(<?= $info ?>);
 		
 		if(entry_id != 'add_evidence') {
-			$("#save_otcem").after("<p style='font-size: 14pt'><a href='#' id='cancel' style='color: #639'>Cancel upload of evidence and refresh.</a></p>");
+			$(".contrast p").first().after("<p style='font-size: 14pt'><a href='#' id='cancel' style='color: #639'>Cancel upload of evidence and refresh.</a></p>");
 		}
 		
 		$me.on('click', '#cancel', function(e) {
@@ -515,7 +515,7 @@ $.fn.evidencing = function() {
 			window.location.reload();
 		});
 		
-		$me.on('click', '#save_otcem', function(e) {
+		$(document).on('click', '#save_otcem', function(e) {
 		e.preventDefault();
 		
 		var data = getCheckedCrit();
@@ -573,7 +573,9 @@ $.fn.evidencing = function() {
 					$(this).parents('li').remove();
 					$('#supervisor_emails').val(supArray.join());
 				});
-			
+			    
+			     $('.feedback, <?= $selector ?>').fadeTo('slow', 0.3);   
+			     
 			    $viewer.find('#publishForm').ajaxForm({
 			        dataType: 'json',
 			        success: function(data) {
@@ -590,8 +592,8 @@ $.fn.evidencing = function() {
 									$viewer.hide();
 									$dialog.css({ width: "400px", height : "220px", left: "546px", top: "499px" });
 									
-									var strLinks = "<p><a class='button' href='/practice-placement/summary-of-your-competencies?show="+jsonData.id+"'>View this evidence in your ePortfolio</a></p>";
-									strLinks += "<p><a class='button' href='javascript:document.location.reload(true);' >Add another piece of evidence</a></p>";
+									var strLinks = "<p><a class='button' href='/practice-placement/summary-of-your-competencies?show="+jsonData.id+"'>View this OTCEM Self-Assessment in your ePortfolio</a></p>";
+									strLinks += "<p><a class='button' href='javascript:document.location.reload(true);' >Add another OTCEM Self-Assessment</a></p>";
 									
 									$dialog.find('span#message').html("<h3>Upload Successful</h3>"+jsonData.message+strLinks);
 									$dialog.show(250);
@@ -613,7 +615,9 @@ $.fn.evidencing = function() {
 								    str += "</p>";
 								
 								   $dialog.find('span#message').html(str);
-								   $dialog.show(250);           
+								   $dialog.show(250); 
+								   $('.feedback, <?= $selector ?>').fadeTo('slow', 0.3); 
+								   $("div.ajax-loader").hide();         
 								}
 			        		}
 			    });
@@ -685,6 +689,7 @@ $.fn.evidencing = function() {
 	$(document).on('click', 'div.file-viewer a.exit', function(e) {
 			e.preventDefault();
 			$(this).closest('div.file-viewer').hide(100);
+			$('.feedback, <?= $selector ?>').fadeTo('slow', 1.0); 
 	}); 
 	
 	$me.ajaxStart(function(){

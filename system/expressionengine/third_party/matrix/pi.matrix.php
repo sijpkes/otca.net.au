@@ -23,12 +23,34 @@ class Matrix {
     {
         $this->id = ee()->TMPL->fetch_param('id');
         $this->member_id = ee()->session->userdata('member_id');
-	//$this->info = ee()->TMPL->tagdata;
     }
     /*
-     *	Testing phase
-     *
-     *
+     * json function for submitting feedback.
+     */
+    public function submit_educator_feedback() {
+        $group_id = ee()->session->userdata('group_id');
+        if($group_id != 1 && $group_id != 6 && $group_id != 7) return;
+
+        $evidence_id = ee()->input->post('evidence_id');
+        $matrix_ids_JSON = ee()->input->post('criteria');
+        $feedback = mysql_real_escape_string(ee()->input->post('feedback'));
+
+        $sql = "INSERT INTO `otca_evidence_validated` (`evidence_id`, `assessor_id`, `matrix_ids`, `feedback`, `date_assessed`)
+                 VALUES ('$evidence_id', '$this->member_id', '$matrix_ids_JSON', '$feedback', UNIX_TIMESTAMP()) 
+                 ON DUPLICATE KEY UPDATE `matrix_ids` = '$matrix_ids_JSON', `feedback` = '$feedback', 
+                 `date_assessed` = UNIX_TIMESTAMP();";
+
+        $query = ee()->db->query($sql);
+
+        $sql = "UPDATE `otca_evidence` SET `last_assessed`= UNIX_TIMESTAMP() WHERE `entry_id` = '$evidence_id'";
+        $query = ee()->db->query($sql);
+
+        $rowsAffected = array("message" => ee()->db->affected_rows());
+        return json_encode($rowsAffected);
+    } 
+    
+    /*
+     *	Generate educator javascript
      */
     public function educatorJavascript() {
      
@@ -81,7 +103,7 @@ if ($query->num_rows() > 0)
 
 // get history of matrix assessments for the historical view of the matrix.
 $sql = "SELECT title.entry_date, data.entry_id, title.author_id, title.title, data.field_id_6 as self_assessment, 
-    data.field_id_13 as step, data.field_id_14 as level, av.matrix_ids as supervisor_assessment,
+    data.field_id_13 as step, data.field_id_14 as level, av.matrix_ids as supervisor_assessment, av.feedback as feedback,
     av.date_assessed, m.screen_name, m.email, m.group_id FROM  exp_channel_data data, exp_channel_titles title , otca_evidence ev,
     otca_evidence_validated av, exp_members m, exp_members student WHERE data.entry_id = ev.entry_id AND title.entry_id = ev.entry_id
     AND ev.entry_id = av.evidence_id AND m.member_id = av.assessor_id AND student.member_id = title.author_id
@@ -96,7 +118,7 @@ if ($query->num_rows() > 0)
         $sa = $row['supervisor_assessment'];
         $selfa = $row['self_assessment'];
         $current = $row['entry_id'] == $entry_id;
-        $assess_array[] = array('is_current_entry' => $current, 
+        $assess_array[] = array('is_current_entry' => $current, 'feedback' => $row['feedback'],
                                 'entry_date' => ee()->localize->format_date('%D, %F %d, %Y %g:%i:%s%a',$row['entry_date']),
                                 'entry_id' => $row['entry_id'], 'title' => $row['title'] /* added 5/06/13 */,
                                 'date_assessed' => $row['date_assessed'], 'supervisor_assessment' => "$sa", 
@@ -117,7 +139,8 @@ if(isset($self_assessed_array)) {
 
 if(empty($form)) $form = "";
 
-$form .= $this->fetchEducatorAppJS($entry_id, $student_id, $student_screen_name, $student_email, $assessed_items_js, $self_assessed_item_js);
+$form .= self::embedEducatorProgressPlugin();
+$form .= self::fetchEducatorAppJS($entry_id, $student_id, $student_screen_name, $student_email, $assessed_items_js, $self_assessed_item_js);
 return $form;
 }
 
@@ -224,6 +247,14 @@ return $form;
 private static function embedProgressPlugin() {
      ob_start();
     include 'jquery.matrix-progress.js';
+    $str = ob_get_clean();
+    $js = JSMin::minify($str);
+    return "<script>$js</script>";
+}
+
+private static function embedEducatorProgressPlugin() {
+     ob_start();
+    include 'jquery.ed-matrix-progress.js';
     $js = ob_get_clean();
     //$js = JSMin::minify($str);
     return "<script>$js</script>";
@@ -255,11 +286,17 @@ return "<script>$js</script>";
 }
    
 private static function fetchEducatorAppJS($entry_id, $student_id, $student_screen_name, $student_email, $assessed_items_js = "", $self_assessed_item_js = "") {
+    
+     $colors = explode(",", ee()->TMPL->fetch_param('legend-colors'), 3);
+     
+    foreach($colors as $key => $color) {   /* @TODO finish integrating PI parameters into educator view &*/
+        $colors[$key] = trim($color); 
+    }  
         
     ob_start();
      include 'educatorEvidencingApp.js';
     $str = ob_get_clean();
-    $js = JSMin::minify($str);
+    $js = $str;//JSMin::minify($str);
     
 return "<script>$js</script>";
 }

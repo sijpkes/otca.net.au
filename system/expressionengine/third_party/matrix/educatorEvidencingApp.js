@@ -1,12 +1,15 @@
 window.stepDefinitions = [ "null", "Request for Service", "Information Gathering", "Occupational Assessment", 
                                 "Identification of Occupational Issues", "Goal Setting", "Intervention",
                                 "Evaluation", "Being a Professional" ];
+window.previousFeedback = "";
 
  (function( $ ) {
 $.fn.evidencing = function() {
+     
+    
     var $me = this;
     var entry_id = <?= $entry_id ?>;
- 
+   
     // last search results
     var $searchResults = null;
     var legend = "<div style=\"clear: both; width: 100%; padding-bottom: 20px\">\
@@ -36,8 +39,8 @@ var suid = <?= $student_id ?>;
     
     $("strong#submitted_by").html("Submitted by: <?= $student_screen_name ?> - <a href='mailto: <?= $student_email ?>'><?= $student_email ?></a>");     
     /* setup file viewer window and ajax loader */
-    $me.append("<div class='file-viewer upload-box' style='display: none;'> </div>");
-    $me.append("<div class='file-viewer dialog' style='display: none;'><a href='#close' class='exit'><img src='/img/close-icon.png' alt='close'></a><span id='message'></span></div>");
+    $("body").append("<div class='file-viewer upload-box' style='display: none;'> </div>");
+    $("body").append("<div class='file-viewer dialog' style='display: none;'><a href='#close' class='exit'><img src='/img/close-icon.png' alt='close'></a><span id='message'></span></div>");
     $me.append("<div class='file-viewer pracsot' style='display: none;'>\
                 </div>");
     $me.append("<div class='ajax-loader' style='display: none;'> </div>");
@@ -118,6 +121,7 @@ var suid = <?= $student_id ?>;
                 );
                 
                 $(current_assessed_item_filter).each(function() {
+                window.previousFeedback = this.feedback;
                 var item = this;
                 var statements = JSON.parse(this.supervisor_assessment);
                 $(statements).each(function() {
@@ -186,7 +190,7 @@ var suid = <?= $student_id ?>;
             }
             var isChecked = wasAssessed ? assessor_agreed : selfChecked; 
             return { assessorsStr : str, wasAssessed : wasAssessed, isChecked : isChecked, highlightColor: bgcolor/*, currentAssessment: selfChecked*/};            
-        } // end verifyCheckBoxes
+        }; // end verifyCheckBoxes
     
     // traverse rows
         var rowspan = 0;
@@ -200,7 +204,7 @@ var suid = <?= $student_id ?>;
                             var criteria = { step: stepn, row: rowi, level: coli, checkbox: cbi, pracsot: 'empty' };
                             var assessCheck = verifyCheckBox(criteria);
                          
-                            var assessed = "<p style='color: "+assessCheck.highlightColor+"; font-size: 12px'>  "+assessCheck.assessorsStr+"</p>";
+                            var assessed = "<p style='background-color: "+assessCheck.highlightColor+"; color: #D1D6E7; padding: 7px; font-size: 12px'>  "+assessCheck.assessorsStr+"</p>";
                             var checked =  assessCheck.isChecked?"checked":"";  
                             var criteriaStr = JSON.stringify(criteria);
                             var selfAssessed = (!assessCheck.wasAssessed && assessCheck.isChecked) || assessCheck.wasAssessed ? "class='preclicked'" : "";
@@ -294,7 +298,7 @@ var suid = <?= $student_id ?>;
         var selectTxt = "";
         if(i==0) { selectTxt = "Being a Professional"; } else { selectTxt = "Step "+i+" - "+window.stepDefinitions[i]; }
         
-        $me.find("select#table-nav").append('<option data-tableid='+i+'>'+selectTxt+'</option>');
+        $me.find("select#table-nav").append("<option data-tableid='"+i+"' value='"+i+"'>"+selectTxt+"</option>");
     });
     /*
         removes duplicate entries in array1 from array2
@@ -339,7 +343,7 @@ var suid = <?= $student_id ?>;
             $(this).append(pracsotStr);
     }
     return this;
-    }
+    };
     
     $.fn.addTableRow = function(step, level, statement) {
         if(statement.text().length == 0) { return this; }
@@ -383,7 +387,7 @@ var suid = <?= $student_id ?>;
         $('input[name=search]').val('');
         $("table#searchResults").fadeOut().remove();
         $($me.currentTableView).fadeIn();
-    }
+    };
     
     $me.find('button#clearSearch').click(function(e) {
         resetSearch();
@@ -465,21 +469,17 @@ var suid = <?= $student_id ?>;
         $("table:eq("+selectedTableId+") a").first().focus();  
     });
     
-    /* add evidencing buttons */
-    //$me.prepend("<a class='button show-files'>Show existing evidence for the selected competency statements</a>");
-    
-    $me.after("<div class='contrast'><p id='feedback'>Please provide meaningful written feedback for the student.  The word limit has been removed.<br><textarea style='min-width: 700px; height: 180px;'></textarea></p><br><button id='submitFeedback'>Submit and Complete Assessment</button></div>");
        
-    $('button#submitFeedback').on('click', function() {
+    $(document).on('click', 'button#submitFeedback', function() {
         $(this).after("<img href='/img/ajax_loader.gif'/>");
         var criteria = getAssessedCriteria();
         
         var data = {evidence_id: entry_id, criteria: JSON.stringify(criteria), feedback: $("#feedback > textarea").val() };
         
-        $.post('/ajax/save-educator-feedback', data, function(data){
+        $.post('/ajax/submit-educator-feedback', data, function(data){
             window.history.back();
         }, 'json');
-    });
+    });   
             
     var getAssessedCriteria = function() {
         var map = [];
@@ -495,7 +495,7 @@ var suid = <?= $student_id ?>;
                 }   
         });
     return map;
-    }
+    };
     
     var makeSearchable = function(map) {
         var newMap = [];
@@ -598,5 +598,6 @@ var suid = <?= $student_id ?>;
 
 $(document).ready(function() {
     $('.evidencing-app').evidencing();
-    $('.evidencing-app select#table-nav').trigger('change');
+    $('.evidencing-app').progress(window.previousFeedback);
+    $('#menu').fadeTo('fast', 0);
 });

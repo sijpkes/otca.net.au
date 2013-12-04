@@ -256,16 +256,16 @@ $recent = time() - $thirty_days_secs;
 $raw_days = time() - $row['last_assessed'];
 $days = floor($raw_days / 60 / 60 / 24);
 $days_str = $days == 0 ? "today" : "$days day(s) ago.";
-$recently_assessed = $row['last_assessed'] > $recent ? " <span style='color:red'><strong>*** Assessed $days_str ***</strong></span>" : "";
+$recently_assessed = $row['last_assessed'] > $recent ? " <span style='color:#FFB510; background-color: #333'><strong>*** Verified $days_str ***</strong></span> " : "";
 $file_link = strlen($row['file_url']) > 0? "<a href='$row[file_url]/$row[entry_id]' title='Download this file' target='_blank' style='color: #639'>Open attached file in a new tab</a>":"";
 
 $file_link = preg_replace('~\{(.*?)\}~', '/download/secure/', $file_link);
 
 $record_array[$upload_time] = "<li $styling><span style=\"color: rgb(68, 68, 68); font-size:15px\">
-<p style=\"margin-top: 0\"><strong><u style='font-size: 12px'>OTCEM Evidence/Supporting Evidence</u> &ndash; \"$title\"
-<span style='font-size:10px'>($step, $level)</span></strong> 
+<p style=\"margin-top: 0\"><strong>".$recently_assessed."<u style='font-size: 12px'>OTCEM Evidence/Supporting Evidence</u> &ndash; \"$title\"
+<br><span style='font-size:10px'>($step, $level)</span></strong> 
 <br><a href='/pages/assessed-matrix/$row[entry_id]/$row[title]' style='color: blue; line-height: 22px'>
-View Assessed OTCEM Competency Statements for this Evidence</a></p> <p>$recently_assessed
+View Assessed OTCEM Competency Statements for this Evidence</a></p> <p>
 </p> $description $file_link <span style=\"float: right; line-height:0px\">$localEntryTime</span></span>$hc</li>";
 
 	}

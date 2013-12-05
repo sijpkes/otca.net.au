@@ -258,10 +258,27 @@ div.ajax-loader {
   background-color: #444;
 }
 .evidencing-app a {
-  color: #639 !important;
+  color: #639;
 }
-.evidencing-app table a {
+
+#otcem-progress a {
+	color: #663399;
+}
+/*.evidencing-app table a {
   color: #FFB510 !important;
+}*/
+
+.matrix-nav-link {
+	padding: 4px;
+	display: block;
+	border: thin solid black;
+	text-decoration: none;
+}
+
+.matrix-nav-link:hover {
+	background-color: #fff;
+	color: #000 !important;
+	font-weight: bolder;
 }
 
 .evidencing-app table th {

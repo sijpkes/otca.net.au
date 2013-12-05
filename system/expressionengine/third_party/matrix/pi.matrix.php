@@ -269,6 +269,9 @@ private static function fetchStudentAppJS($id, $assessed_items_js, $self_assesse
     $previous =  ee()->TMPL->fetch_param('legend-previous');
     $waiting =  ee()->TMPL->fetch_param('legend-waiting');
     $colors = explode(",", ee()->TMPL->fetch_param('legend-colors'), 3);
+    $contrast = explode(",", ee()->TMPL->fetch_param('text-contrast-colors'), 3);
+    $verified = ee()->TMPL->fetch_param('verified-competency-statement-link');
+    $unverified = ee()->TMPL->fetch_param('unverified-competency-statement-link');
     $step_label = ee()->TMPL->fetch_param('step-label');
     
     foreach($colors as $key => $color) {
@@ -287,7 +290,17 @@ return "<script>$js</script>";
    
 private static function fetchEducatorAppJS($entry_id, $student_id, $student_screen_name, $student_email, $assessed_items_js = "", $self_assessed_item_js = "") {
     
-     $colors = explode(",", ee()->TMPL->fetch_param('legend-colors'), 3);
+    $selector = ee()->TMPL->fetch_param('jquery-selector');
+    $legend_title = ee()->TMPL->fetch_param('legend-title');
+    $current = ee()->TMPL->fetch_param('legend-current');
+    $previous =  ee()->TMPL->fetch_param('legend-previous');
+    $waiting =  ee()->TMPL->fetch_param('legend-waiting');
+    $colors = explode(",", ee()->TMPL->fetch_param('legend-colors'), 3);
+    $contrast =  explode(",", ee()->TMPL->fetch_param('text-contrast-colors'), 3);
+    $verified = ee()->TMPL->fetch_param('verified-competency-statement-link');
+    $unverified = ee()->TMPL->fetch_param('unverified-competency-statement-link');
+    $step_label = ee()->TMPL->fetch_param('step-label');
+    
      
     foreach($colors as $key => $color) {   /* @TODO finish integrating PI parameters into educator view &*/
         $colors[$key] = trim($color); 

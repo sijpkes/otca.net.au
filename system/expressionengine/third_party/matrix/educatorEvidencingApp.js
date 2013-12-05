@@ -13,16 +13,16 @@ $.fn.evidencing = function() {
     // last search results
     var $searchResults = null;
     var legend = "<div style=\"clear: both; width: 100%; padding-bottom: 20px\">\
-<h3>Assessment/Verification Legend</h3>\
-<div style=\"border: thin solid white; background-color: #FFB510; display:inline;\">\
+<h3><?= $legend_title ?></h3>\
+<div style=\"border: thin solid white; background-color: #<?= $colors[0] ?>; display:inline;\">\
 &nbsp;&nbsp;&nbsp;&nbsp;</div><label style=\"margin-left:8px\">\
-= Current Assessed Competencies&nbsp;&nbsp;&nbsp;</label>\
-<div style=\"border: thin solid white; background-color: #852C8A;display:inline\">\
+= <?= $current ?> &nbsp;&nbsp;&nbsp;</label>\
+<div style=\"border: thin solid white; background-color: #<?= $colors[1] ?>;display:inline\">\
 &nbsp;&nbsp;&nbsp;&nbsp;</div>\
-<label style=\"margin-left:8px;margin-right:8px\">= Previously Assessed Competencies</label>\
-<div style=\"border: thin solid white; background-color: #1BBFE0;display:inline\">\
+<label style=\"margin-left:8px;margin-right:8px\">= <?= $previous ?> </label>\
+<div style=\"border: thin solid white; background-color: #<?= $colors[2] ?>;display:inline\">\
 &nbsp;&nbsp;&nbsp;&nbsp;</div>\
-<label style=\"margin-left:8px;margin-right:8px\">= Self-Assessed Competencies Awaiting Assessment</label></div>";
+<label style=\"margin-left:8px;margin-right:8px\">= <?= $waiting ?> </label></div>";
     
 <?= $assessed_items_js ?>
 <?= $self_assessed_item_js ?>
@@ -94,15 +94,17 @@ var suid = <?= $student_id ?>;
                     // only 1 assessor per criteria
                     if(str.length==0) {
                         wasAssessed = false; 
-                        bgcolor = "#1BBFE0";
-                    
+                        bgcolor = '<?= $colors[2]; ?>';
+                        text_color = '<?= $contrast[2]; ?>';
                 var radioButtons = "This is the student's self-assessment of achieving this competency statement<br>Agree: <input type='radio' value='1' name='radio"+radioCount+"' checked='checked'> Disagree: <input type='radio' value='0' name='radio"+radioCount+"'><br>";
                 radioCount++;
                 selfChecked = true;
                 str += radioButtons;
                        try {
                             if(!self_assessed_item.is_current_entry) {
-                                str += "<br><a href='/pages/educator-matrix/"+item.entry_id+"/"+suid+"/"+item.title+"/"+item.level+"/"+item.step+"'>View Unverified Supporting Evidence/Description:<br>"+ item.title +"   &ndash;   "+ item.entry_date+"</a>";
+                                str += "<br><a class='matrix-nav-link' style='color:#"+text_color+"' href='/pages/educator-matrix/"+item.entry_id+
+                                    "/"+suid+"/"+item.title+"/"+item.level+"/"+item.step+"'><?= $unverified ?><br>\""
+                                    +item.title +"\"  self-assessed on  <br>    "+ item.entry_date+"</a>";
                             }
                       } catch(e) {
                           console.exception(e);
@@ -134,7 +136,8 @@ var suid = <?= $student_id ?>;
                     // only 1 assessor per criteria
                     if(str.length==0) {
                         wasAssessed = true;
-                        bgcolor = window.yellow;
+                        bgcolor = '<?= $colors[0]; ?>';
+                        text_color = '<?= $contrast[0]; ?>';
                         var agreed;
                         var disagreed;
                         if(typeof this.agreed !== 'undefined') {
@@ -148,7 +151,7 @@ var suid = <?= $student_id ?>;
                 var radioButtons = "Agree: <input type='radio' value='1' name='radio"+radioCount+"' "+agreed+"> Disagree: <input value='0' type='radio' name='radio"+radioCount+"' "+disagreed+"><br>";
                 radioCount++;
                         str += radioButtons + "Assessed by: "; 
-                        str += item.screen_name + ", <a style='color:"+bgcolor+"' href='mailto:"+item.email+"'>"+item.email+"</a>";
+                        str += item.screen_name + ", <a style='color:#"+text_color+"' href='mailto:"+item.email+"'>"+item.email+"</a>";
                     }
                 }
                 });
@@ -174,22 +177,23 @@ var suid = <?= $student_id ?>;
 
                         // only 1 assessor per criteria
                         if(str.length==0) { 
-                            bgcolor = window.purple;
+                            bgcolor = '<?= $colors[1]; ?>';     
+                            text_color = '<?= $contrast[1]; ?>';
                             var agreed = this.agreed == 1 ? "checked" : "";
                             var disagreed = this.agreed != 1 ? "checked" : "";
                             assessor_agreed = (this.agreed == 1);   
                     var radioButtons = "Agree: <input type='radio' value='1' name='radio"+radioCount+"' "+agreed+"> Disagree: <input type='radio' value='0' name='radio"+radioCount+"'"+disagreed+"><br>";
                     radioCount++;
                             str += radioButtons + "Assessed by: "; 
-                            str += item.screen_name + ", <a style='color:"+bgcolor+"' href='mailto:"+item.email+"'>"+item.email+"</a><br>";
-                            str += "<br><a href='/pages/educator-matrix/"+item.entry_id+"/"+suid+"/"+item.title+"/"+item.level+"/"+item.step+"'>View Supporting Evidence/Description:<br>"+ item.title +"   &ndash;   "+ item.entry_date+"</a>";
+                            str += item.screen_name + ", <a style='color:#"+text_color+"' href='mailto:"+item.email+"'>"+item.email+"</a><br>";
+                            str += "<br><a class='matrix-nav-link' style='color:#"+text_color+"; text-decoration: none;' href='/pages/educator-matrix/"+item.entry_id+"/"+suid+"/"+item.title+"/"+item.level+"/"+item.step+"'><?= $verified ?><br>\""+ item.title +"\"   added on<br>    "+ item.entry_date+"</a>";
                         }
                     }
                     });
                 });
             }
             var isChecked = wasAssessed ? assessor_agreed : selfChecked; 
-            return { assessorsStr : str, wasAssessed : wasAssessed, isChecked : isChecked, highlightColor: bgcolor/*, currentAssessment: selfChecked*/};            
+            return { assessorsStr : str, wasAssessed : wasAssessed, isChecked : isChecked, highlightColor: bgcolor, textColor: text_color};            
         }; // end verifyCheckBoxes
     
     // traverse rows
@@ -204,12 +208,12 @@ var suid = <?= $student_id ?>;
                             var criteria = { step: stepn, row: rowi, level: coli, checkbox: cbi, pracsot: 'empty' };
                             var assessCheck = verifyCheckBox(criteria);
                          
-                            var assessed = "<p style='background-color: "+assessCheck.highlightColor+"; color: #D1D6E7; padding: 7px; font-size: 12px'>  "+assessCheck.assessorsStr+"</p>";
+                            var assessed = "<p style='background-color: #"+assessCheck.highlightColor+"; color: #"+assessCheck.textColor+"; padding: 7px; font-size: 12px'>  "+assessCheck.assessorsStr+"</p>";
                             var checked =  assessCheck.isChecked?"checked":"";  
                             var criteriaStr = JSON.stringify(criteria);
                             var selfAssessed = (!assessCheck.wasAssessed && assessCheck.isChecked) || assessCheck.wasAssessed ? "class='preclicked'" : "";
                             $(cbo).html("<label><input type='checkbox' id='c"+stepn.toString()+rowi.toString()+coli.toString()+cbi.toString()+"' data-criteria='"+criteriaStr+"' "+checked+" "+selfAssessed+">"+$(this).text()+assessed+"</label>");
-                            if(assessCheck.wasAssessed || assessCheck.isChecked) { $(cbo).css({'border':'1px solid '+assessCheck.highlightColor}); }
+                           // if(assessCheck.wasAssessed || assessCheck.isChecked) { $(cbo).css({'border':'1px solid '+assessCheck.highlightColor}); }
                         });
             }
            
@@ -550,7 +554,7 @@ var suid = <?= $student_id ?>;
         var criteria =  $(this).data('criteria');
         if($(this).closest('label').find("input[type='radio']").length == 0) {
             var bgcolor = window.yellow;
-            var radioButtons = "<p style=\"color: #FFB510; font-size: 12px\" id='radios'>Agree: <input type='radio' value='1' name='radio"+radioCount+"' checked='checked'> Disagree: <input type='radio' value='0' name='radio"+radioCount+"'></p>";
+            var radioButtons = "<p style=\"color: #"+color[0]+"; font-size: 12px\" id='radios'>Agree: <input type='radio' value='1' name='radio"+radioCount+"' checked='checked'> Disagree: <input type='radio' value='0' name='radio"+radioCount+"'></p>";
             radioCount++;
             $(this).closest('label').parent().addClass('assessed');
             $(this).closest('label').append(radioButtons).parent().css('border', 'thin solid red');

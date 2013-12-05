@@ -92,7 +92,8 @@ $.fn.evidencing = function() {
 					// only 1 assessor per criteria
 					if(str.length==0) {
 						wasAssessed = false; 
-						bgcolor = "#1BBFE0";
+						bgcolor = "<?= $colors[2] ?>";
+                        text_color = "<?= $contrast[2] ?>";
 					
 				var radioButtons = "This competency statement has not yet been verified by a supervisor.<br>";
 				radioCount++;
@@ -100,7 +101,8 @@ $.fn.evidencing = function() {
 				str += radioButtons;
 				console.log('entry_id '+entry_id+'item.entry_id '+item.entry_id);
 				if(!item.is_current_entry) {
-				str += "<br><a href='/pages/assessed-matrix/"+item.entry_id+"/"+item.title+"/"+item.level+"/"+item.step+"'>View Unverified Supporting Evidence/Description:<br>"+ item.title +"   &ndash;   "+ item.entry_date+"</a>";
+				str += "<br><a class='matrix-nav-link' style='color: #"+text_color+"' href='/pages/assessed-matrix/"+item.entry_id+"/"+item.title+"/"+item.level+"/"+item.step+"'><?= $unverified ?><br>\""+ 
+				        item.title +"\"   self-assessed on<br>    "+ item.entry_date+"</a>";
 				}
 						//str += item.screen_name + ", <a style='color:"+bgcolor+"' href='mailto:"+item.email+"'>"+item.email+"</a>";
 					}
@@ -135,7 +137,8 @@ $.fn.evidencing = function() {
 					*/		
 					if(str.length==0) {
 						wasAssessed = true;
-						bgcolor = window.yellow;
+						bgcolor = "<?= $colors[0] ?>";
+						text_color = "<?= $contrast[0] ?>";
 						var agreed;
 						var disagreed;
 						if(typeof this.agreed !== 'undefined') {
@@ -149,7 +152,7 @@ $.fn.evidencing = function() {
 				var radioButtons = "Agree: <input type='radio' value='1' name='radio"+radioCount+"' "+agreed+" disabled='disabled'> Disagree: <input value='0' type='radio' name='radio"+radioCount+"' "+disagreed+" disabled='disabled'><br>";
 				radioCount++;
 						str += radioButtons + "Assessed by: "; 
-						str += item.screen_name + ", <a style='color:"+bgcolor+"' href='mailto:"+item.email+"'>"+item.email+"</a>";
+						str += item.screen_name + ", <a style='color:#"+text_color+"' href='mailto:"+item.email+"'>"+item.email+"</a>";
 					}
 				}
 				});
@@ -174,36 +177,26 @@ $.fn.evidencing = function() {
 						// only 1 assessor per criteria
 						if(str.length==0) {
 							wasAssessed = true;
-							bgcolor = window.purple;
+							bgcolor = "<?= $colors[1]; ?>";
+							text_color = "<?= $contrast[1]; ?>";
 							var agreed = this.agreed == 1 ? "checked" : "";
 							var disagreed = this.agreed != 1 ? "checked" : "";
 							assessor_agreed = (this.agreed == 1);	
 					var radioButtons = "Agree: <input type='radio' value='1' name='radio"+radioCount+"' disabled='disabled' "+agreed+"> Disagree: <input type='radio' value='0' name='radio"+radioCount+"' disabled='disabled' "+disagreed+"><br>";
 					radioCount++;
 							str += radioButtons + "Assessed by: "; 
-							str += item.screen_name + ", <a style='color:"+bgcolor+"' href='mailto:"+item.email+"'>"+item.email+"</a><br>";
-							str += "<br><a href='/pages/assessed-matrix/"+item.entry_id+"/"+item.title+"/"+item.level+"/"+item.step+"'>View Supporting Evidence/Description:<br>"+ item.title +"   &ndash;   "+ item.entry_date+"</a>";
+							str += item.screen_name + ", <a style='color:#"+text_color+"' href='mailto:"+item.email+"'>"+item.email+"</a><br>";
+							str += "<br><a class='matrix-nav-link' style='color: #"+text_color+"' href='/pages/assessed-matrix/"+item.entry_id+
+							         "/"+item.title+"/"+item.level+"/"+item.step+"'><?= $verified ?><br>\""+ 
+							         item.title +"\"   added on<br>   "+ item.entry_date+"</a>";
 						}
 					}
 					});
-					/*if(str.length == 0){
-					var statements = JSON.parse(this.self_assessment);
-					$(statements).each(function() {
-					if(criteria.step == this.step &&
-						criteria.row == this.row &&
-						criteria.level == this.level &&
-						criteria.checkbox == this.checkbox
-						) {
-							bgcolor = "pink";
-							str += "<span style='color: pink'>This is your self-assessment of another piece of evidence which has not yet been validated.</span>";	
-							selfChecked = true;
-						}
-					});
-					}*/
+					
 				});
 			}
 			var isChecked = wasAssessed ? assessor_agreed : selfChecked; 
-			return { assessorsStr : str, wasAssessed : wasAssessed, isChecked : isChecked, highlightColor: bgcolor};			
+			return { assessorsStr : str, wasAssessed : wasAssessed, isChecked : isChecked, highlightColor: bgcolor, textColor: text_color};			
 		};
 
 	// traverse rows
@@ -222,11 +215,11 @@ $.fn.evidencing = function() {
 			
 							var criteria = { step: stepn, row: rowi, level: coli, checkbox: cbi, pracsot: 'empty' };
 							var assessCheck = verifyCheckBox(criteria);			
-							var assessed = "<p style='color: "+assessCheck.highlightColor+"; font-size: 12px'>  "+assessCheck.assessorsStr+"</p>";
+							var assessed = "<p style='color: #"+assessCheck.textColor+"; background-color: #"+assessCheck.highlightColor+"; font-size: 12px; padding: 4px'>  "+assessCheck.assessorsStr+"</p>";
 							var checked =  assessCheck.isChecked?"checked":"";	
 							var criteriaStr = JSON.stringify(criteria);
 							$(cbo).html("<label><input type='checkbox' id='c"+stepn.toString()+rowi.toString()+coli.toString()+cbi.toString()+"' data-criteria='"+criteriaStr+"' "+checked+">"+$(this).text()+assessed+"</label>");
-							if(assessCheck.wasAssessed || assessCheck.isChecked) { $(cbo).css({'border':'1px solid '+assessCheck.highlightColor}); }
+							//if(assessCheck.wasAssessed || assessCheck.isChecked) { $(cbo).css({'border':'1px solid '+assessCheck.highlightColor}); }
 						});
 			}
 		});
@@ -311,7 +304,6 @@ $.fn.evidencing = function() {
 				var asssed_by_str = acount === 0 ? "Last Assessed by:  " : "Previously Assessed by:  ";
 				$(".feedback p:nth-of-type(2) ").before("<strong style='color: blue'>"+asssed_by_str+this.screen_name+" on: "+this.date_assessed+"</strong><br><br>"+this.feedback+"<br><br>");
 				acount++;
-				//$me.before("<p class='feedback'><strong style='color: red'>Last Assessed by: "+assessed_items[0].screen_name+" on "+assessed_items[0].date_assessed+"</strong><br><br>"+assessed_items[0].feedback+"</p>");
 			}
 		});
 	}

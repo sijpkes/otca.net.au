@@ -1,24 +1,23 @@
-/*** adding sf-vertical in addition to sf-menu creates a vertical menu ***/
-.sf-vertical, .sf-vertical li {
-	width:	15em;
-}
-
-/* this lacks ul at the start of the selector, so the styles from the main CSS file override it where needed */
-.sf-vertical li:hover ul,
-.sf-vertical li.sfHover ul {
-	left:	15em; /* match ul width */
-	top:	0;
-}
-
-/*** alter arrow directions ***/
-.sf-vertical .sf-sub-indicator { background-position: -10px 0; } /* IE6 gets solid image only */
-.sf-vertical a > .sf-sub-indicator { background-position: 0 0; } /* use translucent arrow for modern browsers*/
-
-/* hover arrow direction for modern browsers*/
-.sf-vertical a:focus > .sf-sub-indicator,
-.sf-vertical a:hover > .sf-sub-indicator,
-.sf-vertical a:active > .sf-sub-indicator,
-.sf-vertical li:hover > a > .sf-sub-indicator,
-.sf-vertical li.sfHover > a > .sf-sub-indicator {
-	background-position: -10px 0; /* arrow hovers for modern browsers*/
-}
+/*
+*The MIT License (MIT)
+*
+*Copyright (c) 2013 Paul Sijpkes.
+*
+*Permission is hereby granted, free of charge, to any person obtaining a copy
+*of this software and associated documentation files (the "Software"), to deal
+*in the Software without restriction, including without limitation the rights
+*to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+*copies of the Software, and to permit persons to whom the Software is
+*furnished to do so, subject to the following conditions:
+*
+*The above copyright notice and this permission notice shall be included in
+*all copies or substantial portions of the Software.
+*
+*THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+*IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+*FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+*AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+*LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+*OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+*THE SOFTWARE.
+*/

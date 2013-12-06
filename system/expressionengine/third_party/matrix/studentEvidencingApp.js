@@ -124,7 +124,7 @@ $.fn.evidencing = function() {
 				str += radioButtons;
 				console.log('entry_id '+entry_id+'item.entry_id '+item.entry_id);
 				if(!item.is_current_entry) {
-				str += "<br><a class='matrix-nav-link' style='color: #"+text_color+"' href='/pages/assessed-matrix/"+item.entry_id+"/"+item.title+"/"+item.level+"/"+item.step+"'><?= $unverified ?><br>\""+ 
+				str += "<br><a class='matrix-nav-link' title='<?= $competency_link_title ?>'  style='color: #"+text_color+"' href='/pages/assessed-matrix/"+item.entry_id+"/"+item.title+"/"+item.level+"/"+item.step+"'><?= $unverified ?><br>\""+ 
 				        item.title +"\"   self-assessed on<br>    "+ item.entry_date+"</a>";
 				}
 						//str += item.screen_name + ", <a style='color:"+bgcolor+"' href='mailto:"+item.email+"'>"+item.email+"</a>";
@@ -209,7 +209,7 @@ $.fn.evidencing = function() {
 					radioCount++;
 							str += radioButtons + "Assessed by: "; 
 							str += item.screen_name + ", <a style='color:#"+text_color+"' href='mailto:"+item.email+"'>"+item.email+"</a><br>";
-							str += "<br><a class='matrix-nav-link' style='color: #"+text_color+"' href='/pages/assessed-matrix/"+item.entry_id+
+							str += "<br><a class='matrix-nav-link' title='<?= $competency_link_title ?>' style='color: #"+text_color+"' href='/pages/assessed-matrix/"+item.entry_id+
 							         "/"+item.title+"/"+item.level+"/"+item.step+"'><?= $verified ?><br>\""+ 
 							         item.title +"\"   added on<br>   "+ item.entry_date+"</a>";
 						}

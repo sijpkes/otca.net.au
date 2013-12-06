@@ -1,4 +1,4 @@
-/*
+/**
 *The MIT License (MIT)
 *
 *Copyright (c) 2013 Paul Sijpkes.
@@ -125,7 +125,7 @@ var suid = <?= $student_id ?>;
                 str += radioButtons;
                        try {
                             if(!self_assessed_item.is_current_entry) {
-                                str += "<br><a class='matrix-nav-link' style='color:#"+text_color+"' href='/pages/educator-matrix/"+item.entry_id+
+                                str += "<br><a class='matrix-nav-link' title='<?= $competency_link_title ?>' style='color:#"+text_color+"' href='/pages/educator-matrix/"+item.entry_id+
                                     "/"+suid+"/"+item.title+"/"+item.level+"/"+item.step+"'><?= $unverified ?><br>\""
                                     +item.title +"\"  self-assessed on  <br>    "+ item.entry_date+"</a>";
                             }
@@ -209,7 +209,7 @@ var suid = <?= $student_id ?>;
                     radioCount++;
                             str += radioButtons + "Assessed by: "; 
                             str += item.screen_name + ", <a style='color:#"+text_color+"' href='mailto:"+item.email+"'>"+item.email+"</a><br>";
-                            str += "<br><a class='matrix-nav-link' style='color:#"+text_color+"; text-decoration: none;' href='/pages/educator-matrix/"+item.entry_id+"/"+suid+"/"+item.title+"/"+item.level+"/"+item.step+"'><?= $verified ?><br>\""+ item.title +"\"   added on<br>    "+ item.entry_date+"</a>";
+                            str += "<br><a class='matrix-nav-link' title='<?= $competency_link_title ?>' style='color:#"+text_color+"; text-decoration: none;' href='/pages/educator-matrix/"+item.entry_id+"/"+suid+"/"+item.title+"/"+item.level+"/"+item.step+"'><?= $verified ?><br>\""+ item.title +"\"   added on<br>    "+ item.entry_date+"</a>";
                         }
                     }
                     });

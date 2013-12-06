@@ -1,4 +1,5 @@
-/*
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
 *The MIT License (MIT)
 *
 *Copyright (c) 2013 Paul Sijpkes.
@@ -20,8 +21,7 @@
 *LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 *THE SOFTWARE.
-*/
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+**/
 
 include "libs/JSMin.php";
 
@@ -295,6 +295,7 @@ private static function fetchStudentAppJS($id, $assessed_items_js, $self_assesse
     $contrast = explode(",", ee()->TMPL->fetch_param('text-contrast-colors'), 3);
     $verified = ee()->TMPL->fetch_param('verified-competency-statement-link');
     $unverified = ee()->TMPL->fetch_param('unverified-competency-statement-link');
+    $competency_link_title = ee()->TMPL->fetch_param('competency-link-title');
     $step_label = ee()->TMPL->fetch_param('step-label');
     
     foreach($colors as $key => $color) {
@@ -322,6 +323,7 @@ private static function fetchEducatorAppJS($entry_id, $student_id, $student_scre
     $contrast =  explode(",", ee()->TMPL->fetch_param('text-contrast-colors'), 3);
     $verified = ee()->TMPL->fetch_param('verified-competency-statement-link');
     $unverified = ee()->TMPL->fetch_param('unverified-competency-statement-link');
+    $competency_link_title = ee()->TMPL->fetch_param('competency-link-title');
     $step_label = ee()->TMPL->fetch_param('step-label');
     
      

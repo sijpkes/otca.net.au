@@ -22,7 +22,7 @@
 *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 *THE SOFTWARE.
 **/
-
+define("MINIFY", TRUE);
 include "libs/JSMin.php";
 
 $plugin_info = array(
@@ -271,15 +271,15 @@ private static function embedProgressPlugin() {
      ob_start();
     include 'jquery.matrix-progress.js';
     $str = ob_get_clean();
-    $js = JSMin::minify($str);
+    $js = MINIFY ? JSMin::minify($str) : $str;
     return "<script>$js</script>";
 }
 
 private static function embedEducatorProgressPlugin() {
      ob_start();
     include 'jquery.ed-matrix-progress.js';
-    $js = ob_get_clean();
-    //$js = JSMin::minify($str);
+    $str = ob_get_clean();
+    $js = MINIFY ? JSMin::minify($str) : $str;
     return "<script>$js</script>";
 }
 
@@ -307,7 +307,7 @@ private static function fetchStudentAppJS($id, $assessed_items_js, $self_assesse
     ob_start();
 	include 'studentEvidencingApp.js';
     $str = ob_get_clean();
-    $js = $str;//JSMin::minify($str);
+    $js = MINIFY ? JSMin::minify($str) : $str;
 
 return "<script>$js</script>";
 }
@@ -334,7 +334,7 @@ private static function fetchEducatorAppJS($entry_id, $student_id, $student_scre
     ob_start();
      include 'educatorEvidencingApp.js';
     $str = ob_get_clean();
-    $js = $str;//JSMin::minify($str);
+    $js = MINIFY ? JSMin::minify($str) : $str;
     
 return "<script>$js</script>";
 }

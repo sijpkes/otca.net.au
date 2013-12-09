@@ -21,7 +21,9 @@
 *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 *THE SOFTWARE.
 */
-(function( $ ) {    
+(function( $ ) {   
+    
+    // @TODO: allow removal of list items as well as addition (currently no way to remove un-ticked items from <ul>
    $.fn.progress = function() { 
     var select = $("#table-nav").clone().attr('id', 'nav-copy');  
     

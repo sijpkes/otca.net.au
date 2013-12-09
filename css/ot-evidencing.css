@@ -323,7 +323,7 @@ p#message {
   font-size: 12pt;
   padding: 1em;
   margin-top: 17px;
-  max-height: 300px;
+  max-height: 400px;
   overflow: auto;
 }
 .feedback h3 {

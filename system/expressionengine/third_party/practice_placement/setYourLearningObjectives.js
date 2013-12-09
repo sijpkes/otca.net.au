@@ -151,7 +151,7 @@ $(document).ready(function() {
                     });
 
                     if (arrStrID.length == 0) {
-                        $(this).find('select#objective-crit.asmSelect').css('border', 'thin solid yellow').after("<p style='color: yellow' class='userMessage'><strong>Please select atleast one Matrix competency statement for this objective</strong></p>");
+                        $(this).find('select#objective-crit').css('border', 'thin solid yellow').after("<p style='color: yellow' class='userMessage'><strong>Please select atleast one OTCEM competency statement for this objective</strong></p>");
                         error = true;
                     }
 
@@ -160,7 +160,7 @@ $(document).ready(function() {
                     });
 
                     if (stepArr.length == 0) {
-                        $(this).find('select#steps').after("<p style='color: yellow' class='userMessage'><strong>Please select atleast one step for this objective</strong></p>");
+                        $(o).find('select#steps').after("<p style='color: yellow' class='userMessage'><strong>Please select atleast one step for this objective</strong></p>");
                         error = true;
                     }
 
@@ -205,7 +205,8 @@ $(document).ready(function() {
 
             var criteria = this;
             $('ul#criteria-list').html('');
-            $('#objectives img.add').after("<br><select id=\"steps\" multiple=\"1\" title=\"Step(s) for this learning objective\"></select><br>The competency statements below have been drawn in from the OTCEM based the level and step(s) you selected.<br><select id=\"objective-crit\" multiple=\"multiple\" title=\"OTCEM competency statements for this learning objective\"></select>");
+           
+            $('#objectives #instructions').before("<h2 style='margin-top: -35px !important'>Learning Objective</h2><select id=\"steps\" multiple=\"1\" title=\"Step(s) for this learning objective\"></select><br>The competency statements below have been drawn in from the OTCEM based the level and step(s) you selected.<br><select id=\"objective-crit\" multiple=\"multiple\" title=\"OTCEM competency statements for this learning objective\"></select><br>");
             $.each(steps, function(i, v) {
                 $('#objectives select#steps').each(function(obi, obv) {
                     var selected = '';

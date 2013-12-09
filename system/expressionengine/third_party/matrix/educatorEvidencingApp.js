@@ -94,6 +94,7 @@ var suid = <?= $student_id ?>;
                 wasAssessed = false;
             }*/
             var bgcolor = '';
+            var text_color = '';
         
         var str = "";
             var wasAssessed = false;

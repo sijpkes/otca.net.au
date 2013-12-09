@@ -105,6 +105,7 @@ div#wrapper {
 h1 {
     margin-top: 5px;
     color: #FFB510;
+    font-size: 16pt;
 }
 #content-pane a {
     color: #FFB510;
@@ -841,62 +842,25 @@ div#message_side {
 .web-contact-list thead {
     border-bottom: medium solid #eee;
 }
-div#youtube-intro {
-  display: block;
-  margin: 0 auto;
-  padding: 20px;
-  position: absolute;
-  text-align: center;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
-  overflow: auto;
-}
-div#youtube-intro iframe {
-    min-width: 200px;
-    max-width: 480px;
-    width: 250px;
-}
-#youtube-intro p.video {
-  border: thin solid #639;
-  border-radius: 1em 1em 1em 1em;
-  display: block;
-  float: left;
-  margin: 1em;
-  padding: 1em;
-  max-width: 500px;
-}
+
 #close {
     position: fixed;
     left:10px;
     top:20px;
 }
-#youtube-intro .group {
-  margin-left: 196px;
+
+.help-video {
+  display: block;
+  float: left;
+  margin-right: 3em;
 }
-#youtube-intro .group h3 {
-    display: block;
-    float: left;
-    clear: both;
-}
-#helptab {
-  background-color: red;
-  border: 5px solid white;
-  border-radius: 0 0 9px 9px;
-  color: white;
-  cursor: pointer;
+#help-link {
   font-family: helvetica,arial,sans-serif;
-  font-size: 20px;
-  height: 28px;
-  margin: -5px 562px;
-  position: absolute;
-  text-align: center;
+  font-size: 31px;
+  min-width: 7em;
   width: 96px;
 }
-#helptab:hover {
-    background-color:orange;
-    cursor:pointer;
-}
+
 #resource-tabs ul {
 	list-style-type: none;
 	margin: 0;

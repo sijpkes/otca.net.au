@@ -347,33 +347,6 @@ $(document).ready(function() {
 		$("#system_message").slideDown();
 		
 		$("#system_message").click(function() { $(this).slideUp(1000); });
-		
-		<?php
-		if($member_id > 0 && $group_id == 6 || $group_id == 7 || $group_id == 5 || $group_id == 1 || $group_id == 9) { ?>
-		
-		$("#helptab").click(function() {
-			$("#youtube-intro").slideDown();
-		});
-		
-		$("#youtube-intro a#close").click(function(e) {
-			e.preventDefault();
-			$(this).closest('div').slideUp();
-		});
-		
-		// not implemented
-		/*$("#youtube-intro input#dontshow").click(function() {
-			var ytframe = $(this).closest('div');
-			
-			if($(this).is(':checked')) {
-				window.userProfile.beginner = 0;
-				 $.post('/ajax/user-status',
-				{ "userProfile" : JSON.stringify(window.userProfile) }
-			,'json');
-				 
-			$(ytframe).slideUp();	 
-			}
-		});*/
-	<?php } ?>		
 });
 </script>
 			

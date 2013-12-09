@@ -87,12 +87,14 @@ $.fn.evidencing = function() {
 	var radioCount = 0;	
 	/* verified matrix version */
 	$.fn.addCheckBoxes = function(stepn) {
+	    if(entry_id == 'guest') return false;
 		var verifyCheckBox = function(criteria) {
 			
 			/*if(typeof assessed_items == 'undefined') {
 				wasAssessed = false;
 			}*/
 			var bgcolor = '';
+			var text_color = '';
 		
 		var str = "";
 			var wasAssessed = false;

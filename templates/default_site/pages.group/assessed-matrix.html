@@ -1,10 +1,14 @@
 {embed="structure/header" use_ot_evidencing_css='yes'}
 
+
 {if segment_3 == 'overview'}
-<h2>Cumulative Overview of Your Self-Assessed OTCEM</h2>
+<h1>Cumulative Overview of Your Self-Assessed OTCEM</h1>
 <h3>Read only version</h3>
 {if:elseif segment_3 == 'add_evidence'} 
-<h2>Self-Assess Your OTCEM</h2>
+<h1>Self-Assess Your OTCEM</h1>
+{if:elseif segment_3 == 'guest'} 
+<h1>THE OCCUPATIONAL THERAPY COMPETENCY EVIDENCING MATRIX (OTCEM):<br>
+Self &amp; Student &amp; Practice Educator Tool for Evidencing Competence</h1>
 {/if}
 
 <div class='feedback'>
@@ -19,7 +23,7 @@
     competence.
 </p>
 <p>
-    Use the <strong>'Self-Assess Your OTCEM'</strong> option in ‘Your Toolbar’ to self-assess your competence.
+    Use the <strong>'Self-Assess Your OTCEM'</strong> option in "Your Toolbar" to self-assess your competence.
 </p>
 {if:elseif segment_3 == 'add_evidence'} 
 	<p>
@@ -32,20 +36,45 @@
     <strong><a href='/pages/important-otcem-info' style='color: red !important'>Click here for IMPORTANT INSTRUCTIONS &amp; INFORMATION for Self-Assessing Your OTCEM
     . You MUST read this information first.</a></strong>
 </p>
-{if:else} 
-The competency statements marked as assessed (in yellow) in the OTCEM have been completed by the evidence detailed here:<br><br>
+{/if}
+{if segment_3 == 'overview' OR segment_3 == 'add_evidence'} 
+Your self-assessed OTCEM competency statements are displayed below, statements highlighted in <a style='color:#161500; background-color: #FFB510;'>yellow</a> have been verified by your Practice Educator.<br>
+<br><span style='color:#F7F7FB ; background-color: #852C8A'>Purple</span> indicates previously verified self-asssessments, whilst <span style='color: #F4D431; background-color:#042C6D;'>blue</span> indicates un-verified self-assessments that are awaiting verification by your Practice Educator.<br>
+{/if}
 
-<strong style='font-size: 14px'>Title: {segment_4}</strong><br>
-<strong style='font-size: 12px'>Level: {segment_5}</strong><br>
-<strong style='font-size: 12px'>Step: {segment_6}</strong><br>
-
+{if segment_4 != ""} 
 {exp:member:custom_profile_data}
 <strong>Submitted by: {first_name} {last_name}</strong><br>
 <strong>Student Number: {student_number}</strong>
+<br>
+<strong style='font-size: 14px'>Title: {segment_4}</strong><br>
+<strong style='font-size: 12px'>Level: {segment_5}</strong><br>
+<strong style='font-size: 12px'>Step: {segment_6}</strong><br>
 {/exp:member:custom_profile_data}
-
-<p>Note: competency statements marked in blue indicate evidence that has not yet been assessed.</p>
 {/if}
+
+{if segment_3 == 'guest'}
+<p>
+The OTCEM competency statements are mapped to the Australian Minimum Competency Standards for New Graduate Occupational Therapists (ACSOT) Occupational Therapy Australia, 2010.  
+</p>
+<p>
+They have been mapped and directly linked within the website to the Performance Record for the Australian Competency Standards for Occupational Therapists (PRACSOT) Occupational Therapy Australia, 2010. 
+</p>
+<p>
+	Students can use the OTCEM to self-assess and evidence their developing competence.  Practice Educators use
+	the OTCEM to verify the student's self-assessment.
+</p>
+<p>
+Once your competency evidenced within the OTCA Website OTCEM is verified by your practice educator and/or lecturer, they will be automatically be tick-off against the relevant PRACSOT performance criteria at the appropriate Competency Development Level: Emerging, Consolidating and Competent to Graduate.
+</p>
+<p>
+For the purpose of this competency website, and with the permission of OTA, the PRACSOT 'Demonstrated Competence' categories have been amended to reflect the 3 Competency Development Levels.
+</p>
+<p>If you wish to trial the OTCEM competency matrix please contact 
+	<a href='mailto:enquiries@otca.net.au'>enquiries@otca.net.au</a> and we can setup a 
+	demonstration account for you.</p>
+{/if}
+
 <p>
     <a href="https://otca.net.au/pages/evidencing-matrix">More information about the OTCEM.</a>
 </p>
@@ -68,7 +97,7 @@ The competency statements marked as assessed (in yellow) in the OTCEM have been 
 	legend-waiting='Self-Assessed Competencies Awaiting Verification'
 	unverified-competency-statement-link="View Unverified OTCEM Self-Assessment"
 	verified-competency-statement-link="View Previously Verified OTCEM Self-Assessment"
-	legend-colors="FFB510,852C8A,1B66E2"
+	legend-colors="FFB510,852C8A,042C6D"
 	text-contrast-colors= "161500,F7F7FB,FFD500"
 	step-label='View the OTPP Step'
 }

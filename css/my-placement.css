@@ -85,10 +85,10 @@ p.knowledgeStatement, p.growthStatement, p.growthStatement {
 p#objectives img.exit {
   background-color: transparent;
   height: 20px;
-  left: 725px;
+  left: 784px;
   margin: 1px;
   position: relative;
-  top: 2px;
+  top: -9px;
   width: 20px;
   z-index: 10000;
 }
@@ -99,12 +99,12 @@ p#objectives img.exit:hover {
 	margin: 0 0;
 }
 p#objectives img.add {
-    position: relative;
-    top: 31px;
-    left: 5px;
-    width: 16px;
-    height: 16px;
-    margin: 1px;
+  height: 16px;
+  left: 88px;
+  margin: 1px;
+  position: relative;
+  top: 42px;
+  width: 16px;
 }
 p#objectives img.add:hover {
 	cursor: pointer;

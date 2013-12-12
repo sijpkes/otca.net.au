@@ -2,19 +2,19 @@
 {if logged_in}
 <h2>Self-Assess Your OTCEM</h2>
 <div class='feedback'>
-<p>
+	<p>
     Here you self-assess your competency by ticking the OTCEM competency statements have achieved. This will save to your ePortfolio.
 </p>
 <p>
     Your Practice Educator will verify your self-assessment by agreeing or disagreeing. This is Observable Evidence.
 </p>
 <p>
-    <strong><a href='/pages/important-otcem-info' style='color: red !important'>Click here for IMPORTANT INSTRUCTIONS &amp; INFORMATION for Self-Assessing Your OTCEM</u>
+    <strong><a href='/pages/important-otcem-info' style='color: red !important'>Click here for IMPORTANT INSTRUCTIONS &amp; INFORMATION for Self-Assessing Your OTCEM
     . You MUST read this information first.</a></strong>
 </p>
-<p>
-    <a href="https://otca.net.au/pages/evidencing-matrix">More information about the OTCEM.</a>
-</p>
+Your self-assessed OTCEM competency statements are displayed below, statements highlighted in <a style='color:#161500; background-color: #FFB510;'>yellow</a> have been verified by your Practice Educator.<br>
+<br><span style='color:#F7F7FB ; background-color: #852C8A'>Purple</span> indicates previously verified self-asssessments, whilst <span style='color: #F4D431; background-color:#042C6D;'>blue</span> 
+indicates un-verified self-assessments that are awaiting verification by your Practice Educator.<br>
 </div>
 <div class='evidencing-app'>
 			{exp:channel:entries channel="evidencing_matrix" limit="10" orderby="title" sort="asc" dynamic="no"}
@@ -37,7 +37,36 @@
 	text-contrast-colors= "161500,F7F7FB,FFD500"
 	step-label='View the OTPP Step'
 }
-	{embed="embed/matrix-content"}
+<!-- if updating this, please don't forget to update the assessed matrix copy in the pages template group 
+	I know this is dumb, but for historic reasons I've done this, this will be centralised at some point
+	when I have more time - PS
+-->
+	<p>
+When you tick the competency statements that you have achieved for each step that you have focused on below, a box will appear
+on the left side of the page.  Use this to save and upload your OTCEM self-assessment and any supporting hard evidence/description
+to your ePortfolio.
+</p>
+<p>
+    Then get your Practice Educator to verify your self-assessment.
+</p>
+<p>
+    You can also use the Save window to upload Documented Evidence,
+    this is either a description or a piece of hard/documented evidence that supports your
+    ticked self-assessment.
+</p>
+<p>
+    <strong>
+        You DO NOT have to add an individual piece of Documented Evidence (description or hard evidence) for EACH ticked competency statement. Consult the
+        Course Guide/Outline for your University Occupational Therapy Course for details on how much evidence is required. Check the Important Instruction
+        Information link in the box above for further information about this.
+    </strong>
+</p>
+<p>
+See further information about how to self-assess and evidence your competence using the OTCEM in the    <strong>Important Instruction Information link box</strong> above.
+</p>
+<p>
+  	<a href="/docs/Occupational%20Therapy%20Competency%20Development%20Levels%20&%20Levels%20of%20Evidence.pdf">Levels of Evidence &amp; Types of Evidence</a>
+</p> 
 {/exp:matrix:studentjavascript}
 <script>
 $(document).ready(function() {

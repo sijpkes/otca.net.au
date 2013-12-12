@@ -1,39 +1,48 @@
 {embed="/structure/header"}
-
-<h2>Hi there, {screen_name}. This is the OTCA help page.</h2>
+{if logged_in}
+<h1>Hi there, {screen_name}. This is the OTCA help page.</h1>
+{if:else}
+<h1>Hi! This is the OTCA Howto page.</h1>
+{/if}
+<div class='contrast'>
+<style>
+.help {
+	display: block;
+	float: right;
+	margin-top: 1em;
+}
+</style>
 <p>Please contact your University's O.T. Lecturer if you have any enquiries regarding competency or educationally related aspects 
 of this website</p>
-<p>Note that this website works best in a modern, standards compliant browser.  See <a class='help' href='http://browsehappy.com/'>browsehappy.com</a>
+<p>Note that this website works best in a modern, standards compliant browser.  See <a href='http://browsehappy.com/'>browsehappy.com</a>
 to download your latest preferred browser.</p>
 <p>All the below videos are embedded and linked via Youtube, they are not hosted on this website.  Funding for these training materials 
 was provided by the Health Education and Training Institute (HETI) &amp; Hunter and Coast Interdisciplinary Clinical Training Network (ICTN)</p>
-<div class='group'>
-
-<h3>Student Essentials</h3>
-<a class='help' href="/docs/OTCA_Student_Fact_Sheet_2013.pdf" style="display: inline">Fact Sheet</a><br>
-<br>
-<p class='help-video'><strong>Introduction</strong><br>
-<iframe width="250" src="//www.youtube.com/embed/KOAHxWBP0pk?rel=0" frameborder="0" allowfullscreen></iframe>
+<p><strong>Contents</strong>
+<ul>
+	<li><a href='#students'>Student Essentials</a></li>
+	<li><a href='#educators'>Educator Essentials</a> (it's recommended that you view the student materials first)</li>
+</ul>
 </p>
-<p class='help-video'><strong>Occupational Therapy<br>Practice Process</strong><br>
-<iframe width="250" src="//www.youtube.com/embed/_68lCEcop8E?rel=0" frameborder="0" allowfullscreen></iframe>
-</p>
-<p class='help-video'><strong>Occupational Therapy Competency<br>Evidencing Matrix (OTCEM)</strong><br>
-<iframe width="250" src="//www.youtube.com/embed/-ljGgIO069M?rel=0" frameborder="0" allowfullscreen></iframe>
-</p>
-</div>
-{if group_id == 6 OR group_id == 7 OR group_id == 1}
-<div class='group'>
-<h3>Practice Educator/Clinical Supervisor/Educator Essentials</h3>
-<a class='help' href='/docs/OTCA_Ed_Fact_Sheet_2013.pdf' style="display: inline">Fact Sheet</a><br>
-<br>
-<p class='help-video'>
-<strong>Assessing the OTCEM</strong><br>	
-An overview of how to verify student self-assessments using the Occupational Therapy Competency Evidencing Matrix (OTCEM).
-We recommend you watch the <b>Student Essentials</b> videos before viewing this video.<br>	
-<iframe width="250" src="//www.youtube.com/embed/mXXpQoPcT9s?rel=0" frameborder="0" allowfullscreen></iframe>
+<a name='students'></a><h3>Student Essentials</h3>
+<p><strong>Overview &amp; Introduction</strong><br>
 	</p>
+<iframe width="830" height="467" src="//www.youtube.com/embed/v-Cff7rw3BQ?rel=0" frameborder="0" allowfullscreen></iframe>
+<a class='help' href="/docs/OTCA_Student_Fact_Sheet_2013.pdf" style="display: inline">Fact Sheet</a><br>
+<p>
+<strong>Self-Assessing using the OTCEM</strong><br>
+</p>
+<iframe width="830" height="467" src="//www.youtube.com/embed/h6frt4t_EYc?rel=0" frameborder="0" allowfullscreen></iframe>
+
+<a name='educators'></a><h3>Educator Essentials</h3>
+
+<p>
+<strong>Verifying the OTCEM</strong><br>	
+An overview of how to verify student self-assessments using the Occupational Therapy Competency Evidencing Matrix (OTCEM).
+We recommend you watch the <b>Student Essentials</b> videos before viewing this video.<br></p>	
+<iframe width="830" height="467" src="//www.youtube.com/embed/EH7jyyLBpnc?rel=0" frameborder="0" allowfullscreen></iframe>
+<a class='help' href='/docs/OTCA_Ed_Fact_Sheet_2013.pdf' style="display: inline">Fact Sheet</a><br>
 </div>
-{/if}
+
 
 {embed="/structure/footer"}

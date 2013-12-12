@@ -22,7 +22,7 @@
 *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 *THE SOFTWARE.
 **/
-define("MINIFY", FALSE);
+define("MINIFY", TRUE);
 include "libs/JSMin.php";
 
 $plugin_info = array(
@@ -163,7 +163,7 @@ if(isset($self_assessed_array)) {
 if(empty($form)) $form = "";
 
 $form .= self::embedEducatorProgressPlugin();
-$form .= self::fetchEducatorAppJS($entry_id, $student_id, $student_screen_name, $student_email, $assessed_items_js, $self_assessed_item_js);
+$form .= self::fetchEducatorAppJS($entry_id, $student_id, $student_screen_name, $student_email, $assessed_items_js, $self_assessed_item_js, ee()->TMPL->tagdata);
 return $form;
 }
 
@@ -312,7 +312,7 @@ private static function fetchStudentAppJS($id, $assessed_items_js, $self_assesse
 return "<script>$js</script>";
 }
    
-private static function fetchEducatorAppJS($entry_id, $student_id, $student_screen_name, $student_email, $assessed_items_js = "", $self_assessed_item_js = "") {
+private static function fetchEducatorAppJS($entry_id, $student_id, $student_screen_name, $student_email, $assessed_items_js = "", $self_assessed_item_js = "", $info) {
     
     $selector = ee()->TMPL->fetch_param('jquery-selector');
     $legend_title = ee()->TMPL->fetch_param('legend-title');
@@ -326,6 +326,7 @@ private static function fetchEducatorAppJS($entry_id, $student_id, $student_scre
     $competency_link_title = ee()->TMPL->fetch_param('competency-link-title');
     $step_label = ee()->TMPL->fetch_param('step-label');
     
+    $info = json_encode($info);
      
     foreach($colors as $key => $color) {   /* @TODO finish integrating PI parameters into educator view &*/
         $colors[$key] = trim($color); 

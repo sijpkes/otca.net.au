@@ -513,7 +513,7 @@ $.fn.evidencing = function() {
 	$me.on('change', "select#table-nav", function(e) 
 	{
 		$(e.target).setSelectedTab();
-	});
+	});    
 	
 <?php include("genStepLevel.js") ?>	
 
@@ -521,7 +521,8 @@ $.fn.evidencing = function() {
 		
 		$("td input[type='checkbox']").removeAttr('disabled').removeAttr('checked');
 		
-		$('select#table-nav').after(<?= $info ?>);
+		/* add tag data containing user instructions for the OTCEM*/
+		$('select#table-nav').first().after(<?= $info ?>);  
 		
 		if(entry_id != 'add_evidence') {
 			$(".contrast p").first().after("<p style='font-size: 14pt'><a href='#' id='cancel' style='color: #639'>Cancel upload of evidence and refresh.</a></p>");

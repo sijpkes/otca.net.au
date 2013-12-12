@@ -619,7 +619,7 @@ var suid = <?= $student_id ?>;
         });
     });
     
-    $me.find('#table-nav').after(legend);
+    $me.find('#table-nav').after(legend).after(<?= $info ?>);
 };
 
 })( jQuery );

@@ -105,7 +105,7 @@ div#wrapper {
 h1 {
     margin-top: 5px;
     color: #FFB510;
-    font-size: 16pt;
+    font-size: 20pt;
 }
 #content-pane a {
     color: #FFB510;
@@ -949,7 +949,7 @@ div.tableHeading, div.profileHead {
     width: 675px;
 }
 .contrast a {
-    color: #639 !important;
+    color: #320B59 !important; /* changed to higher contrast on grey background */
 }
 .contrast h2 {
     margin: 0px 0px 21px 0px !important;

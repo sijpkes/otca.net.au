@@ -58,7 +58,11 @@ class Member_register extends Member {
 		$res = $result -> result_array();
 		$institution_id = 0;
 		$institution_name = "";
-
+		
+		if(count($res) === 0) {
+			return  ee() -> output -> show_user_error('general', array(lang('not_authorized')));
+		}
+		
 		foreach ($res as $otca_row) {
 			if (count($res) > 0 && time() < $otca_row['expiry_date']) {
 				// Fetch the registration form
@@ -224,18 +228,16 @@ class Member_register extends Member {
 		if (ee() -> config -> item('allow_member_registration') == 'n') {
 			return FALSE;
 		}
-
 		// Is user banned?
 		if (ee() -> session -> userdata('is_banned') === TRUE) {
 			return  ee() -> output -> show_user_error('general', array(lang('not_authorized')));
 		}
-
 		// Blacklist/Whitelist Check
 		if (ee() -> blacklist -> blacklisted == 'y' &&
 		ee() -> blacklist -> whitelisted == 'n') {
 			return  ee() -> output -> show_user_error('general', array(lang('not_authorized')));
 		}
-
+		
 		ee() -> load -> helper('url');
 
 		// -------------------------------------------
@@ -350,7 +352,6 @@ class Member_register extends Member {
 
 			ee() -> db -> query("DELETE FROM exp_captcha WHERE (word='" . ee() -> db -> escape_str($_POST['captcha']) . "' AND ip_address = '" . ee() -> input -> ip_address() . "') OR date < UNIX_TIMESTAMP()-7200");
 		}
-
 		// Secure Mode Forms?
 		if (ee() -> config -> item('secure_forms') == 'y' AND ! ee() -> security -> secure_forms_check(ee() -> input -> post('XID'))) {
 			return  ee() -> output -> show_user_error('general', array(lang('not_authorized')));
@@ -498,7 +499,13 @@ class Member_register extends Member {
 			ee() -> email -> message(entities_to_ascii($email_msg));
 			ee() -> email -> Send();
 		}
-
+		
+		// set institution ID for OTCA hook
+		if( isset( $_POST['otca_institution_id'] ) ) {
+			$data['institution_id'] = $_POST['otca_institution_id'];
+		} else {
+			return  ee() -> output -> show_user_error('general', array(lang('not_authorized')));
+		}
 		// -------------------------------------------
 		// 'member_member_register' hook.
 		//  - Additional processing when a member is created through the User Side

@@ -85,6 +85,11 @@ We reserve the right to remove, edit, or move any content for any reason.
 {/if}
 
 {institution_hidden_id}
+{group_type}
+<!-- override compulsory ID field for students -->
+<input type="hidden" name="m_field_id_3" value="0000000">
+
+
 <p><input type='checkbox' name='accept_terms' value='y'  />&nbsp;&nbsp;<span class="alert">{lang:terms_accepted}</span></p>
 <p><input type="submit" value="{lang:submit}" class="submit" /></p>
 <p><span class="highlight">*</span> {lang:required_fields}</p>

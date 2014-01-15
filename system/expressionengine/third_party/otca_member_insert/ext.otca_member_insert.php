@@ -84,9 +84,14 @@ class Otca_member_insert_ext {
 	 */
 	public function add_member_institution_id($data, $member_id)
 	{
-		$institution_id = $data['institution_id'];
-		
-		ee()->db->query("INSERT INTO otca_member_fields (member_id, institution_id) VALUES ('$member_id', '$institution_id')");
+		$insert_data = array(
+								'member_id' => $member_id,
+								'institution_id' => $data['institution_id'],
+								'authcode' => $data['authcode'],
+								'group_id' => $data['group_type'] === 'student' ? 5 : 6 // 5 student, 6 educator
+							);
+							
+		ee()->db->insert("otca_member_fields",  $insert_data);
 	}
 
 	// ----------------------------------------------------------------------

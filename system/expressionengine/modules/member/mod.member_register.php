@@ -70,6 +70,7 @@ class Member_register extends Member {
 				$institution_name = $otca_row['name'];
 				$reg_form = str_replace("{institution_name}", $otca_row['name'], $reg_form);
 				$reg_form = str_replace("{institution_hidden_id}", "<input type='hidden' value='$otca_row[id]' name='otca_institution_id'>", $reg_form);
+				$reg_form = str_replace("{group_type}", "<input type='hidden' value='$type' name='otca_group_type'>", $reg_form);
 			} else {
 				return  ee() -> output -> show_user_error('general', array(lang('not_authorized')));
 			}
@@ -506,6 +507,14 @@ class Member_register extends Member {
 		} else {
 			return  ee() -> output -> show_user_error('general', array(lang('not_authorized')));
 		}
+		
+		// set activation registration type for OTCA hook
+		if( isset( $_POST['otca_group_type'] ) ) {
+			$data['group_type'] = $_POST['otca_group_type'];
+		} else {
+			return  ee() -> output -> show_user_error('general', array(lang('not_authorized')));
+		}
+		
 		// -------------------------------------------
 		// 'member_member_register' hook.
 		//  - Additional processing when a member is created through the User Side
@@ -616,6 +625,15 @@ class Member_register extends Member {
 
 		// Set the member group
 		$group_id =  ee() -> config -> item('default_member_group');
+		
+		// override member group with OTCA details if set
+		$query = ee() -> db -> select('group_id') -> where('authcode', $id) -> get('otca_member_fields');
+		
+		if ($query -> num_rows() > 0) {
+			foreach($query->result_array() as $row) {
+				$group_id = $row['group_id'];
+			}
+		}
 
 		// Is there even a Pending (group 4) account for this particular user?
 		$query =  ee() -> db -> select('member_id, group_id, email') -> where('group_id', 4) -> where('authcode', $id) -> get('members');

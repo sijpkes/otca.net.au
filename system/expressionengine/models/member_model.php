@@ -1474,11 +1474,7 @@ class Member_model extends CI_Model {
 	}
 	
 	/*
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
+	 * 	OTCA Institution functions
 	 */
 	  
 	function getInstitutionName() {

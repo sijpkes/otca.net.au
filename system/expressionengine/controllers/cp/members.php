@@ -46,6 +46,7 @@ class Members extends CP_Controller {
 
 		$this->lang->loadfile('members');
 		$this->load->model('member_model');
+		$this->load->model('institution_model');
 	}
 	
 	// --------------------------------------------------------------------
@@ -212,8 +213,8 @@ class Members extends CP_Controller {
 			$vars['delete_button_label'] = lang('delete_selected');
 		}
 		
-		$this->view->cp_page_title = lang('view_members') . " of " . $this->member_model->getInstitutionName();
-		$vars['institution_name'] = $this->member_model->getInstitutionName();
+		$this->view->cp_page_title = lang('view_members') . " of " . $this->institution_model->get_institution_name();
+		$vars['institution_name'] = $this->institution_model->get_institution_name();
 		
 		$this->cp->render('members/view_members', $vars);
 	}

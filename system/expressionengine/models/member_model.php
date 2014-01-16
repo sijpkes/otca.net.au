@@ -26,12 +26,6 @@ if (!defined('BASEPATH'))
  */
 class Member_model extends CI_Model {
 	
-	private $institution_id = 0;
-	private $institution_name = "";
-	
-	function __construct() {
-		$this->_get_institution_details();
-	}
 	/**
 	 * Get Username
 	 *
@@ -105,7 +99,8 @@ class Member_model extends CI_Model {
 									member_data.m_field_id_3 as student_number");
 		$this -> db -> join("member_data", "member_data.member_id = members.member_id");
 
-		$this -> _prep_otca_join_query();
+		$this -> load -> model('institution_model');
+		$this->institution_model->_prep_otca_join_query($this);
 
 		$this -> _prep_search_query($group_id, $search_value, $column);
 
@@ -1027,7 +1022,8 @@ class Member_model extends CI_Model {
 	 * @return	int
 	 */
 	function count_members($group_id = '', $search_value = '', $search_field = '') {
-		$this -> _prep_otca_join_query();
+		$this -> load -> model('institution_model');
+		$this->institution_model->_prep_otca_join_query($this);
 		$this -> _prep_search_query($group_id, $search_value, $search_field);
 		return $this -> db -> count_all_results('members');
 	}
@@ -1473,17 +1469,6 @@ class Member_model extends CI_Model {
 		return ($query -> num_rows() === 0) ? FALSE : TRUE;
 	}
 	
-	/*
-	 * 	OTCA Institution functions
-	 */
-	  
-	function getInstitutionName() {
-	 	return $this->institution_name;
-	}
-	
-	function getInstitutionID() {
-		return $this->institution_id;
-	}
 	// --------------------------------------------------------------------
 
 	/**
@@ -1522,36 +1507,6 @@ class Member_model extends CI_Model {
 			}
 		}
 	}
-
-	private function _prep_otca_join_query() {
-		if (
-		ee() -> session -> userdata('group_id') == 8 ||
-		ee() -> session -> userdata('group_id') == 9) {
-			$this -> db -> join("otca_member_fields", "otca_member_fields.member_id = members.member_id");
-			$this -> db -> where("otca_member_fields.institution_id", $this->institution_id);
-		}
-	}
-
-	private function _get_institution_details() {
-		if (
-		ee() -> session -> userdata('group_id') == 8 ||
-		ee() -> session -> userdata('group_id') == 9) {
-			$admin_member_id =   ee() -> session -> userdata('member_id');
-
-			$res =  ee() -> db -> select("institution_id") -> where("member_id", $admin_member_id) -> get("otca_member_fields");
-
-			foreach ($res->result_array() as $row) {
-				$this->institution_id = $row['institution_id'];
-			}
-			
-			$res =  ee() -> db -> query("SELECT name FROM otca_institutions WHERE id = '$this->institution_id'");
-			
-			foreach ($res->result_array() as $row) {
-				$this->institution_name = $row['name'];
-			}
-		}
-	}
-
 }
 
 /* End of file member_model.php */

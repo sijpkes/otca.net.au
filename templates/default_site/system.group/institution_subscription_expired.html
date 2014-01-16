@@ -1,0 +1,23 @@
+{embed="structure/header"}
+<h1>Your University's Subscription has Lapsed</h1>
+<div class='contrast'>
+<p>Your University has not renewed their subscription to this service. 
+	You will not be able to access this service until the subscription has been renewed.
+</p>
+<p>You can continue using the public areas of the site once you have <a href="https://otca.net.au/?ACT=16">logged out</a>.</p>
+<p>Thank you and our apologies for any inconvenience, <br><br>The OTCA Team</p>
+<p id='countdown' style='font-size: 18px; font-weight: bold'></p>
+
+<script>
+	var count = 20;
+  var countdown = setInterval(function(){
+    $("p#countdown").html("You will be logged out in " + count + " seconds.");
+    if (count == 0) {
+      clearInterval(countdown);
+      document.location = 'https://otca.net.au/?ACT=16';
+    }
+    count--;
+  }, 1000);
+</script>
+</div>
+{embed="structure/footer"}

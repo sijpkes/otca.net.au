@@ -27,7 +27,7 @@
 class Otca_member_insert_ext {
 	
 	public $settings 		= array();
-	public $description		= 'Additional fields to be added on member insert for the OTCA site';
+	public $description		= 'This extension adds additional fields on member insert for the OTCA site';
 	public $docs_url		= '';
 	public $name			= 'OTCA Member Fields';
 	public $settings_exist	= 'n';

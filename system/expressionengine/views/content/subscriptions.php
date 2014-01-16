@@ -2,7 +2,8 @@
 	
 	<h2><?=$institution_name?> Subscription Information</h2>
 	<?php if($expired === TRUE):  ?>
-		<p style='color: red'><strong><?= $institution_name ?> does not currently have an active subscription</strong>.  New students will not be able to register.</p>
+		<p style='color: red'><strong><?= $institution_name ?> does not currently have an active subscription</strong>.  
+			New students will not be able to register and existing users from <?=$institution_name?> will not have access to the subscribed areas of the site.</p>
 	<?php endif; ?>	
 	<?php if($expired === FALSE): ?>
 	<p>Your subscription expires on: <b><?= $expiry_date ?></b></p>

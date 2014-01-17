@@ -94,6 +94,12 @@ $lang = array(
 "can_delete_categories" =>
 "Can delete categories",
 
+"can_view_institutions_subscription" =>
+"Can view their institution's subscription",
+
+"can_manage_subscriptions" =>
+"Can manage all subscriptions to OTCA as a University of Newcastle employee",
+
 "can_not_delete_self" =>
 "You are not allowed to delete your own membership account.",
 

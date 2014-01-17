@@ -1185,6 +1185,8 @@ class Members extends CP_Controller {
 			'can_edit_categories',
 			'can_delete_categories',
 			'can_delete_self',
+			'can_view_institutions_subscription',
+			'can_manage_subscriptions',
 			'enable_lock'
 		);
 
@@ -1331,7 +1333,9 @@ class Members extends CP_Controller {
 				'can_access_comm'	 		=> 'n',
 				'can_access_utilities'		=> 'n',
 				'can_access_data'			=> 'n',
-				'can_access_logs'	 		=> 'n'												
+				'can_access_logs'	 		=> 'n',
+				'can_view_institutions_subscription' => 'n',
+				'can_manage_subscriptions' => 'n'												
 			),
 
 			'cp_admin_privs'	=> array (

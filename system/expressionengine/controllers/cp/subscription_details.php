@@ -46,11 +46,13 @@ class Subscription_details extends CP_Controller {
 
 	// --------------------------------------------------------------------
 	public function index() {
-		$group_id = ee()->session->userdata("group_id");
-		if($group_id == 1) {
+		
+		if($this->cp->allowed_group('can_manage_subscriptions')) {
 			$this->manage();
-		} else {
+		} else if($this->cp->allowed_group('can_view_institutions_subscription')) {
 			$this->show();
+		} else {
+			show_error(lang('unauthorized_access'));
 		}
 	}
 	/**
@@ -60,7 +62,7 @@ class Subscription_details extends CP_Controller {
 	 */
 	public function show()
 	{
-		if ( ! $this->cp->allowed_group('can_access_members'))
+		if ( ! $this->cp->allowed_group('can_view_institutions_subscription'))
 		{
 			show_error(lang('unauthorized_access'));
 		}
@@ -83,7 +85,7 @@ class Subscription_details extends CP_Controller {
 	
 	public function manage()
 	{
-		if ( ! $this->cp->allowed_group('can_access_admin'))
+		if ( ! $this->cp->allowed_group('can_manage_subscriptions'))
 		{
 			show_error(lang('unauthorized_access'));
 		}
@@ -118,7 +120,7 @@ class Subscription_details extends CP_Controller {
 	
 	public function institution_confirm()
 	{
-		if ( ! $this->cp->allowed_group('can_access_admin'))
+		if ( ! $this->cp->allowed_group('can_manage_subscriptions'))
 		{
 			show_error(lang('unauthorized_access'));
 		}
@@ -140,7 +142,7 @@ class Subscription_details extends CP_Controller {
 	}
 	
 	public function institutions_add() {
-		if ( ! $this->cp->allowed_group('can_access_admin') )
+		if ( ! $this->cp->allowed_group('can_manage_subscriptions') )
 		{
 			show_error(lang('unauthorized_access'));
 		}
@@ -161,7 +163,7 @@ class Subscription_details extends CP_Controller {
 	}
 	
 	public function institutions_delete() {
-		if ( ! $this->cp->allowed_group('can_access_admin') )
+		if ( ! $this->cp->allowed_group('can_manage_subscriptions') )
 		{
 			show_error(lang('unauthorized_access'));
 		}
@@ -193,7 +195,7 @@ class Subscription_details extends CP_Controller {
 	}
 	
 	public function institutions_renew() {
-		if ( ! $this->cp->allowed_group('can_access_admin') )
+		if ( ! $this->cp->allowed_group('can_manage_subscriptions') )
 		{
 			show_error(lang('unauthorized_access'));
 		}
@@ -229,7 +231,7 @@ class Subscription_details extends CP_Controller {
 	}
 	
 	public function institutions_cancel() {
-		if ( ! $this->cp->allowed_group('can_access_admin') )
+		if ( ! $this->cp->allowed_group('can_manage_subscriptions') )
 		{
 			show_error(lang('unauthorized_access'));
 		}

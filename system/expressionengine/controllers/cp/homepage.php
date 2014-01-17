@@ -115,13 +115,12 @@ class Homepage extends CP_Controller {
 		
 		$vars['subscriber'] = FALSE;
 		
-		if ($this->session->userdata('group_id') == 8 ||
-			$this->session->userdata('group_id') == 9) {
+		if($this->cp->allowed_group('can_view_institutions_subscription')) {
 			
 			$vars["subscriber"] = TRUE;
 		}
 		
-		$vars['is_admin'] = ee()->session->userdata('group_id') == 1 ? TRUE : FALSE;
+		$vars['is_admin'] = $this->cp->allowed_group('can_manage_subscriptions') ? TRUE : FALSE;
 		
 		// Most recent comment and most recent entry
 		$this->load->model('channel_model');

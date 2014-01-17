@@ -179,6 +179,9 @@ Please download <a href="%s" title="Download Here">here</a> and follow the <a hr
 'subscription_details' =>
 'Subscription Details',
 
+'subscription_management' =>
+'Subscription Management',
+
 'subscription_description' =>
 'Details of your Institutions subscription including registration links for students and educators.',
 

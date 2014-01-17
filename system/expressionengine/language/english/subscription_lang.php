@@ -1,5 +1,38 @@
 <?php
-$lang = array('','');
+$lang = array('expiry_date' => 'Expiry Date',
+				'student_uri_hash' => 'Student URI Hash',
+				'educator_uri_hash' => 'Educator URI Hash',
+				'subscription_details' => 'Subscriptions',
+				'renew_subscription' => 'Renew Subscriptions',
+				'cancel_subscription' => 'Cancel Subscriptions',
+				'delete_selected' => 'Delete Institutions',
+				'add_institution' => 'Add an Institution',
+				'add_institution_details' => 'Add a new institution name here.  You can create a subscription for this institution once it has been created.',
+				'renew_12month_subscription' => 'Renew 12 Month Subscription',
+				'can_not_delete_owner' => 'You cannot delete the University of Newcastle as the owner institution.',
+				'can_not_renew_owner' => 'You cannot renew the owner institution',
+				'can_not_cancel_owner' => 'You cannot cancel the owner institution',
+				'delete_institutions' => 'Delete Institutions',
+				'delete_institutions_confirm' => 'Please confirm the permanent deletion of these insitutions.',
+				'action_can_not_be_undone', 'This action CANNOT be undone',
+				'delete' => 'Delete',
+				'renew' => 'Renew',
+				'cancel' => 'Cancel',
+				'add' => 'Add',
+				'renew_institutions' => 'This will renew the selected institutions for 12 months',
+				'renew_institutions_confirm' => 'Please confirm the renewal of the selected institutions',
+				'cancel_institutions' => 'This will cancel the selected institutions subscriptions',
+				'cancel_institutions_confirm' => 'Please confirm the cancellation of subscriptions for the selected institutions',
+				'institution_deleted' => 'Institution deleted',
+				'institutions_deleted' => 'Institutions deleted',
+				'institution_renewed' => 'The selected institution\'s subscription has been renewed for 12 months',
+				'institutions_renewed' => 'The selected institution subscriptions have been renewed for 12 months',
+				'institution_cancelled' => 'The selected institution\'s subscription has been cancelled',
+				'institutions_cancelled' => 'The selected institution subscriptions have been cancelled',
+				'institution_added' => 'The new institution has been added',
+				'manage_subscriptions' => 'Manage Subscriptions',
+				'',''
+);
 
 /* End of file subscription_lang.php */
 /* Location: ./system/expressionengine/language/english/subscription_lang.php */

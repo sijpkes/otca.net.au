@@ -115,12 +115,13 @@ class Homepage extends CP_Controller {
 		
 		$vars['subscriber'] = FALSE;
 		
-		if ($this->session->userdata['group_id'] == 1 ||
-			$this->session->userdata['group_id'] == 8 ||
-			$this->session->userdata['group_id'] == 9) {
+		if ($this->session->userdata('group_id') == 8 ||
+			$this->session->userdata('group_id') == 9) {
 			
 			$vars["subscriber"] = TRUE;
 		}
+		
+		$vars['is_admin'] = ee()->session->userdata('group_id') == 1 ? TRUE : FALSE;
 		
 		// Most recent comment and most recent entry
 		$this->load->model('channel_model');

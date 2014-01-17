@@ -45,15 +45,26 @@ class Subscription_details extends CP_Controller {
 	}
 
 	// --------------------------------------------------------------------
-
+	public function index() {
+		$group_id = ee()->session->userdata("group_id");
+		if($group_id == 1) {
+			$this->manage();
+		} else {
+			$this->show();
+		}
+	}
 	/**
-	 * Index function
+	 * Show subscription details for institution administrator
 	 *
 	 * @return	void
 	 */
-	public function index()
+	public function show()
 	{
-	
+		if ( ! $this->cp->allowed_group('can_access_members'))
+		{
+			show_error(lang('unauthorized_access'));
+		}
+		
 		$vars['institution_name'] = $this->institution_model->get_institution_name();
 		
 		$date_r = $this->institution_model->get_expiry_date();
@@ -98,7 +109,7 @@ class Subscription_details extends CP_Controller {
 		
 		$vars = $this->table->datasource('_load_subscriptions', $state);
 		
-		$vars['institution_action_options'] = array('delete' => lang('delete_selected'), 'renew' => lang('renew_subscription'), 'cancel' => lang('cancel_subscription'));
+		$vars['institution_action_options'] = array('renew' => lang('renew_subscription'), 'cancel' => lang('cancel_subscription'), 'delete' => lang('delete_selected'));
 		$vars['delete_button_label'] = lang('submit');
 		$vars['add_button_label'] = lang('add');
 		$this->view->cp_page_title = lang('manage_subscriptions');

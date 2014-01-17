@@ -31,6 +31,7 @@ $lang = array('expiry_date' => 'Expiry Date',
 				'institutions_cancelled' => 'The selected institution subscriptions have been cancelled',
 				'institution_added' => 'The new institution has been added',
 				'manage_subscriptions' => 'Manage Subscriptions',
+				'subscription_info' => 'Subscription Details',
 				'',''
 );
 

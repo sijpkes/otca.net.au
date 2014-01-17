@@ -128,7 +128,7 @@
 			<li class="resource"><a rel="external" href="<?=config_item('doc_url')?>"><?=lang('user_guide')?></a></li>
 			
 			<?php if($subscriber === TRUE): ?>
-			<li class="item"><a href="<?=BASE.AMP.'C=subscription_details'?>"><?=lang('subscription_details')?></a></li>	
+			<li class="item"><a href="<?=BASE.AMP.'C=subscription_details'.AMP.'M=show'?>"><?=lang('subscription_details')?></a></li>	
 			<?php endif; ?> 
 			
 			<?php if($is_admin === TRUE): ?>

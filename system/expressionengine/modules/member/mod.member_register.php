@@ -96,7 +96,7 @@ class Member_register extends Member {
 
 			foreach ($query->result_array() as $row) {
 				// remove student number if this is educator registration
-				if (($type == "educator" && $row["m_field_name"] !== "student_number") || $type === "student") {
+				if ((($type == "educator" || $type == 'lecturer') && $row["m_field_name"] !== "student_number") || $type === "student") {
 
 					$field = '';
 					$temp = $field_chunk;

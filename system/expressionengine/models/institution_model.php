@@ -31,6 +31,7 @@ class Institution_model extends CI_Model {
 	private $expiry_date = 0;
 	private $educator_reg_uri;
 	private $student_reg_uri;
+	private $lecturer_reg_uri;
 	
 	function __construct() {
 		$this->_get_institution_details();
@@ -59,6 +60,10 @@ class Institution_model extends CI_Model {
 	function get_educator_url() {
 		return "https://otca.net.au/member/register?T=educator".AMP."C=".$this->educator_reg_uri;
 	}
+	
+	function get_lecturer_url() {
+		return "https://otca.net.au/member/register?T=lecturer".AMP."C=".$this->lecturer_reg_uri;
+	}
 	// --------------------------------------------------------------------
 	function count_institutions() {
 			$query = ee() -> db -> query("SELECT COUNT(*) as sum FROM otca_institutions");
@@ -78,8 +83,8 @@ class Institution_model extends CI_Model {
 	function renew_institutions($data) {
 		foreach($data as $renew) {
 			ee() -> db -> query("UPDATE `otca_institutions` SET `student_uri_hash` = '$renew[student_hash]', 
-								`educator_uri_hash`='$renew[educator_hash]', `expiry_date`='$renew[expiry_date]' 
-								WHERE `id` = '$renew[id]'");
+								`educator_uri_hash`='$renew[educator_hash]', `lecturer_uri_hash`='$renew[lecturer_hash]', 
+								`expiry_date`='$renew[expiry_date]' WHERE `id` = '$renew[id]'");
 		}
 	}
 	
@@ -87,7 +92,7 @@ class Institution_model extends CI_Model {
 			$list = implode(",", $institution_ids);	
 				
 			ee() -> db -> query("UPDATE `otca_institutions` SET `student_uri_hash` = '', 
-								`educator_uri_hash`='', `expiry_date`='0' 
+								`educator_uri_hash`='', `lecturer_uri_hash`='', `expiry_date`='0' 
 								WHERE `id` IN ($list)");
 	}
 	
@@ -112,13 +117,14 @@ class Institution_model extends CI_Model {
 				$this->institution_id = $row['institution_id'];
 			}
 			
-			$res =  ee() -> db -> query("SELECT name, student_uri_hash, educator_uri_hash, expiry_date FROM otca_institutions WHERE id = '$this->institution_id'");
+			$res =  ee() -> db -> query("SELECT name, expiry_date, student_uri_hash, educator_uri_hash, lecturer_uri_hash FROM otca_institutions WHERE id = '$this->institution_id'");
 			
 			foreach ($res->result_array() as $row) {
 				$this->institution_name = $row['name'];
+				$this->expiry_date = $row['expiry_date'];
 				$this->student_reg_uri = $row['student_uri_hash'];
 				$this->educator_reg_uri = $row['educator_uri_hash'];
-				$this->expiry_date = $row['expiry_date'];
+				$this->lecturer_reg_uri = $row['lecturer_uri_hash'];
 			}
 		}
 	}

@@ -71,13 +71,14 @@ class Subscription_details extends CP_Controller {
 		
 		$date_r = $this->institution_model->get_expiry_date();
 		
-		$vars['expired'] = (time() > $date_r) ? TRUE : FALSE;
+		$vars['expired'] = time() > $date_r;
 		
-		$date_f = mdate($this->datestring, $date_r);
+		$date_f = ee()->localize->format_date($this->datestring, $date_r);
 		
 		$vars['expiry_date'] = $date_f;
 		$vars['student_url'] = $this->institution_model->get_student_url();
 		$vars['educator_url'] = $this->institution_model->get_educator_url();
+		$vars['lecturer_url'] = $this->institution_model->get_lecturer_url();
 		$this->view->cp_page_title = $this->institution_model->get_institution_name() . " " .lang('subscription_info');
 		
 		$this->cp->render('content/subscriptions', $vars);
@@ -98,6 +99,7 @@ class Subscription_details extends CP_Controller {
 			'expiry_date' => array(),
 			'student_uri_hash' => array(),
 			'educator_uri_hash' => array(),
+			'lecturer_uri_hash' => array(),
 			'_check'		=> array(
 				'header' => form_checkbox('select_all', 'true', FALSE, 'class="toggle_all"'),
 				'sort' => FALSE
@@ -216,7 +218,8 @@ class Subscription_details extends CP_Controller {
 				$data[] = array('id' => $this->db->escape_str($val),
 								'expiry_date' => strtotime('+1 year', time()) ,
 								'educator_hash' => ee()->functions->random('alpha', 20),
-								'student_hash' => ee()->functions->random('alpha', 20)
+								'student_hash' => ee()->functions->random('alpha', 20),
+								'lecturer_hash' => ee()->functions->random('alpha', 20)
 								);
 			}		
 		}
@@ -375,7 +378,7 @@ class Subscription_details extends CP_Controller {
 			$i = $i + 1;
 		}
 		
-		$sql = "SELECT id, name, expiry_date, student_uri_hash, educator_uri_hash FROM otca_institutions ORDER BY $order_by LIMIT $initial_state[offset], $this->manager_per_page";
+		$sql = "SELECT id, name, expiry_date, student_uri_hash, educator_uri_hash, lecturer_uri_hash FROM otca_institutions ORDER BY $order_by LIMIT $initial_state[offset], $this->manager_per_page";
 		
 		$result = ee()->db->query($sql);
 		$offset = $initial_state['offset'];
@@ -390,6 +393,7 @@ class Subscription_details extends CP_Controller {
 				'expiry_date' => mdate($this->datestring, $institution['expiry_date']),
 				'student_uri_hash' => $institution['student_uri_hash'],
 				'educator_uri_hash' => $institution['educator_uri_hash'],
+				'lecturer_uri_hash' => $institution['lecturer_uri_hash'],
 				'_check'	=> '<input class="toggle" type="checkbox" name="toggle[]" value="'.$institution['id'].'" />'
 			);
 		}

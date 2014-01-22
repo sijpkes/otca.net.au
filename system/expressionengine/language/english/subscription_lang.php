@@ -2,6 +2,7 @@
 $lang = array('expiry_date' => 'Expiry Date',
 				'student_uri_hash' => 'Student URI Hash',
 				'educator_uri_hash' => 'Educator URI Hash',
+				'lecturer_uri_hash' => 'Lecturer URI Hash',
 				'subscription_details' => 'Subscriptions',
 				'renew_subscription' => 'Renew Subscriptions',
 				'cancel_subscription' => 'Cancel Subscriptions',

@@ -8,7 +8,6 @@ $key = ee()->input->get('id');
 $history_id = ee()->input->get('history_id');
 $tag = ee()->input->get('tag');
 
-echo "<h1>$key</h1>";
 if(!empty($tag) && !empty($history_id) && !empty($diary_entry)) {
 
     ee()->db->query("INSERT INTO `otca_diary` (`entry_id`,`member_id`,`entry_text`,`creation_date`, `current_practice_cycle`, `tag`)

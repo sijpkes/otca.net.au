@@ -10,14 +10,14 @@ if(empty($member_id)) return;
 $query = ee()->db->query("SELECT * FROM `otca_diary` WHERE `member_id`='$member_id' AND `tag` LIKE '%general_diary_entry%' ORDER BY `creation_date` DESC");  
 if ($query->num_rows() > 0)
 {
-foreach($query->result_array() as $row) {
-	$date = date('l dS M, Y g:i a', ee()->localize->set_localized_time($row['creation_date']));
-	echo "<p class='otca-textbox'>$date<br><textarea data-tag='$row[tag]' data-id='$row[entry_id]' class='diary-entry'>";
-	echo $row['entry_text'];
-	echo "</textarea><img class=\"add\" src=\"/img/plus-icon.png\"><img class=\"exit\" src=\"/img/close-icon-white.png\"><br><button id='save'>Save</button><label><input type='checkbox' id='printhis' title='Include this entry in the print view'/>Include entry in print view.</label></p>";
-}
+	foreach($query->result_array() as $row) {
+		$date = ee()->localize->format_date('%l %d%S %M, %Y %g:%i %a', $row['creation_date']);
+		echo "<p class='otca-textbox'>$date<br><textarea data-tag='$row[tag]' data-id='$row[entry_id]' class='diary-entry'>";
+		echo $row['entry_text'];
+		echo "</textarea><img class=\"add\" src=\"/img/plus-icon.png\"><img class=\"exit\" src=\"/img/close-icon-white.png\"><br><button id='save'>Save</button><label><input type='checkbox' id='printhis' title='Include this entry in the print view'/>Include entry in print view.</label></p>";
+	}
 } else {
-$date = date('l dS M, Y g:i a', $this->EE->localize->set_localized_time(time()));
+	$date = ee()->localize->format_date('%l %d%S %M, %Y %g:%i %a');
 echo "<p class='otca-textbox'>$date<br><textarea data-tag='general-diary-entry' data-id='0' class='diary-entry'>";
 echo "Your diary is completely empty.  Make this your first entry!</textarea><img class=\"add\" src=\"/img/plus-icon.png\"><img class=\"exit\" src=\"/img/close-icon-white.png\"><br><button id='save'>Save</button></p>";
 

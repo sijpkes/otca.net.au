@@ -260,7 +260,7 @@ if ($query->num_rows() > 0)
 		}
 		$upload_time = $upload_time . "_" . $countDuplicates[$upload_time];
 	}
-$localEntryTime = date('d/M/Y g:i:s a', ee()->localize->set_localized_time($row['upload_time']));
+$localEntryTime = ee()->localize->format_date('%D, %F %d, %Y %g:%i%a', $row['upload_time']);
 
 $unique_code = "evidence_".$this->member_id."_".$row['entry_id'];
 $hc = str_replace("%code%", $unique_code, $hlSelectControl);
@@ -685,7 +685,7 @@ if ($query->num_rows() > 0)
 			}
 			$creation_date = $creation_date . "_" . $countDuplicates[$creation_date];
 		}
-		$localEntryTime = date('d/M/Y g:i a', ee()->localize->set_localized_time($row['creation_date']));
+		$localEntryTime =   ee()->localize->format_date('%d/%M/%Y %g:%i%a', $row['creation_date']);
 		$radio_name = $row['entry_id'];
 		if((isset($ho) && $ho > 0 && !empty($styling)) || (!isset($ho) || empty($ho)) ) {
 		    $record_array[$creation_date] = "<li $styling><span style=\"color: rgb(68, 68, 68); font-size:15px\"><p style=\"margin-top: 0\"><strong><u>Diary Entry</u></strong> ".
@@ -708,8 +708,7 @@ if($contracts == 1) {
 	    if(array_key_exists($row['id'], $contract_hl_colors)) {
 		$styling = "style='border: thick solid ".$contract_hl_colors[$row['id']]."'";
 	    }
-	    
-            $localEntryTime = date('d/M/Y g:i a', ee()->localize->set_localized_time($creation_date));
+	    	$localEntryTime =   ee()->localize->format_date('%d/%M/%Y %g:%i%a', $creation_date);
             if((isset($ho) && $ho > 0 && !empty($styling)) || (!isset($ho) || empty($ho)) ) {
 	       $record_array[$creation_date] = "<li $styling><p style=\"margin-top: 0; font-size: 13px\">
 	       <a href='/pages/learning-contract?id=$row[id]&m=$suid'>
@@ -818,7 +817,7 @@ if($contracts == 1) {
 
 $time = time();
 
-$output_date = date('l dS M, Y g:i a',  ee()->localize->set_localized_time($time));
+$output_date = ee()->localize->format_date('%l, %d%S %M, %Y %g:%i%a', $time);
 $current_date = "";
 $output .= "<p>Current time: ".$output_date." </p>";
 

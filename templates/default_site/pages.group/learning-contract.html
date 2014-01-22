@@ -90,8 +90,7 @@ var tempUserProfile;
 				\"history_id\" : $id,
 				\"title\" : \"$title\",
 				\"time\" : $time};\n\n";
-		
-		$readable_time = date('l dS M g:i a', $this->EE->localize->set_localized_time($time));
+		$readable_time = ee()->localize->format_date('%l %d%S %M, %Y %g:%i %a', $time);
 		echo $js_userProfile;
 		echo "var humanTime = \"$readable_time\";";
 		?>

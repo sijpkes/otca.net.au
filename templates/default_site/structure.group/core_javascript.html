@@ -154,12 +154,12 @@ if ($query->num_rows() > 0)
 	$objectives = '[]';
 	$history_id = 0;
 	$title = "";
-	$time = time();
+	$time = 0;
 }
 if($time == 0) 
-	$js_humanTime = "var cycleCreated = \"Not yet saved\"";
+	$js_humanTime = "var cycleCreated = \"Not yet saved\";\n";
 else
-	$js_humanTime = "var cycleCreated = \"" . date("d/m/Y", $time) . "\";\n";
+	$js_humanTime = "var cycleCreated = \"" . ee()->localize->format_date('%d %M, %Y', $time) . "\";\n";
 
 $screen_name = $this->EE->session->userdata("screen_name");		
 $js_screen_name = "var screen_name = \"$screen_name\";\n";
@@ -181,7 +181,7 @@ $js_userProfile = "window.userProfile = {
 				\"time\" : $time
 			};\n\n";
 			
-$js_currentTime = "var currentTime = \"".date('ds M, Y g:i a', $this->EE->localize->set_localized_time(time()))."\";\n";
+$js_currentTime = "var currentTime = \"".ee()->localize->format_date('%l %d%S %M, %Y %g:%i %a')."\";\n";
 			
 /* user javascript variables */			
 echo $js_userProfile;

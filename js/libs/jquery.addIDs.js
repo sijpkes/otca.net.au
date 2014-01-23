@@ -18,6 +18,18 @@ $.fn.addIDs = function() {
 		}
 		});
 	});
+	
+	try {
+		console.log("checking pseudo :nth-of-type support: "+$('.bap tr:nth-of-type(4) p').length+"results... Succesful.");
+	} catch(err) {
+		console.log('pseudo not supported, creating...');
+		
+		$.expr[':']['nth-of-type'] = function(elem, i, match) {
+    		if (match[3].indexOf("n") === -1) return i + 1 == match[3];
+    		var parts = match[3].split("+");
+    	return (i + 1 - (parts[1] || 0)) % parseInt(parts[0], 10) === 0;
+		};
+	}
 	// Being a professional
 	$('.bap tr:nth-of-type(4) p', this).each(function(i,v) {
 		$(v).addClass('otca-step8');

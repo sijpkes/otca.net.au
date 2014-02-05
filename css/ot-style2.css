@@ -69,6 +69,10 @@ a.chapter {
   margin: 6px;
   cursor: pointer;
 }
+a.chapter:hover {
+    background-color: #000;
+    color: #fff !important;
+}
 div#wrapper {
     background-color: #131313;
     background-image: url("/img/background_w1130tiny.png");

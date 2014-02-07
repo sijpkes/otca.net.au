@@ -575,9 +575,14 @@ $file_link = strlen($row['file_url']) > 0? "<a href='$row[file_url]/$row[entry_i
 $file_link = preg_replace('~\{(.*?)\}~', '/download/secure/', $file_link);
 
 if((!empty($ho) && !empty($styling)) || empty($ho) ) {
+	
+	$step_level = "";
+	if(!empty($step) && !empty($level)) {
+		$step_level = "<span style='font-size: 10px'>($step, $level)</span>";
+	}
+	
     $record_array[$upload_time] = "<li $styling><span style=\"color: rgb(68, 68, 68); font-size:13px\">
-                <p style=\"margin-top: 0\"><strong><u>OTCEM Evidence/Supporting Evidence</u> &ndash; \"$title\" 
-                <span style='font-size: 10px'>($step, $level)</span></strong><br>
+                <p style=\"margin-top: 0\"><strong><u>OTCEM Evidence/Supporting Evidence</u> &ndash; \"$title\" $step_level</strong><br>
                 <a href='/pages/educator-matrix/$row[entry_id]/$suid/$title/$level/$step' 
                 style='color: blue; line-height: 22px'>Assess OTCEM Competency Statements for this Evidence</a></p> 
                 <p> $title </p> $description $file_link <span style=\"float: right; line-height:0px\">$localEntryTime</span></span>

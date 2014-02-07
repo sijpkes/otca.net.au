@@ -1,26 +1,27 @@
 <?php /**
-*The MIT License (MIT)
-*
-*Copyright (c) 2013 Paul Sijpkes.
-*
-*Permission is hereby granted, free of charge, to any person obtaining a copy
-*of this software and associated documentation files (the "Software"), to deal
-*in the Software without restriction, including without limitation the rights
-*to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-*copies of the Software, and to permit persons to whom the Software is
-*furnished to do so, subject to the following conditions:
-*
-*The above copyright notice and this permission notice shall be included in
-*all copies or substantial portions of the Software.
-*
-*THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-*IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-*FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-*AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-*LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-*OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-*THE SOFTWARE.
-*/ ?>
+ *The MIT License (MIT)
+ *
+ *Copyright (c) 2013 Paul Sijpkes.
+ *
+ *Permission is hereby granted, free of charge, to any person obtaining a copy
+ *of this software and associated documentation files (the "Software"), to deal
+ *in the Software without restriction, including without limitation the rights
+ *to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *copies of the Software, and to permit persons to whom the Software is
+ *furnished to do so, subject to the following conditions:
+ *
+ *The above copyright notice and this permission notice shall be included in
+ *all copies or substantial portions of the Software.
+ *
+ *THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *THE SOFTWARE.
+ */
+ ?>
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 //include "libs/JSMin.php";
@@ -107,17 +108,54 @@ class Otca_ajax {
         
         return json_encode($json);
     }
+	
+	public function hide_diary_entry() {
+		$member_id = ee()->session->userdata('member_id');
+		if($member_id == 0) return;
+
+	$hidden = ee()->input->post('hidden');
+	$entry_id = ee()->input->post('entry_id');
+	$group_type = ee()->input->post('group_type');
+	
+	/* checks if extra classes were applied to this element (e.g. expanded), if so, only use the first class name*/
+	$bits = explode(' ', $group_type);
+	if(count($bits) > 1) $group_type = $bits[0];
+
+	if(empty($group_type)) {
+	    $sql = "UPDATE `otca_diary` SET `hidden`='$hidden' WHERE `entry_id`='$entry_id'";
+	} else {
+	    $sql = "SELECT `current_practice_cycle` FROM `otca_diary` WHERE `entry_id`='$entry_id'";
+	    $query =  ee()->db->query($sql);
+	    
+	    $cycle = 0;
+	    if ($query->num_rows() > 0)
+	    {
+	        foreach($query->result_array() as $row)  
+	        {
+	            $cycle = $row['current_practice_cycle'];
+	        }
+	    }
+    
+    $sql = "UPDATE `otca_diary` SET `hidden`='$hidden' 
+            WHERE `tag` LIKE '%$group_type%' AND `current_practice_cycle`='$cycle'";
+}
+$query = ee()->db->query($sql);
+
+$irows = ee()->db->affected_rows();
+return json_encode(array('message' => '$irows affected rows'));
+	}
 
 public static function usage()
 {
-    ob_start();  ?>
+    ob_start();
+?>
 
-This plugin will eventually contain all AJAX functions used by the otca.net.au website. 
+This plugin will eventually contain all AJAX functions used by the otca.net.au website.
 
-    <?php
-        $buffer = ob_get_contents();
-        ob_end_clean();
+<?php
+$buffer = ob_get_contents();
+ob_end_clean();
 
-        return $buffer;
-    }
+return $buffer;
+}
 }

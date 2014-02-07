@@ -509,7 +509,6 @@ $diary_hl_colors = array();
 $contract_hl_colors = array();
 $evidence_hl_colors = array();
 
-//if(isset($ho) && $ho > 0) {
 /* get highlighted items*/
 $sql = "SELECT `id`, `color`, `type`, `entry_id` FROM `otca_folio_highlights` WHERE `member_id` = '$suid'";
 
@@ -621,8 +620,11 @@ if ($query->num_rows() > 0)
 		    $grouped_entry_set[$row['current_practice_cycle']."_$postfix"] = array();
 		 }
 		   
-                    $item_data = array('text' => nl2br($row['entry_text']), 'date' => $row['last_updated'], 'label' => $my_label,
-                                        'entry_id' => $row['entry_id'], 'hidden' => $row['hidden']);
+                    $item_data = array('text' => nl2br($row['entry_text']), 
+                    					'date' => empty( $row['last_updated'] ) ? $row['creation_date'] : $row['last_updated'],
+                    					'label' => $my_label,
+                                        'entry_id' => $row['entry_id'], 
+                                        'hidden' => $row['hidden']);
                   
                     $grouped_entry_set[$row['current_practice_cycle']."_$postfix"][$my_tag] = $item_data;
               
@@ -708,7 +710,7 @@ if($contracts == 1) {
 	    if(array_key_exists($row['id'], $contract_hl_colors)) {
 		$styling = "style='border: thick solid ".$contract_hl_colors[$row['id']]."'";
 	    }
-	    	$localEntryTime =   ee()->localize->format_date('%d/%M/%Y %g:%i%a', $creation_date);
+	    	$localEntryTime =   ee()->localize->format_date('%d %M %Y', $creation_date);
             if((isset($ho) && $ho > 0 && !empty($styling)) || (!isset($ho) || empty($ho)) ) {
 	       $record_array[$creation_date] = "<li $styling><p style=\"margin-top: 0; font-size: 13px\">
 	       <a href='/pages/learning-contract?id=$row[id]&m=$suid'>

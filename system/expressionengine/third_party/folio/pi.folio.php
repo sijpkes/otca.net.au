@@ -382,7 +382,7 @@ if ($query->num_rows() > 0)
     
     foreach($results as $row) // returns all diary entries for this practice cycle
     {
-		$creation_date = $row['last_updated'];
+		$creation_date = empty($row['last_updated']) ? $row['creation_date'] : $row['last_updated'];
                  $styling = "";
                 
                 $selectedColor = "none";
@@ -400,7 +400,7 @@ if ($query->num_rows() > 0)
 			}
 			$creation_date = $creation_date . "_" . $countDuplicates[$creation_date];
 		}
-		$localEntryTime = ee()->localize->format_date('%d %M %Y', $row['last_updated']);
+		$localEntryTime = ee()->localize->format_date('%d %M %Y', $creation_date);
 		$hide_id = $row['entry_id'];
                 $hidden = $row['hidden'] == 1 ? "checked='checked'" : "";
                 $unique_code = "diary_".$this->member_id."_".$row['entry_id'];
@@ -466,6 +466,7 @@ return $output;
 public function educator_timeline_list() {
 $this->member_id = ee()->session->userdata('member_id');
 if($this->member_id == 0) return;
+
 $output = "";
 
 $start = ee()->input->get('start');
@@ -577,17 +578,18 @@ $file_link = preg_replace('~\{(.*?)\}~', '/download/secure/', $file_link);
 if((!empty($ho) && !empty($styling)) || empty($ho) ) {
 	
 	$step_level = "";
-	if(!empty($step) && !empty($level)) {
-		$step_level = "<span style='font-size: 10px'>($step, $level)</span>";
-	}
 	
-    $record_array[$upload_time] = "<li $styling><span style=\"color: rgb(68, 68, 68); font-size:13px\">
-                <p style=\"margin-top: 0\"><strong><u>OTCEM Evidence/Supporting Evidence</u> &ndash; \"$title\" $step_level</strong><br>
-                <a href='/pages/educator-matrix/$row[entry_id]/$suid/$title/$level/$step' 
-                style='color: blue; line-height: 22px'>Assess OTCEM Competency Statements for this Evidence</a></p> 
-                <p> $title </p> $description $file_link <span style=\"float: right; line-height:0px\">$localEntryTime</span></span>
-                </li>";
-}
+		if(!empty($step) && !empty($level)) {
+			$step_level = "<span style='font-size: 10px'>($step, $level)</span>";
+		}
+	
+		    $record_array[$upload_time] = "<li $styling><span style=\"color: rgb(68, 68, 68); font-size:13px\">
+		                <p style=\"margin-top: 0\"><strong><u>OTCEM Evidence/Supporting Evidence</u> &ndash; \"$title\" $step_level</strong><br>
+		                <a href='/pages/educator-matrix/$row[entry_id]/$suid/$title/$level/$step' 
+		                style='color: blue; line-height: 22px'>Assess OTCEM Competency Statements for this Evidence</a></p> 
+		                <p> $title </p> $description $file_link <span style=\"float: right; line-height:0px\">$localEntryTime</span></span>
+		                </li>";
+			}
 	}
     }
 }
@@ -595,8 +597,6 @@ if((!empty($ho) && !empty($styling)) || empty($ho) ) {
 if($diary == 1 || $letters == 1 || $reflections == 1) { 
 
 $sql = "SELECT `entry_id`, `entry_text`, `tag`, `creation_date`, `last_updated`, `current_practice_cycle`, `hidden` FROM `otca_diary` WHERE `member_id`='$suid' AND `hidden` = '0' AND ($whereClause) ORDER BY `last_updated` DESC";
-
-//echo $sql; 
 
 $query =  ee()->db->query($sql);
 
@@ -650,7 +650,7 @@ if ($query->num_rows() > 0)
 	//$colorSet = FALSE;
         foreach($grouped_item as $item) {
             $grouped_entry_text .= "<p>$item[text]</p>";    
-            $group_date = $item['date'];
+            $group_date = $item['date']; 
             $group_label = $item['label'];
             $group_entry_id = $item['entry_id'];
             $group_hidden = $item['hidden'];
@@ -662,10 +662,9 @@ if ($query->num_rows() > 0)
 	if(array_key_exists($group_entry_id, $diary_hl_colors)) {
 		    $styling = "style='border: thick solid ".$diary_hl_colors[$group_entry_id]."'";
 		    $selectedColor = $diary_hl_colors[$group_entry_id];
-		   // $colorSet = true;
 	}
 	
-        $groupLocalTime = ee()->localize->format_date("%d %M %Y",$group_date);
+    $groupLocalTime = ee()->localize->format_date("%d %M %Y",$group_date);
         
 	if((isset($ho) && $ho > 0 && !empty($styling)) || (!isset($ho) || empty($ho)) ) {
 	    $record_array[$group_date] = "<li $styling><span style=\"color: rgb(68, 68, 68); font-size:13px\"><p style=\"margin-top: 0\"><strong><u>$group_label</u></strong> &ndash; "
@@ -673,12 +672,11 @@ if ($query->num_rows() > 0)
 	}
     }
     
-    
-    foreach($results as $row) // returns all diary entries for this practice cycle
+    foreach($results as $row) // returns all remaining non-grouped diary entries for this practice cycle
     {
-        
-		$creation_date = $row['creation_date'];
-		 $styling = "";
+		$creation_date = empty($row['last_updated']) ? $row['creation_date'] : $row['last_updated'];
+	
+	    $styling = "";
 	    
 		if(array_key_exists($row['entry_id'], $diary_hl_colors)) {
 		    $styling = "style='border: thick solid ".$diary_hl_colors[$row['entry_id']]."'";
@@ -692,7 +690,7 @@ if ($query->num_rows() > 0)
 			}
 			$creation_date = $creation_date . "_" . $countDuplicates[$creation_date];
 		}
-		$localEntryTime =   ee()->localize->format_date('%d/%M/%Y %g:%i%a', $row['creation_date']);
+		$localEntryTime =   ee()->localize->format_date('%d/%M/%Y %g:%i%a', $creation_date);
 		$radio_name = $row['entry_id'];
 		if((isset($ho) && $ho > 0 && !empty($styling)) || (!isset($ho) || empty($ho)) ) {
 		    $record_array[$creation_date] = "<li $styling><span style=\"color: rgb(68, 68, 68); font-size:15px\"><p style=\"margin-top: 0\"><strong><u>Diary Entry</u></strong> ".

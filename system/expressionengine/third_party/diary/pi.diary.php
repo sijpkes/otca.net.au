@@ -33,9 +33,36 @@ $plugin_info = array(
 );
 
 class Diary {
-    
-public function __construct() {
-    $member_id = ee()->session->userdata('member_id');
+
+public function add_entry() {
+	
+	$member_id = ee()->session->userdata('member_id');
+	echo $member_id;
+	
+	if(empty($member_id)) return;
+	
+	$diary_entry = mysql_real_escape_string(ee()->input->post('entry'));
+	$key = ee()->input->get('id');
+	$history_id = ee()->input->get('history_id');
+	$tag = ee()->input->get('tag');
+
+	if(!empty($tag) && !empty($history_id) && !empty($diary_entry)) {
+
+    ee()->db->query("INSERT INTO `otca_diary` (`entry_id`,`member_id`,`entry_text`,`creation_date`, `current_practice_cycle`, `tag`)
+    				VALUES ('$key','$member_id','$diary_entry',UNIX_TIMESTAMP(),'$history_id', '$tag')
+    				ON DUPLICATE KEY UPDATE `entry_text`='$diary_entry', `last_updated`= UNIX_TIMESTAMP(), `tag`='$tag'");
+					
+//	echo "INSERT INTO `otca_diary` (`entry_id`,`member_id`,`entry_text`,`creation_date`, `current_practice_cycle`, `tag`)
+  //  				VALUES ('$key','$member_id','$diary_entry',UNIX_TIMESTAMP(),'$history_id', '$tag')
+    //				ON DUPLICATE KEY UPDATE `entry_text`='$diary_entry', `last_updated`= UNIX_TIMESTAMP(), `tag`='$tag'";
+	} 
+}
+
+public function remove_entry() {
+	if(empty($member_id)) return;
+
+	$key = ee()->input->get('id');
+	ee()->db->query("DELETE FROM `otca_diary` WHERE `entry_id`='$key'");  
 }
  
 public static function usage()

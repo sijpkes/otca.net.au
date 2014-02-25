@@ -504,17 +504,33 @@ class Member_memberlist extends Member {
 		}
 		
 		$path = '/'.$group_id.'-'.$order_by.'-'.$sort_order.'-'.$row_limit;
+		
+		
+		/* get institution id for this member */
+		$admin_member_id =   ee() -> session -> userdata('member_id');
 
+		$res =  ee() -> db -> select("institution_id") -> where("member_id", $admin_member_id) -> get("otca_member_fields");
+
+		$institution_id = $res->row('institution_id');
+		
 		/** ----------------------------------------
 		/**  Build the query
 		/** ----------------------------------------*/
 
-			// patched: includes OTCA member nominated by this student...
-			$f_sql	= "SELECT m.member_id, m.member_id IN (SELECT `educator_id` FROM `otca_evidence_access` WHERE `student_id` = '".$this->EE->session->userdata('member_id')."') as nominated, m.username, m.screen_name, m.email, m.url, m.location, m.icq, m.aol_im, m.yahoo_im, m.msn_im, m.location, m.join_date, m.last_visit, m.last_activity, m.last_entry_date, m.last_comment_date, m.last_forum_post_date, m.total_entries, m.total_comments, m.total_forum_topics, m.total_forum_posts, m.language, m.timezone, m.bday_d, m.bday_m, m.bday_y, m.accept_user_email, m.avatar_filename, m.avatar_width, m.avatar_height, (m.total_forum_topics + m.total_forum_posts) AS total_posts, g.group_title ";
+		// patched: includes OTCA member nominated by this student...
+		$f_sql	= "SELECT m.member_id, m.member_id IN (
+					SELECT `educator_id` FROM `otca_evidence_access` WHERE `student_id` = '".$this->EE->session->userdata('member_id')."') as nominated, 
+					m.username, m.screen_name, m.email, m.url, m.location, m.icq, m.aol_im, m.yahoo_im, m.msn_im, m.location, m.join_date, 
+					m.last_visit, m.last_activity, m.last_entry_date, m.last_comment_date, m.last_forum_post_date, 
+					m.total_entries, m.total_comments, m.total_forum_topics, m.total_forum_posts, m.language, m.timezone, 
+					m.bday_d, m.bday_m, m.bday_y, m.accept_user_email, m.avatar_filename, m.avatar_width, m.avatar_height, 
+					(m.total_forum_topics + m.total_forum_posts) AS total_posts, g.group_title ";
 		
-		$p_sql	= "SELECT COUNT(member_id) AS count ";
-		$sql	= "FROM exp_members m, exp_member_groups g
-					WHERE m.group_id = g.group_id
+		$p_sql	= "SELECT COUNT(m.member_id) AS count ";
+		$sql	= "FROM exp_members m, exp_member_groups g, exp_otca_member_fields om
+					WHERE m.group_id = g.group_id 
+					AND om.member_id = m.member_id 
+					AND om.institution_id = '$institution_id'
 					AND g.group_id != '3'
 					AND g.group_id != '4'
 					AND g.site_id = '".ee()->db->escape_str(ee()->config->item('site_id'))."'

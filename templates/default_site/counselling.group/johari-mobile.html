@@ -1,0 +1,408 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Johari Window</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<style>
+body {
+	font-family: Tahoma, Geneva, sans-serif;
+	max-width: 404px;
+	max-height: 404px;
+}
+h1 {
+	margin: 1em;	
+}
+.box {
+	width: 196px; height: 196px; float: left; 
+	min-width: 7px; max-width: 397px; min-height: 7px; max-height: 397px;
+	border-radius: 15px;
+	margin: 2px;
+	color: #FFFBE0;
+	font-family: Tahoma, Geneva, sans-serif;
+}
+.boxHoverMain {
+	position:absolute;
+	display: block;
+	width: 186px;
+	height: 166px;
+	max-width: 387px;
+	/*border: thick solid red;*/
+}
+.boxHoverSub {
+	position:absolute;
+	display: block;
+	width: 166px;
+	max-width: 367px;
+	height: 20px;
+	/*border: thick solid red;*/
+}
+#b1_s {
+	top:196px;
+	left: 24px;
+}
+#b2_s {
+	top:196px;
+	left: 251px;
+}
+#b2_m {
+	left: 231px;
+}
+#b3_m {
+	top: 251px;
+	left: 24px;
+}
+#b3_s {
+	top: 221px;
+	left: 24px;
+}
+#b4_m {
+	top: 251px;
+	left: 231px;
+}
+#b4_s {
+	top: 221px;
+	left: 251px;
+}
+.box > h1 {
+	font-size: 18px;
+	display: block;
+	position: relative;
+	margin: 0.5em;
+}
+.box > pre, .box > p {
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 12px;
+	margin: 0.5em;
+	display: block;
+}
+.box#b1 {
+	border: 1px solid black;
+	background-color: #4F81BC;
+}
+.box#b2 {
+	border: 1px solid black;
+	background-color:#9CBA58;
+}
+.box#b3 {
+	border: 1px solid black;
+	background-color:#C0504E;
+}
+.box#b4 {
+	border: 1px solid black;
+	background-color: #8165A0;
+}
+#johari {
+	max-width: 404px; 
+	min-width: 404px; 
+	max-height: 404px; 
+	min-width: 404px;
+	overflow: hidden;
+	float: left;
+	margin: 1em;
+}
+textarea {
+	width: 90%;
+	height: 40%;
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 12px;
+	background-color:transparent;
+	color: #FFFBE0;
+}
+
+#handle {
+	width: 40px;
+	height: 64px;
+	border: none;	
+	position: fixed;
+	display: none;
+	background-image:url(/img/hand_grab_icon50x64.png);
+	background-repeat:no-repeat
+}
+#edit {
+	display: none;
+	width: 54px;
+	height: 60px;
+	position: fixed;	
+	background-image:url(/img/hand_edit_icon.png);
+	background-repeat:no-repeat;
+	cursor: pointer;
+}
+#hover_region {
+	width: 50px;
+	height: 50px;
+	position: fixed;
+	cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div id='johari'>
+	<div id='edit' title="Click into this box to edit."> </div>
+    <div class='boxHoverMain' id='b1_m'></div> 
+    <div class='boxHoverSub' id='b1_s'></div> 
+    <div class='box' id='b1'><h1>Facade</h1><p>Only I know this</p></div>
+    <div class='boxHoverMain' id='b2_m'></div> 
+    <div class='boxHoverSub' id='b2_s'></div> 
+    <div class='box' id='b2'><h1>Arena (Open)</h1><p>Everyone knows this</p></div>
+    <div class='boxHoverMain' id='b3_m'></div> 
+    <div class='boxHoverSub' id='b3_s'></div> 
+    <div class='box' id='b3'><h1>Unknown</h1><p>Unknown to everyone (including me)</p></div>
+    <div class='boxHoverMain' id='b4_m'></div> 
+    <div class='boxHoverSub' id='b4_s'></div> 
+    <div class='box' id='b4'><h1>Blind Spot</h1><p>Others know this about me</p></div>
+    <div id='handle' title='Drag this handle to change the size of each window pane.'></div>
+    
+    <div id='hover_region'></div>
+</div>
+
+                                                                                                                                                                                                                                                                                                                                          
+
+<script>
+$(document).ready(function() {
+var defx = 208;
+var defy = 208;
+
+var b1y = $('#johari > #b1').height();
+var b2y = $('#johari > #b2').height();
+var b3y = $('#johari > #b3').height();
+var b4y = $('#johari > #b4').height();
+		
+var b1x = $('#johari > #b1').width();
+var b2x = $('#johari > #b2').width();
+var b3x = $('#johari > #b3').width();
+var b4x = $('#johari > #b4').width();
+
+var minHeight = 7;
+var minWidth = 7;
+var maxHeight = 379;
+var maxWidth = 379;
+
+var currentBoxId = "";
+
+var currentCL = 208;
+var currentCT = 208;
+
+
+var setHandlePosition = function(lastX, lastY) {
+		var left = (lastX + containerOffset.left) - 30;
+		var top = (lastY + containerOffset.top) - 30;
+	
+		left = left + "px";
+		top = top + "px";
+	
+		$('#handle').css({ left: left, top: top});
+};
+
+var setHoverRegion = function(lastX, lastY) {
+	  var left = (lastX + containerOffset.left) - 30;
+	  var top = (lastY + containerOffset.top) - 30;
+	
+	  left = left + "px";
+	  top = top + "px";
+	
+	  $('#hover_region').css({ left: left, top: top});
+};
+
+var addBoxMouseOver = function() {
+	$(".boxHoverMain, .boxHoverSub").on("mouseenter touchstart", function(e) {
+		
+		var h_id = $(this).attr('id');
+	
+		var id = h_id.split("_")[0];
+		
+		if(currentBoxId !== id) {
+			currentBoxId = id;
+			//get valid box
+			var box = $("#"+currentBoxId);
+			if($(box).width() > 100 && $(box).height() > 100) {
+			var myOffset = $(box).offset();
+			
+			var w = ($(box).width() - 30)	;
+			$("#edit").css({ left: myOffset.left + w, top: (myOffset.top - 20) });
+		
+			if($("#edit").is(":hidden")) {
+				$("#edit").show();
+				$("#handle").hide();
+				setHoverRegion(currentCL, currentCT);
+			}
+			}
+			
+			if(event.type === 'touchstart') {
+				$(box).trigger('click');
+			}
+		}
+	});
+};
+
+var containerOffset = $('#johari').offset();
+
+var addBoxClick = function() {
+	$(".boxHoverMain, .boxHoverSub").on('click', function(e) {
+			if(typeof currentBoxId === undefined || currentBoxId.length == 0) return false;
+			
+			$("#edit, #handle").hide();
+			$(".boxHoverMain, .boxHoverSub").off("mouseenter touchstart click");
+			
+			var $currentBox = $("#"+currentBoxId);
+			
+			var heading = $("#johari #"+currentBoxId).find("h1").text();
+			var subheading = $("#johari #"+currentBoxId).find("p").text();
+			var text = $("#johari #"+currentBoxId).find("#text").text();
+					
+			$currentBox.html("<h1>"+heading+"</h1><p>"+subheading+"</p><span class='editGroup'><textarea>"+text+"</textarea></span>");
+			
+			$currentBox.find("textarea").focus();
+			
+			var removeEditGroup = function() {
+				var text = $(".editGroup > textarea").val();
+				
+				$(".editGroup").remove();
+				$currentBox.html("<h1>"+heading+"</h1><p>"+subheading+"</p><pre id='text'>"+text+"</pre>");
+				
+				setHoverRegion(currentCL,currentCT);
+				addBoxMouseOver();
+				addBoxClick();
+				currentBoxId = "";
+			};
+			
+			$('.editGroup > textarea').on('keydown keypress blur', function(e){
+  				if((e.which == 13 && !e.shiftKey) || event.type === 'blur') {
+   						e.preventDefault();
+   						$("#edit").hide();
+						removeEditGroup();
+  				}
+			});
+	});
+};
+
+var resizePanes = function(cursorX, cursorY) {
+		var x = cursorX;// - containerOffset.left;
+		var y = cursorY;// - containerOffset.top;
+		
+		currentCL = x;
+		currentCT = y;
+		//applyScrollAdjustment();
+		setHandlePosition(currentCL, currentCT);
+		
+		var b1height = b1y + (y - defy);
+		b1height = b1height < minHeight ? minHeight : b1height > maxHeight ? maxHeight : b1height;  
+		
+		var b2height = b2y + (y - defy);
+		b2height = b2height < minHeight ? minHeight : b2height > maxHeight ? maxHeight : b2height;
+		
+		var b3height = y < defy ? b3y + Math.abs(y - defy) : b3y + (defy - y);
+		b3height = b3height < minHeight ? minHeight : b3height > maxHeight ? maxHeight : b3height;
+		
+		var b4height = y < defy ? b4y + Math.abs(y - defy) : b4y + (defy - y);
+		b4height = b4height < minHeight ? minHeight : b4height > maxHeight ? maxHeight : b4height;
+		
+		var b1width = b1x + (x - defy);
+		b1width = b1width < minWidth ? minWidth : b1width > maxWidth ? maxWidth : b1width;
+		
+		var b2width = x < defx ? b2x + Math.abs(x - defx) : b2x + (defx - x);
+		b2width = b2width < minWidth ? minWidth : b2width > maxWidth ? maxWidth : b2width;
+		
+		var b3width = b3x + (x - defx);
+		b3width = b3width < minWidth ? minWidth : b3width > maxWidth ? maxWidth : b3width;
+		
+		var b4width = x < defx ? b4x + Math.abs(x - defx) : b4x + (defx - x);
+		b4width = b4width < minWidth ? minWidth : b4width > maxWidth ? maxWidth : b4width;
+		
+		$('#b1').height(b1height).width(b1width);
+		$('#b2').height(b2height).width(b2width);
+		$('#b3').height(b3height).width(b3width); 
+		$('#b4').height(b4height).width(b4width);
+		
+		$('#b1_m').height(b1height-20).width(b1width-10);
+		$('#b1_s').width(b1width-20).css({top: b1height+10});
+		$('#b2_m').height(b2height-20).width(b2width-10).css({left: b1width+35});
+		$('#b2_s').width(b2width-30).css({top: b2height+10}).css({left: b1width+55});;
+		$('#b3_m').height(b3height-20).width(b3width-10).css({top: b1height+55});
+		$('#b3_s').width(b3width-20).css({top: b3height+10}).css({top: b1height+35});;
+		$('#b4_m').height(b4height-20).width(b4width-10).css({top: b2height+55, left: b3width+35});
+		$('#b4_s').width(b4width-30).css({top: b1height+35, left: b3width+55});
+};
+
+setHoverRegion(currentCL, currentCT);
+setHandlePosition(currentCL, currentCT);
+addBoxMouseOver();
+addBoxClick();
+
+$(document).on('touchmove',function(e){
+    		if(!$('#johari #hover_region').has($(e.target)).length)
+        	e.preventDefault();
+});
+
+$(document).on('mouseenter touchstart', '#johari #hover_region', function(e) {
+	e.preventDefault();
+		//$(document).on('touchmove', function(e) { e.preventDefault(); });
+		
+		
+		if(event.type === 'touchstart') {
+			//alert('touchstart');
+				var ev = e.originalEvent;
+				var touch = ev.touches[0];
+				
+				$(document).on('touchmove', '#johari #hover_region', function(e) {
+					e.preventDefault();
+					x = touch.pageX;
+					y = touch.pageY;
+					
+					resizePanes(x, y);	
+				}).on('touchend touchcancel', "#johari #hover_region", function(e) {
+						e.preventDefault();
+		
+						currentCL = touch.pageX;// - containerOffset.left;
+						currentCT = touch.pageY;// - containerOffset.top;
+						
+						$(document).off('touchmove', "#johari").
+									off('touchend touchcancel', '#johari #hover_region');
+						
+						setHoverRegion(currentCL, currentCT);
+				});
+				
+		} else {
+			$("#handle").show();
+			$("#edit").hide();
+			setHoverRegion(10000,10000);
+		}
+});
+if (!('ontouchstart' in document.documentElement)) {
+$(document).on('mousedown','#handle', function(e) {
+	
+	$(".boxHoverMain, .boxHoverSub").off('mouseenter').off('click');
+	$("#edit").hide();
+
+	$(document).on('mousemove','#johari', function(e) {
+		e.preventDefault();
+		var x = e.pageX;
+		var y = e.pageY;
+		
+		resizePanes(x, y);	
+	});		
+});
+
+$(document).on('mouseup','#handle', function(e) {
+	$('#handle').hide();
+	$(document).off('mousemove', '#johari');
+	
+	currentCL = e.pageX;// - containerOffset.left;
+	currentCT = e.pageY;//- containerOffset.top;	
+	
+	setHandlePosition(currentCL, currentCT);
+	setHoverRegion(currentCL, currentCT);
+	
+	addBoxMouseOver();
+	addBoxClick();
+});
+}
+});
+</script>
+
+
+</body>
+</html>

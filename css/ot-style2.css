@@ -52,7 +52,7 @@ a[href$=".mp3"], a[href$=".MP3"]  {
   padding-top: 3px;
 }
 a[href$=".ppt"], a[href$=".PPT"], a[href$=".pptx"] {
-  background: url("/img/ppt-icon32x32.png") no-repeat scroll left center transparent;
+  background: url("/img/ppt-icon24x24.png") no-repeat scroll left center transparent;
   display: block;
   height: auto;
   padding-bottom: 3px;

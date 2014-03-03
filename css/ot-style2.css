@@ -57,7 +57,7 @@ a[href$=".ppt"], a[href$=".PPT"], a[href$=".pptx"] {
   height: auto;
   padding-bottom: 3px;
   padding-left: 35px;
-  padding-top: 9    px;
+  padding-top: 9px;
 }
 a.chapter {
     background: url("/img/chapter-icon30x30.png") no-repeat scroll left center transparent;

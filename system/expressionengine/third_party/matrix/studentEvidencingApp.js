@@ -231,14 +231,11 @@ $.fn.evidencing = function() {
 	if(rowi > 2) {
 		var nocells = $('td', rowo).length;
 		$(rowo).find('td').each(function(coli, colo) {
-			//var tempRowSpan = Number($(colo).attr('rowspan'));
 
 			if(! (nocells == 4 && coli == 0) ) {// skip column headers
-				//if(nocells < 4) coli += 1;
 						$(colo).find('p').each(function(cbi, cbo) {
-							//var tcoli = (stepn==0) ? coli + 1 : coli;
-			
-							var criteria = { step: stepn, row: rowi, level: coli, checkbox: cbi, pracsot: 'empty' };
+										
+							var criteria = { step: stepn, row: rowi, level: (coli+1), checkbox: cbi, pracsot: 'empty' };
 							var assessCheck = verifyCheckBox(criteria);			
 							var assessed = "<p style='color: #"+assessCheck.textColor+"; background-color: #"+assessCheck.highlightColor+"; font-size: 12px; padding: 4px'>  "+assessCheck.assessorsStr+"</p>";
 							var checked =  assessCheck.isChecked?"checked":"";	

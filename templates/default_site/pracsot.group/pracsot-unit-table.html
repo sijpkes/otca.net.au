@@ -34,27 +34,38 @@ $sql = "SELECT `id`, `question` FROM `otca_pracsot` WHERE `id` LIKE('$element.%'
 
 $query = ee()->db->query($sql);
 
-if(!empty($member_id)) { 
-$assess_sql = "SELECT * FROM (SELECT `data`.`entry_id`, `data`.`field_id_6` as `self_assessment`, `av`.`matrix_ids` as `supervisor_assessment`, `av`.`date_assessed` FROM  `exp_channel_data` `data` LEFT JOIN (`exp_channel_titles` `title` , `otca_evidence` `ev`, `otca_evidence_validated` `av`) ON (`data`.`entry_id` = `ev`.`entry_id` AND `title`.`entry_id` = `ev`.`entry_id` AND `ev`.`entry_id` = `av`.`evidence_id`) WHERE `title`.`author_id` = '$member_id' order by `data`.`entry_id`, `av`.`date_assessed` desc) `ua` GROUP BY `ua`.`entry_id`";
- 
+//$assess_sql = "SELECT * FROM (SELECT `data`.`entry_id`, `data`.`field_id_6` as `self_assessment`, `av`.`matrix_ids` as `supervisor_assessment`, `av`.`date_assessed` FROM  `exp_channel_data` `data` LEFT JOIN (`exp_channel_titles` `title` , `otca_evidence` `ev`, `otca_evidence_validated` `av`) ON (`data`.`entry_id` = `ev`.`entry_id` AND `title`.`entry_id` = `ev`.`entry_id` AND `ev`.`entry_id` = `av`.`evidence_id`) WHERE `title`.`author_id` = '$member_id' order by `data`.`entry_id`, `av`.`date_assessed` desc) `ua` GROUP BY `ua`.`entry_id`";
+$assess_sql = "SELECT * FROM (SELECT `data`.`entry_id`, `data`.`field_id_6` as `self_assessment`, `av`.`matrix_ids` as `supervisor_assessment`, `av`.`date_assessed` FROM `exp_channel_data` `data` \n"
+    . "LEFT JOIN `exp_channel_titles` `title` ON `title`.`entry_id` = `data`.`entry_id`\n"
+    . "LEFT JOIN `otca_evidence` `ev` ON `data`.`entry_id` = `ev`.`entry_id`\n"
+    . "LEFT JOIN `otca_evidence_validated` `av` ON `ev`.`entry_id` = `av`.`evidence_id`\n"
+    . "WHERE `title`.`author_id` = '$member_id' order by `data`.`entry_id`, `av`.`date_assessed` desc) `ua` GROUP BY `ua`.`entry_id`";
+
 $comparison_query = ee()->db->query($assess_sql);
 
 	if ($comparison_query->num_rows() > 0)
 	{
 		foreach($comparison_query->result_array() as $row)
 	    {	
-			// add option to compare later ...? maybe
+		// add option to compare later ...? maybe
+		if(!empty($row['supervisor_assessment'])) {
 			$temp_array = json_decode("[$row[supervisor_assessment]]");
 			foreach($temp_array as $item) {
 				$evidence_array[] = $item;
 			}
+		} 
+		if(!empty($row['self_assessment'])) {
+			$temp_array = json_decode("[$row[self_assessment]]");
+			foreach($temp_array as $item) {
+				$evidence_array[] = $item;
+			}
+		} 	
 		}
 	}
-}
 ?>	
-<br>
-<p style='text-align:right'><input type="button" value="Print this page" onClick="window.print()"></p>
 {embed='pracsot/header'}
+<p style='text-align:right'><input type="button" value="Print this page" onClick="window.print()"></p>
+
 <p>&nbsp;</p>
 {embed='pracsot/<?php echo $unit_heading; ?>' unit_color='<?php echo $unit_color; ?>'}	
 		<table cellspacing="0" cellpadding="0" border="0" class="pracsot-table">
@@ -129,10 +140,9 @@ foreach($evidence_array as $ev_array)
 {	
 	$i = 0;
 	foreach($ev_array as $evidence) {
-		
+		echo "<div style='display:none'>Checking: $evidence->pracsot as $row[id]</div>";
 		if(strpos($evidence->pracsot, $row['id']) !== FALSE) {
-		
-			if($evidence->agreed == 1) {
+			if(!empty($evidence->agreed) && $evidence->agreed == 1) {
 				
 				if($evidence->level == BEING_A_PROFESSIONAL) {
 					$emer_v = $emer_v + 1;
@@ -174,31 +184,43 @@ foreach($evidence_array as $ev_array)
 }
 }
 ?>
-					<td tyle="text-align:left;width:1.386cm;">
-						<div title="Evidence - validated: <?php echo $emer_v; ?> unvalidated: <?php echo $emer_u; ?>" class="pracsot-tickbox">
+						<td tyle="text-align:left;width:1.386cm;">
+						<div title="Pieces of evidence verified: <?php echo $emer_v; ?>.  Pieces of evidence un-verified: <?php echo $emer_u; ?>" class="pracsot-tickbox">
+								<?php if($emer_u > 0 || $emer_v > 0) { ?>
+								<div style='padding-top: 8px'>
+									
+										<?php echo "&#10003;"; ?>
 								<?php if($emer_v > 0) { ?>
-									<div style='padding-top: 8px'>
-								<?php echo "&#10003;"; ?>
-									</div>
-							<?php	} ?>	
+										<img src='/img/verified_stamp.png' class='verified-stamp' alt="Evidence has been verified by an educator"/>									
+								<?php } ?>	
+								</div>
+								<?php	} ?>	
 						</div>
 					</td>
 					<td style="text-align:left;width:1.386cm;">
-						<div title="Evidence - validated: <?php echo $cons_v; ?> unvalidated: <?php echo $cons_u; ?>" class="pracsot-tickbox">
+						<div title="Pieces of evidence verified: <?php echo $cons_v; ?>.  Pieces of evidence un-verified: <?php echo $cons_u; ?>" class="pracsot-tickbox">
+								<?php if($cons_u > 0 || $cons_v > 0){ ?>
+								<div style='padding-top: 8px'>
+									
+										<?php echo "&#10003;"; ?>
 								<?php if($cons_v > 0) { ?>
-									<div style='padding-top: 8px'>
-								<?php echo "&#10003;"; ?>
-									</div>
-							<?php	} ?>
+										<img src='/img/verified_stamp.png' class='verified-stamp' alt="Evidence has been verified by an educator"/>									
+								<?php } ?>	
+								</div>
+								<?php	} ?>	
 						</div>
 					</td>
 					<td style="text-align:left;width:1.386cm;">
-						<div title="Evidence - validated: <?php echo $comp_v; ?> unvalidated: <?php echo $comp_u; ?>" class="pracsot-tickbox">
-						<?php if($comp_v > 0) { ?>
-							<div style='padding-top: 8px'>
-						<?php echo "&#10003;"; ?>
-							</div>
-						<?php	} ?>
+						<div title="Pieces of evidence verified: <?php echo $comp_v; ?>.  Pieces of evidence un-verified: <?php echo $comp_u; ?>" class="pracsot-tickbox">
+						<?php if($comp_u > 0 || $comp_v > 0){ ?>
+								<div style='padding-top: 8px'>
+									
+										<?php echo "&#10003;"; ?>
+								<?php if($comp_v > 0) { ?>
+										<img src='/img/verified_stamp.png' class='verified-stamp' alt="Evidence has been verified by an educator"/>									
+								<?php } ?>	
+								</div>
+								<?php	} ?>	
 						</div>
 					</td>
 				</tr>
@@ -209,3 +231,4 @@ foreach($evidence_array as $ev_array)
 			</tbody>
 		</table>
 <p style='text-align:right'><input type="button" value="Print this page" onClick="window.print()"></p>
+{embed='pracsot/footer'}

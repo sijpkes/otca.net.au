@@ -1,0 +1,129 @@
+li {
+  padding: 4px;
+}
+ul > li:nth-child(1) {
+  color: #8C0048;
+  font-size: 14pt;
+}
+ul > li:nth-child(1) > ul > li {
+    color: #8C0048 !important;
+}
+ul > li:nth-child(1) > ul > li > a {
+    color: #8C0048 !important;
+    font-weight: bold;
+    text-decoration:underline;
+}
+ul > li:nth-child(1) > ul > li > a:hover {
+    color: white !important;
+    background-color: #8C0048;
+    font-weight: bold;
+    text-decoration: none;
+}
+ul > li:nth-child(2) {
+  color: #005E9D;
+  font-size: 14pt;
+}
+ul > li:nth-child(2) > ul > li {
+    color: #005E9D !important;
+}
+ul > li:nth-child(2) > ul > li > a {
+    color: #005E9D !important;
+    font-weight: bold;
+    text-decoration:underline;
+}
+ul > li:nth-child(2) > ul > li > a:hover {
+    color: white !important;
+    background-color: #005E9D;
+    font-weight: bold;
+    text-decoration: none;
+}
+ul > li:nth-child(3) {
+  color: #EF8914;
+  font-size: 14pt;
+}
+ul > li:nth-child(3) > ul > li {
+    color: #EF8914 !important;
+}
+ul > li:nth-child(3) > ul > li > a {
+    color: #EF8914 !important;
+    font-weight: bold;
+    text-decoration:underline;
+}
+ul > li:nth-child(3) > ul > li > a:hover {
+    color: white !important;
+    background-color: #EF8914;
+    font-weight: bold;
+    text-decoration: none;
+}
+ul > li:nth-child(4) {
+  color: #572469;
+  font-size: 14pt;
+}
+ul > li:nth-child(4) > ul > li {
+    color: #572469 !important;
+}
+ul > li:nth-child(4) > ul > li > a {
+    color: #572469 !important;
+    font-weight: bold;
+    text-decoration:underline;
+}
+ul > li:nth-child(4) > ul > li > a:hover {
+    color: white !important;
+    background-color: #572469;
+    font-weight: bold;
+    text-decoration: none;
+}
+ul > li:nth-child(5) {
+  color: #6AA322;
+  font-size: 14pt;
+}
+ul > li:nth-child(5) > ul > li {
+    color: #6AA322 !important;
+}
+ul > li:nth-child(5) > ul > li > a {
+    color: #6AA322 !important;
+    font-weight: bold;
+    text-decoration:underline;
+}
+ul > li:nth-child(5) > ul > li > a:hover {
+    color: white !important;
+    background-color: #6AA322;
+    font-weight: bold;
+    text-decoration: none;
+}
+ul > li:nth-child(6) {
+  color: #008499;
+  font-size: 14pt;
+}
+ul > li:nth-child(6) > ul > li {
+    color: #008499 !important;
+}
+ul > li:nth-child(6) > ul > li > a {
+    color: #008499 !important;
+    font-weight: bold;
+    text-decoration:underline;
+}
+ul > li:nth-child(6) > ul > li > a:hover {
+    color: white !important;
+    background-color: #008499;
+    font-weight: bold;
+    text-decoration: none;
+}
+ul > li:nth-child(7) {
+  color: #152D70;
+  font-size: 14pt;
+}
+ul > li:nth-child(7) > ul > li {
+    color: #152D70 !important;
+}
+ul > li:nth-child(7) > ul > li > a {
+    color: #152D70 !important;
+    font-weight: bold;
+    text-decoration:underline;
+}
+ul > li:nth-child(7) > ul > li > a:hover {
+    color: white !important;
+    background-color: #152D70;
+    font-weight: bold;
+    text-decoration: none;
+}

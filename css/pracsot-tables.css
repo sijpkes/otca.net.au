@@ -225,6 +225,13 @@ vertical-align: top;
   text-align: center;
   width: 2em;
 }
+.verified-stamp {
+	margin-top: -42px;
+	margin-left: -16px;
+	position: absolute;
+	display: block;
+	width: 79px;
+}
 li {
   padding: 4px;
 }

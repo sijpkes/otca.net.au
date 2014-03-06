@@ -229,7 +229,7 @@ var suid = <?= $student_id ?>;
         $(rowo).find('td').each(function(coli, colo) {
             if(! (nocells == 4 && coli == 0) ) {// skip column headers
                         $(colo).find('p').each(function(cbi, cbo) {
-                            var criteria = { step: stepn, row: rowi, level: coli, checkbox: cbi, pracsot: 'empty' };
+                            var criteria = { step: stepn, row: rowi, level: (coli+1), checkbox: cbi, pracsot: 'empty' };
                             var assessCheck = verifyCheckBox(criteria);
                          
                             var assessed = "<p style='background-color: #"+assessCheck.highlightColor+"; color: #"+assessCheck.textColor+"; padding: 7px; font-size: 12px'>  "+assessCheck.assessorsStr+"</p>";

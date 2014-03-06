@@ -67,9 +67,10 @@ if ($comparison_query->num_rows() > 0)
 }
 //var_dump($assess_sql);
 ?>	
-{embed='pracsot/header'}
-<p style='text-align:right'><input type="button" value="Print this page" onClick="window.print()"></p>
 
+<br>
+<p style='text-align:right'><input type="button" value="Print this page" onClick="window.print()"></p>
+{embed='pracsot/header'}
 <p>&nbsp;</p>
 {embed='pracsot/<?php echo $unit_heading; ?>' unit_color='<?php echo $unit_color; ?>'}	
 		<table cellspacing="0" cellpadding="0" border="0" class="pracsot-table">
@@ -145,7 +146,9 @@ foreach($evidence_array as $ev_array)
 {	
 	$i = 0;
 	foreach($ev_array as $evidence) {
+		//echo "<p>$evidence->pracsot >> $row[id] >> ".strpos($evidence->pracsot, $row['id'])."</p>";
 		if(strpos($evidence->pracsot, $row['id']) !== FALSE) {
+			echo "<p> STRPOS: ".strpos($evidence->pracsot, $row['id'])." evidence level: ".$evidence->level." id: $row[id]</p>";
 			
 			if(!empty($evidence->agreed) && $evidence->agreed == 1) {
 				
@@ -167,6 +170,7 @@ foreach($evidence_array as $ev_array)
 				}
 			} else
 			{
+				echo "<p>In non-validated loop. Level: $evidence->level E: $emer_u C: $cons_u CP: $comp_u</p>";
 				if($evidence->level == BEING_A_PROFESSIONAL) {
 					$emer_u = $emer_u + 1;
 					$cons_u = $cons_u + 1;
@@ -190,40 +194,40 @@ foreach($evidence_array as $ev_array)
 }
 ?>
 
-					<td tyle="text-align:left;width:1.386cm;">
-						<div title="Pieces of evidence verified: <?php echo $emer_v; ?>.  Pieces of evidence un-verified: <?php echo $emer_u; ?>" class="pracsot-tickbox">
-								<?php if($emer_u > 0 || $emer_v > 0) { ?>
+							<td tyle="text-align:left;width:1.386cm;">
+						<div title="Evidence - validated: <?php echo $emer_v; ?> unvalidated: <?php echo $emer_u; ?>" class="pracsot-tickbox">
+								<?php if($emer_u > 0) { ?>
 								<div style='padding-top: 8px'>
 									
 										<?php echo "&#10003;"; ?>
 								<?php if($emer_v > 0) { ?>
-										<img src='/img/verified_stamp.png' class='verified-stamp' alt="Evidence has been verified by an educator"/>									
+										<img src='/img/verified_stamp.png' class='verified-stamp'/>									
 								<?php } ?>	
 								</div>
 								<?php	} ?>	
 						</div>
 					</td>
 					<td style="text-align:left;width:1.386cm;">
-						<div title="Pieces of evidence verified: <?php echo $cons_v; ?>.  Pieces of evidence un-verified: <?php echo $cons_u; ?>" class="pracsot-tickbox">
-								<?php if($cons_u > 0 || $cons_v > 0){ ?>
+						<div title="Evidence - validated: <?php echo $cons_v; ?> unvalidated: <?php echo $cons_u; ?>" class="pracsot-tickbox">
+								<?php if($cons_u > 0) { ?>
 								<div style='padding-top: 8px'>
 									
 										<?php echo "&#10003;"; ?>
 								<?php if($cons_v > 0) { ?>
-										<img src='/img/verified_stamp.png' class='verified-stamp' alt="Evidence has been verified by an educator"/>									
+										<img src='/img/verified_stamp.png' class='verified-stamp'/>									
 								<?php } ?>	
 								</div>
 								<?php	} ?>	
 						</div>
 					</td>
 					<td style="text-align:left;width:1.386cm;">
-						<div title="Pieces of evidence verified: <?php echo $comp_v; ?>.  Pieces of evidence un-verified: <?php echo $comp_u; ?>" class="pracsot-tickbox">
-						<?php if($comp_u > 0 || $comp_v > 0){ ?>
+						<div title="Evidence - validated: <?php echo $comp_v; ?> unvalidated: <?php echo $comp_u; ?>" class="pracsot-tickbox">
+						<?php if($comp_u > 0) { ?>
 								<div style='padding-top: 8px'>
 									
 										<?php echo "&#10003;"; ?>
 								<?php if($comp_v > 0) { ?>
-										<img src='/img/verified_stamp.png' class='verified-stamp' alt="Evidence has been verified by an educator"/>									
+										<img src='/img/verified_stamp.png' class='verified-stamp'/>									
 								<?php } ?>	
 								</div>
 								<?php	} ?>	
@@ -237,4 +241,4 @@ foreach($evidence_array as $ev_array)
 			</tbody>
 		</table>
 <p style='text-align:right'><input type="button" value="Print this page" onClick="window.print()"></p>
-{embed='pracsot/footer'}
+

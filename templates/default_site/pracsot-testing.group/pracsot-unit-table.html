@@ -1,11 +1,14 @@
 <?php
 $member_id = ee()->session->userdata('member_id');
-if($member_id == 0) return;
+
+$group_id = ee()->session->userdata('group_id');
+if($group_id == 6 || $group_id == 7 || $group_id == 9 || $group_id == 1) {
+	$member_id = ee()->input->get('sid');
+}
 
 define('BEING_A_PROFESSIONAL', 1); // check for holistic item which spans all PRACSOT levels
 
 $element = ee()->input->get('element');
-$suid = ee()->input->get('suid');
 
 $unit_code = substr($element, 0, 1);
 $unit_color = "unit$unit_code-color";
@@ -31,45 +34,27 @@ $sql = "SELECT `id`, `question` FROM `otca_pracsot` WHERE `id` LIKE('$element.%'
 
 $query = ee()->db->query($sql);
 
-//$assess_sql = "SELECT * FROM (SELECT data.entry_id, title.author_id, data.field_id_6 as self_assessment, av.matrix_ids as supervisor_assessment, av.date_assessed, m.screen_name, m.email, m.group_id FROM  exp_channel_data data, exp_channel_titles title , otca_evidence ev, otca_evidence_validated av, exp_members m, exp_members student WHERE data.entry_id = ev.entry_id AND title.entry_id = ev.entry_id AND ev.entry_id = av.evidence_id AND m.member_id = av.assessor_id AND student.member_id = title.author_id AND student.member_id ='$suid' ORDER BY m.group_id, av.date_assessed DESC, data.entry_id) ua GROUP BY ua.entry_id";
-
-$assess_sql = "SELECT * FROM (\n"
-    . "SELECT data.entry_id, title.author_id, data.field_id_6 as self_assessment, av.matrix_ids as supervisor_assessment, av.date_assessed, m.screen_name, m.email, m.group_id FROM exp_channel_data data\n"
-    . "LEFT JOIN otca_evidence ev ON data.entry_id = ev.entry_id \n"
-    . "LEFT JOIN exp_channel_titles title ON title.entry_id = ev.entry_id \n"
-    . "LEFT JOIN otca_evidence_validated av ON ev.entry_id = av.evidence_id \n"
-    . "LEFT JOIN exp_members m ON m.member_id = av.assessor_id \n"
-    . "LEFT JOIN exp_members student ON student.member_id = title.author_id \n"
-    . "WHERE student.member_id ='$suid' ORDER BY m.group_id, av.date_assessed DESC, data.entry_id\n"
-    . "\n"
-    . ") ua GROUP BY ua.entry_id";
-
+if(!empty($member_id)) { 
+$assess_sql = "SELECT * FROM (SELECT `data`.`entry_id`, `data`.`field_id_6` as `self_assessment`, `av`.`matrix_ids` as `supervisor_assessment`, `av`.`date_assessed` FROM  `exp_channel_data` `data` LEFT JOIN (`exp_channel_titles` `title` , `otca_evidence` `ev`, `otca_evidence_validated` `av`) ON (`data`.`entry_id` = `ev`.`entry_id` AND `title`.`entry_id` = `ev`.`entry_id` AND `ev`.`entry_id` = `av`.`evidence_id`) WHERE `title`.`author_id` = '$member_id' order by `data`.`entry_id`, `av`.`date_assessed` desc) `ua` GROUP BY `ua`.`entry_id`";
+ 
 $comparison_query = ee()->db->query($assess_sql);
 
-if ($comparison_query->num_rows() > 0)
-{
-	foreach($comparison_query->result_array() as $row)
-    {	
-		// add option to compare later ...? maybe
-		if(!empty($row['supervisor_assessment'])) {
+	if ($comparison_query->num_rows() > 0)
+	{
+		foreach($comparison_query->result_array() as $row)
+	    {	
+			// add option to compare later ...? maybe
 			$temp_array = json_decode("[$row[supervisor_assessment]]");
 			foreach($temp_array as $item) {
 				$evidence_array[] = $item;
 			}
-		} 
-		if(!empty($row['self_assessment'])) {
-			$temp_array = json_decode("[$row[self_assessment]]");
-			foreach($temp_array as $item) {
-				$evidence_array[] = $item;
-			}
-		} 			
+		}
 	}
 }
-//var_dump($assess_sql);
 ?>	
-{embed='pracsot/header'}
+<br>
 <p style='text-align:right'><input type="button" value="Print this page" onClick="window.print()"></p>
-
+{embed='pracsot/header'}
 <p>&nbsp;</p>
 {embed='pracsot/<?php echo $unit_heading; ?>' unit_color='<?php echo $unit_color; ?>'}	
 		<table cellspacing="0" cellpadding="0" border="0" class="pracsot-table">
@@ -140,14 +125,14 @@ $cons_u = 0;
 $comp_u = 0;
 
 if(isset($evidence_array)) {
-	
 foreach($evidence_array as $ev_array)
 {	
 	$i = 0;
 	foreach($ev_array as $evidence) {
+		
 		if(strpos($evidence->pracsot, $row['id']) !== FALSE) {
-			
-			if(!empty($evidence->agreed) && $evidence->agreed == 1) {
+		
+			if($evidence->agreed == 1) {
 				
 				if($evidence->level == BEING_A_PROFESSIONAL) {
 					$emer_v = $emer_v + 1;
@@ -189,44 +174,31 @@ foreach($evidence_array as $ev_array)
 }
 }
 ?>
-
 					<td tyle="text-align:left;width:1.386cm;">
-						<div title="Pieces of evidence verified: <?php echo $emer_v; ?>.  Pieces of evidence un-verified: <?php echo $emer_u; ?>" class="pracsot-tickbox">
-								<?php if($emer_u > 0 || $emer_v > 0) { ?>
-								<div style='padding-top: 8px'>
-									
-										<?php echo "&#10003;"; ?>
+						<div title="Evidence - validated: <?php echo $emer_v; ?> unvalidated: <?php echo $emer_u; ?>" class="pracsot-tickbox">
 								<?php if($emer_v > 0) { ?>
-										<img src='/img/verified_stamp.png' class='verified-stamp' alt="Evidence has been verified by an educator"/>									
-								<?php } ?>	
-								</div>
-								<?php	} ?>	
+									<div style='padding-top: 8px'>
+								<?php echo "&#10003;"; ?>
+									</div>
+							<?php	} ?>	
 						</div>
 					</td>
 					<td style="text-align:left;width:1.386cm;">
-						<div title="Pieces of evidence verified: <?php echo $cons_v; ?>.  Pieces of evidence un-verified: <?php echo $cons_u; ?>" class="pracsot-tickbox">
-								<?php if($cons_u > 0 || $cons_v > 0){ ?>
-								<div style='padding-top: 8px'>
-									
-										<?php echo "&#10003;"; ?>
+						<div title="Evidence - validated: <?php echo $cons_v; ?> unvalidated: <?php echo $cons_u; ?>" class="pracsot-tickbox">
 								<?php if($cons_v > 0) { ?>
-										<img src='/img/verified_stamp.png' class='verified-stamp' alt="Evidence has been verified by an educator"/>									
-								<?php } ?>	
-								</div>
-								<?php	} ?>	
+									<div style='padding-top: 8px'>
+								<?php echo "&#10003;"; ?>
+									</div>
+							<?php	} ?>
 						</div>
 					</td>
 					<td style="text-align:left;width:1.386cm;">
-						<div title="Pieces of evidence verified: <?php echo $comp_v; ?>.  Pieces of evidence un-verified: <?php echo $comp_u; ?>" class="pracsot-tickbox">
-						<?php if($comp_u > 0 || $comp_v > 0){ ?>
-								<div style='padding-top: 8px'>
-									
-										<?php echo "&#10003;"; ?>
-								<?php if($comp_v > 0) { ?>
-										<img src='/img/verified_stamp.png' class='verified-stamp' alt="Evidence has been verified by an educator"/>									
-								<?php } ?>	
-								</div>
-								<?php	} ?>	
+						<div title="Evidence - validated: <?php echo $comp_v; ?> unvalidated: <?php echo $comp_u; ?>" class="pracsot-tickbox">
+						<?php if($comp_v > 0) { ?>
+							<div style='padding-top: 8px'>
+						<?php echo "&#10003;"; ?>
+							</div>
+						<?php	} ?>
 						</div>
 					</td>
 				</tr>
@@ -237,4 +209,3 @@ foreach($evidence_array as $ev_array)
 			</tbody>
 		</table>
 <p style='text-align:right'><input type="button" value="Print this page" onClick="window.print()"></p>
-{embed='pracsot/footer'}

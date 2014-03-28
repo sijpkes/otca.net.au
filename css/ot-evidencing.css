@@ -43,6 +43,7 @@ div#content td {
 div#content table {
   clear: both;
   margin-top: -11px;
+  width: inherit !important;
 }
 a.button {
 	float:right; display: block; position: relative; padding: 4px; margin-top: 20px;  margin: 2px;
